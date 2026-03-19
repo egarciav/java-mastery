@@ -6,7 +6,7 @@ Mi guía personal de Java y Spring Boot — desde lo básico hasta APIs REST pro
 
 Un sitio web interactivo donde documenté todo lo que aprendí de Java mientras venía del mundo de TypeScript/Angular. No es un tutorial formal, es más como mis notas organizadas con ejemplos de código que realmente funcionan.
 
-**Ver el sitio:** [java-mastery.netlify.app](https://hey-java-mastery.netlify.app)
+**Ver el sitio:** [hey-java-mastery.netlify.app](https://hey-java-mastery.netlify.app)
 
 ## 📚 Lo que cubro
 
