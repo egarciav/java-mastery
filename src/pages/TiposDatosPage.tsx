@@ -1,18 +1,38 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function TiposDatosPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Tipos de Datos</h1>
-      <p className="text-text-muted text-lg mb-8">Primitivos y de referencia — la base de todo programa Java</p>
+      <DayHeader
+        day={3}
+        title="Tipos de Datos"
+        duration="50 min"
+        commitMsg="dia-3: tipos primitivos, wrappers, casting"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy vas a entender la diferencia más fundamental de Java: primitivos vs objetos.
+        También vas a aprender a convertir entre tipos sin perder datos.
+      </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Tipos Primitivos</h2>
-        <p className="text-text-muted leading-relaxed mb-4">
-          Java tiene <strong className="text-text">8 tipos primitivos</strong>. Son los bloques básicos de datos
-          que se almacenan directamente en la memoria (stack). No son objetos.
-        </p>
+        <h2 className="text-2xl font-bold text-text mb-4">Los 8 tipos primitivos</h2>
+
+        <ThinkSection title="¿Por qué Java tiene tantos tipos de números?">
+          <p>
+            En TypeScript solo existe <code className="text-primary">number</code> para todo. En Java
+            debes elegir el tipo exacto. ¿Por qué? <strong className="text-text">Eficiencia y control</strong>.
+            Un <code className="text-primary">byte</code> usa 1 byte de RAM; un <code className="text-primary">long</code> usa 8.
+            Cuando manejas millones de registros, esa diferencia importa.
+          </p>
+          <p>
+            En la práctica, usarás <code className="text-primary">int</code> para enteros y <code className="text-primary">double</code> para
+            decimales el 95% del tiempo. Los demás son para casos especiales (archivos binarios, rendimiento extremo, dinero).
+          </p>
+        </ThinkSection>
 
         <div className="overflow-x-auto mb-6">
           <table className="w-full text-sm text-text-muted">
@@ -79,10 +99,18 @@ public class TiposPrimitivos {
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Tipos de Referencia</h2>
-        <p className="text-text-muted leading-relaxed mb-4">
-          Todo lo que no es un tipo primitivo es un <strong className="text-text">tipo de referencia</strong>.
-          Se almacenan en el heap y la variable contiene una referencia (dirección de memoria) al objeto.
-        </p>
+
+        <ThinkSection title="Primitivo vs Referencia — ¿Cuál es la diferencia real?">
+          <p>
+            Imagina que un <strong className="text-text">primitivo</strong> es un post-it con un número escrito directamente.
+            Si le sacas copia, tienes otro post-it independiente con el mismo número.
+          </p>
+          <p>
+            Una <strong className="text-text">referencia</strong> es un post-it con una <em>dirección</em> que apunta a
+            una caja en un almacén. Si copias el post-it, ahora tienes dos post-its que apuntan a la <em>misma</em> caja.
+            Si alguien modifica el contenido de la caja desde un post-it, el otro también lo ve.
+          </p>
+        </ThinkSection>
 
         <CodeBlock filename="TiposReferencia.java" code={`
 public class TiposReferencia {
@@ -264,6 +292,136 @@ public class InferenciaTipos {
           TypeScript cuando no especificas el tipo. TypeScript también infiere tipos automáticamente.
           La diferencia es que Java solo permite <code className="text-primary">var</code> en variables locales.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 3</h2>
+        <p className="text-text-muted leading-relaxed mb-4">
+          Crea cada archivo en IntelliJ, escríbelo tú mismo y ejecútalo.
+        </p>
+
+        <Exercise
+          number={1}
+          title="Explorador de tipos"
+          description={`Crea ExploradorTipos.java que declare una variable de cada tipo primitivo y las imprima todas.
+Incluye:
+- Un byte, short, int y long
+- Un float y double
+- Un char y un boolean
+
+Usa separadores _ en los números grandes para legibilidad.`}
+          hint="Recuerda: long necesita L al final, float necesita f al final. Usa System.out.println() para cada variable."
+          solution={`public class ExploradorTipos {
+    public static void main(String[] args) {
+        byte nivelBateria = 87;
+        short anio = 2026;
+        int poblacionCiudad = 8_336_817;
+        long distanciaLuna = 384_400_000L;
+
+        float tasaInteres = 4.5f;
+        double pi = 3.14159265358979;
+
+        char inicial = 'J';
+        boolean javaEsGenial = true;
+
+        System.out.println("Batería: " + nivelBateria + "%");
+        System.out.println("Año: " + anio);
+        System.out.println("Población: " + poblacionCiudad);
+        System.out.println("Distancia luna: " + distanciaLuna + " metros");
+        System.out.println("Tasa interés: " + tasaInteres + "%");
+        System.out.println("Pi: " + pi);
+        System.out.println("Inicial: " + inicial);
+        System.out.println("¿Java es genial? " + javaEsGenial);
+    }
+}`}
+          solutionFilename="ExploradorTipos.java"
+        />
+
+        <Exercise
+          number={2}
+          title="Casting peligroso"
+          description={`Crea CastingDemo.java que demuestre:
+1. Widening: asigna un int a un double e imprime ambos
+2. Narrowing: asigna un double (3.99) a un int con cast explícito — ¿qué valor obtienes?
+3. Overflow: asigna 200 a una variable byte con cast — ¿qué imprime?
+4. String a número: convierte "456" a int y "78.9" a double, súmalos e imprime
+
+¿Qué aprendiste sobre la pérdida de datos?`}
+          hint="Para narrowing usa (int), para overflow usa (byte). parseInt() y parseDouble() convierten strings."
+          solution={`public class CastingDemo {
+    public static void main(String[] args) {
+        // 1. Widening (seguro)
+        int entero = 42;
+        double decimal = entero;
+        System.out.println("int: " + entero + " → double: " + decimal);
+
+        // 2. Narrowing (pierde decimales)
+        double precio = 3.99;
+        int precioEntero = (int) precio;
+        System.out.println("double: " + precio + " → int: " + precioEntero);
+        // Imprime 3 — se TRUNCA, no se redondea
+
+        // 3. Overflow
+        int grande = 200;
+        byte pequeno = (byte) grande;
+        System.out.println("int 200 → byte: " + pequeno);
+        // Imprime -56 — overflow silencioso
+
+        // 4. String a número
+        int num = Integer.parseInt("456");
+        double dec = Double.parseDouble("78.9");
+        System.out.println("456 + 78.9 = " + (num + dec));
+    }
+}`}
+          solutionFilename="CastingDemo.java"
+        />
+
+        <Exercise
+          number={3}
+          title="Trampa de los Wrappers"
+          description={`Crea WrapperTrampa.java que demuestre la trampa clásica de == vs .equals():
+1. Crea dos Integer con valor 100 y compáralos con == y .equals()
+2. Crea dos Integer con valor 200 y compáralos con == y .equals()
+3. Imprime los resultados y explica con comentarios por qué uno da true y otro false con ==
+
+Este es un bug real que pasa en producción.`}
+          hint="Integer cachea valores de -128 a 127. Dentro de ese rango, == funciona 'por casualidad'. Fuera de ese rango, falla."
+          solution={`public class WrapperTrampa {
+    public static void main(String[] args) {
+        // Caso 1: valor 100 (dentro del cache -128 a 127)
+        Integer a = 100;
+        Integer b = 100;
+        System.out.println("100 == 100: " + (a == b));       // true (cache)
+        System.out.println("100 equals 100: " + a.equals(b)); // true
+
+        // Caso 2: valor 200 (fuera del cache)
+        Integer x = 200;
+        Integer y = 200;
+        System.out.println("200 == 200: " + (x == y));       // false (!!)
+        System.out.println("200 equals 200: " + x.equals(y)); // true
+
+        // LECCIÓN: SIEMPRE usa .equals() para comparar Wrappers
+        // == compara referencias (direcciones de memoria)
+        // .equals() compara valores
+    }
+}`}
+          solutionFilename="WrapperTrampa.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`
+git add .
+git commit -m "dia-3: tipos primitivos, wrappers, casting, var"
+git push origin main
+`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana en el <strong className="text-text">Día 4</strong>: variables, constantes, scope
+            y valores por defecto.
+          </p>
+        </div>
       </section>
     </div>
   );

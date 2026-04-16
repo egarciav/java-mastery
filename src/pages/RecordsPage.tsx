@@ -1,14 +1,35 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function RecordsPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Records</h1>
-      <p className="text-text-muted text-lg mb-8">Clases inmutables de datos en una línea (Java 16+)</p>
+      <DayHeader
+        day={29}
+        title="Records"
+        duration="40 min"
+        commitMsg="dia-29: records, constructor compacto, DTOs inmutables"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy aprenderás Records — clases de datos inmutables en una línea. Son perfectos para
+        DTOs en Spring Boot y reemplazan toneladas de boilerplate.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Definir y usar Records</h2>
+
+        <ThinkSection title="Record = interfaz TypeScript + constructor + equals + toString">
+          <p>
+            En TypeScript defines <code className="text-primary">{"interface Persona { nombre: string; edad: number; }"}</code>.
+            En Java, un <code className="text-primary">record</code> genera automáticamente: constructor, getters,
+            <code className="text-primary"> equals()</code>, <code className="text-primary">hashCode()</code> y
+            <code className="text-primary"> toString()</code>. Todo inmutable.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="Records.java" code={`
 // Un record genera automáticamente:
 // - Constructor con todos los campos
@@ -79,6 +100,62 @@ public record Rango(int min, int max) implements Comparable<Rango> {
           pero son clases reales con constructor, igualdad por valor y toString. En Angular usarías una
           interfaz o clase — en Java moderno, usa records para DTOs y objetos de valor.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 29</h2>
+        <Exercise
+          number={1}
+          title="Sistema de pedidos con Records"
+          description={`Crea un mini sistema de pedidos:
+1. record Producto(String nombre, double precio)
+2. record LineaPedido(Producto producto, int cantidad) con método subtotal()
+3. record Pedido(String cliente, List<LineaPedido> lineas) con métodos total() y resumen()
+4. En main: crea un pedido con 3 productos y muestra el resumen`}
+          hint="En el record Pedido: public double total() { return lineas.stream().mapToDouble(LineaPedido::subtotal).sum(); }"
+          solution={`import java.util.List;
+
+public class SistemaPedidos {
+    record Producto(String nombre, double precio) {}
+
+    record LineaPedido(Producto producto, int cantidad) {
+        public double subtotal() { return producto.precio() * cantidad; }
+    }
+
+    record Pedido(String cliente, List<LineaPedido> lineas) {
+        public double total() {
+            return lineas.stream().mapToDouble(LineaPedido::subtotal).sum();
+        }
+        public String resumen() {
+            var sb = new StringBuilder("Pedido de " + cliente + ":\\n");
+            lineas.forEach(l -> sb.append(String.format(
+                "  %s x%d = $%.2f%n", l.producto().nombre(), l.cantidad(), l.subtotal())));
+            sb.append(String.format("  TOTAL: $%.2f", total()));
+            return sb.toString();
+        }
+    }
+
+    public static void main(String[] args) {
+        var p = new Pedido("Carlos", List.of(
+            new LineaPedido(new Producto("Laptop", 1200), 1),
+            new LineaPedido(new Producto("Mouse", 25), 2),
+            new LineaPedido(new Producto("Monitor", 450), 1)
+        ));
+        System.out.println(p.resumen());
+    }
+}`}
+          solutionFilename="SistemaPedidos.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-29: records, constructor compacto, DTOs inmutables"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 30</strong> — Sealed Classes: controlar la herencia.
+          </p>
+        </div>
       </section>
     </div>
   );

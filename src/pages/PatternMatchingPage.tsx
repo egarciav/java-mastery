@@ -1,14 +1,34 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function PatternMatchingPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Pattern Matching</h1>
-      <p className="text-text-muted text-lg mb-8">Verificar tipo y extraer datos en una sola expresión</p>
+      <DayHeader
+        day={31}
+        title="Pattern Matching"
+        duration="45 min"
+        commitMsg="dia-31: pattern matching instanceof, switch, guards"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy dominarás Pattern Matching — verificar tipo y extraer datos en una sola expresión.
+        Con sealed classes y records, el compilador verifica exhaustividad.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">instanceof con Pattern Matching (Java 16+)</h2>
+
+        <ThinkSection title="Pattern Matching = casting inteligente">
+          <p>
+            Antes necesitabas: verificar tipo con instanceof, luego hacer cast manual. Ahora Java
+            lo combina en una línea: <code className="text-primary">if (obj instanceof String s)</code> verifica
+            Y crea la variable tipada al mismo tiempo.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="PatternInstanceof.java" code={`
 public class PatternInstanceof {
     static void procesar(Object obj) {
@@ -85,6 +105,60 @@ public class PatternSwitch {
           Pattern matching + sealed classes + records es la combinación más poderosa de Java moderno.
           Permite modelar dominios de forma segura donde el compilador verifica que cubres todos los casos.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 31</h2>
+        <Exercise
+          number={1}
+          title="Evaluador de expresiones"
+          description={`Modela expresiones matemáticas con sealed + records + pattern matching:
+1. sealed interface Expr permits Num, Suma, Mult, Neg
+2. record Num(double valor) implements Expr
+3. record Suma(Expr izq, Expr der) implements Expr
+4. record Mult(Expr izq, Expr der) implements Expr
+5. record Neg(Expr expr) implements Expr
+6. Método double evaluar(Expr e) con switch recursivo
+7. Prueba: evaluar(new Suma(new Num(3), new Mult(new Num(2), new Num(5))))`}
+          hint="case Suma(var i, var d) -> evaluar(i) + evaluar(d); (usa deconstructing patterns si Java 21)"
+          solution={`public class Evaluador {
+    sealed interface Expr permits Num, Suma, Mult, Neg {}
+    record Num(double valor) implements Expr {}
+    record Suma(Expr izq, Expr der) implements Expr {}
+    record Mult(Expr izq, Expr der) implements Expr {}
+    record Neg(Expr expr) implements Expr {}
+
+    static double evaluar(Expr e) {
+        return switch (e) {
+            case Num n -> n.valor();
+            case Suma s -> evaluar(s.izq()) + evaluar(s.der());
+            case Mult m -> evaluar(m.izq()) * evaluar(m.der());
+            case Neg n -> -evaluar(n.expr());
+        };
+    }
+
+    public static void main(String[] args) {
+        // 3 + (2 * 5) = 13
+        Expr expr = new Suma(new Num(3), new Mult(new Num(2), new Num(5)));
+        System.out.println(evaluar(expr)); // 13.0
+
+        // -(4 + 6) = -10
+        Expr neg = new Neg(new Suma(new Num(4), new Num(6)));
+        System.out.println(evaluar(neg)); // -10.0
+    }
+}`}
+          solutionFilename="Evaluador.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-31: pattern matching instanceof, switch, guards"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 32</strong> — Patrones de diseño esenciales.
+          </p>
+        </div>
       </section>
     </div>
   );

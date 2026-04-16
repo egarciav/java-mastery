@@ -90,11 +90,11 @@ const sections = [
       { path: '/spring-services', label: 'Servicios', icon: Cog },
       { path: '/spring-repositories', label: 'Repositories y JPA', icon: Server },
       { path: '/spring-security', label: 'Spring Security', icon: Shield },
+      { path: '/spring-testing', label: 'Testing', icon: TestTube },
       { path: '/spring-excepciones', label: 'Manejo de Excepciones', icon: AlertCircle },
       { path: '/spring-validacion', label: 'Validación (@Valid)', icon: Shield },
       { path: '/spring-dtos', label: 'DTOs y MapStruct', icon: Binary },
       { path: '/spring-perfiles', label: 'Perfiles y Config', icon: Settings },
-      { path: '/spring-testing', label: 'Testing', icon: TestTube },
     ],
   },
 ];

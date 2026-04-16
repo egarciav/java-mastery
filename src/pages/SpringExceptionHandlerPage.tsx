@@ -1,14 +1,34 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function SpringExceptionHandlerPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-spring mb-2">Manejo de Excepciones</h1>
-      <p className="text-text-muted text-lg mb-8">@ControllerAdvice y @ExceptionHandler para respuestas de error consistentes</p>
+      <DayHeader
+        day={42}
+        title="Manejo de Excepciones"
+        duration="45 min"
+        commitMsg="dia-42: @ControllerAdvice, @ExceptionHandler, ErrorResponse"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy centralizarás el manejo de errores con @ControllerAdvice — respuestas JSON
+        consistentes y profesionales para toda tu API.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Por qué es necesario?</h2>
+
+        <ThinkSection title="@ControllerAdvice = ErrorHandler global de Angular">
+          <p>
+            En Angular usas ErrorHandler o interceptors para capturar errores globalmente.
+            En Spring, <code className="text-primary">@ControllerAdvice</code> intercepta excepciones de cualquier
+            Controller y las transforma en respuestas JSON limpias con el código HTTP correcto.
+          </p>
+        </ThinkSection>
+
         <p className="text-text-muted leading-relaxed mb-4">
           Sin manejo de errores global, Spring retorna stacktraces en JSON o páginas HTML de error al cliente. 
           Con <code className="text-primary">@ControllerAdvice</code> defines respuestas de error <strong className="text-text">consistentes y profesionales</strong> 
@@ -150,6 +170,64 @@ public class GlobalExceptionHandler {
           <code className="text-primary"> catchError</code> del observable. El <code className="text-primary">error.error.mensaje</code> 
           o <code className="text-primary">error.error.errores</code> tendrá el detalle para mostrar en la UI.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 42</h2>
+        <Exercise
+          number={1}
+          title="GlobalExceptionHandler completo"
+          description={`Implementa un @RestControllerAdvice con handlers para:
+1. RecursoNoEncontradoException → 404
+2. RecursoDuplicadoException → 409
+3. IllegalArgumentException → 400
+4. Exception genérica → 500
+Todos retornando ErrorResponse con status, error, mensaje, timestamp, path.`}
+          hint="@ExceptionHandler(MiException.class) @ResponseStatus(HttpStatus.NOT_FOUND) public ErrorResponse handle(...)"
+          solution={`@RestControllerAdvice
+public class GlobalExceptionHandler {
+    record ErrorResponse(int status, String error, String mensaje, String timestamp, String path) {
+        static ErrorResponse of(int s, String e, String m, String p) {
+            return new ErrorResponse(s, e, m, java.time.LocalDateTime.now().toString(), p);
+        }
+    }
+
+    @ExceptionHandler(RecursoNoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handle404(RecursoNoEncontradoException ex, HttpServletRequest req) {
+        return ErrorResponse.of(404, "Not Found", ex.getMessage(), req.getRequestURI());
+    }
+
+    @ExceptionHandler(RecursoDuplicadoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handle409(RecursoDuplicadoException ex, HttpServletRequest req) {
+        return ErrorResponse.of(409, "Conflict", ex.getMessage(), req.getRequestURI());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handle400(IllegalArgumentException ex, HttpServletRequest req) {
+        return ErrorResponse.of(400, "Bad Request", ex.getMessage(), req.getRequestURI());
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handle500(Exception ex, HttpServletRequest req) {
+        return ErrorResponse.of(500, "Internal Server Error", "Error interno", req.getRequestURI());
+    }
+}`}
+          solutionFilename="GlobalExceptionHandler.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-42: @ControllerAdvice, ErrorResponse, exception handlers"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 43</strong> — Validación con @Valid y Bean Validation.
+          </p>
+        </div>
       </section>
     </div>
   );

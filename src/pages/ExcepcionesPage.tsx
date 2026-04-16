@@ -1,14 +1,40 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function ExcepcionesPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Excepciones</h1>
-      <p className="text-text-muted text-lg mb-8">Manejo de errores con try-catch-finally y throw</p>
+      <DayHeader
+        day={18}
+        title="Excepciones"
+        duration="50 min"
+        commitMsg="dia-18: try-catch, throw, custom exceptions, try-with-resources"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy dominarás el manejo de errores en Java. A diferencia de TypeScript donde los errores
+        son opcionales, Java te obliga a pensar en qué puede fallar.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">try-catch-finally</h2>
+
+        <ThinkSection title="Checked vs Unchecked — la gran diferencia con TypeScript">
+          <p>
+            En TypeScript, todos los errores son opcionales de manejar. En Java hay dos tipos:
+          </p>
+          <p>
+            <strong className="text-text">Checked</strong> (heredan de Exception): el compilador te <em>obliga</em> a manejarlas.
+            Ejemplo: <code className="text-primary">IOException</code>. Si no haces try-catch, no compila.
+          </p>
+          <p>
+            <strong className="text-text">Unchecked</strong> (heredan de RuntimeException): opcionales.
+            Ejemplo: <code className="text-primary">NullPointerException</code>, <code className="text-primary">ArrayIndexOutOfBoundsException</code>.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="Excepciones.java" code={`
 public class Excepciones {
     public static void main(String[] args) {
@@ -121,6 +147,76 @@ public class TryWithResources {
           TypeScript no tiene checked exceptions. En Java, el compilador te fuerza a manejar ciertas excepciones.
           Es más estricto pero previene errores no manejados en producción.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 18</h2>
+        <Exercise
+          number={1}
+          title="Validador con excepciones personalizadas"
+          description={`Crea un sistema de validación:
+1. EdadInvalidaException extends Exception (con campo int edad)
+2. EmailInvalidoException extends Exception (con campo String email)
+3. Clase Validador con métodos static:
+   - validarEdad(int edad) — lanza si edad < 0 o > 150
+   - validarEmail(String email) — lanza si no contiene "@"
+4. Main que pruebe ambos casos con try-catch`}
+          hint='throw new EdadInvalidaException("Edad fuera de rango: " + edad, edad);'
+          solution={`class EdadInvalidaException extends Exception {
+    private int edad;
+    public EdadInvalidaException(String msg, int edad) {
+        super(msg); this.edad = edad;
+    }
+    public int getEdad() { return edad; }
+}
+
+class EmailInvalidoException extends Exception {
+    private String email;
+    public EmailInvalidoException(String msg, String email) {
+        super(msg); this.email = email;
+    }
+    public String getEmail() { return email; }
+}
+
+public class Validador {
+    public static void validarEdad(int edad) throws EdadInvalidaException {
+        if (edad < 0 || edad > 150)
+            throw new EdadInvalidaException("Edad inválida: " + edad, edad);
+    }
+
+    public static void validarEmail(String email) throws EmailInvalidoException {
+        if (email == null || !email.contains("@"))
+            throw new EmailInvalidoException("Email inválido: " + email, email);
+    }
+
+    public static void main(String[] args) {
+        try { validarEdad(200); }
+        catch (EdadInvalidaException e) { System.out.println(e.getMessage()); }
+
+        try { validarEmail("sin-arroba"); }
+        catch (EmailInvalidoException e) { System.out.println(e.getMessage()); }
+
+        try {
+            validarEdad(25);
+            validarEmail("user@mail.com");
+            System.out.println("Todo válido");
+        } catch (EdadInvalidaException | EmailInvalidoException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}`}
+          solutionFilename="Validador.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-18: excepciones, try-catch, custom exceptions"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 19</strong> — Generics: tipos paramétricos, bounded types, wildcards.
+          </p>
+        </div>
       </section>
     </div>
   );

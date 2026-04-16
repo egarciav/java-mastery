@@ -1,14 +1,35 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function SpringAnotacionesPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-spring mb-2">Anotaciones de Spring</h1>
-      <p className="text-text-muted text-lg mb-8">Las anotaciones más importantes que debes conocer</p>
+      <DayHeader
+        day={36}
+        title="Anotaciones de Spring"
+        duration="50 min"
+        commitMsg="dia-36: @Component, @Service, @RestController, DI, JPA annotations"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy aprenderás las anotaciones esenciales de Spring. Son el lenguaje del framework
+        — cada @ le dice a Spring qué hacer con tu clase.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Anotaciones de componentes</h2>
+
+        <ThinkSection title="Anotaciones = decoradores de Angular">
+          <p>
+            En Angular usas <code className="text-primary">@Component</code>, <code className="text-primary">@Injectable</code>,
+            <code className="text-primary"> @Input</code>. En Spring es igual: <code className="text-primary">@Service</code>,
+            <code className="text-primary"> @RestController</code>, <code className="text-primary">@GetMapping</code>.
+            Las anotaciones son metadatos que Spring lee para autoconfigurar tu aplicación.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="Componentes.java" code={`
 // Spring escanea estas anotaciones y crea beans automáticamente
 
@@ -123,6 +144,62 @@ public class Usuario {
     private String campoTemporal;
 }
 `} />
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 36</h2>
+        <Exercise
+          number={1}
+          title="CRUD completo con anotaciones"
+          description={`Crea un ProductoController con:
+1. @GetMapping — listar todos
+2. @GetMapping("/{id}") — buscar por id
+3. @PostMapping — crear producto (@RequestBody)
+4. @PutMapping("/{id}") — actualizar
+5. @DeleteMapping("/{id}") — eliminar
+Usa una List<Producto> en memoria por ahora.`}
+          hint="private List<Producto> productos = new ArrayList<>(); Usa @PathVariable y @RequestBody"
+          solution={`@RestController
+@RequestMapping("/api/productos")
+public class ProductoController {
+    private List<Producto> productos = new ArrayList<>();
+    private long nextId = 1;
+
+    record Producto(long id, String nombre, double precio) {}
+
+    @GetMapping
+    public List<Producto> listar() { return productos; }
+
+    @GetMapping("/{id}")
+    public Producto buscar(@PathVariable long id) {
+        return productos.stream().filter(p -> p.id() == id)
+            .findFirst().orElseThrow();
+    }
+
+    @PostMapping
+    public Producto crear(@RequestBody Producto p) {
+        var nuevo = new Producto(nextId++, p.nombre(), p.precio());
+        productos.add(nuevo);
+        return nuevo;
+    }
+
+    @DeleteMapping("/{id}")
+    public void eliminar(@PathVariable long id) {
+        productos.removeIf(p -> p.id() == id);
+    }
+}`}
+          solutionFilename="ProductoController.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-36: anotaciones Spring, DI, HTTP mappings, JPA"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 37</strong> — Controllers en profundidad.
+          </p>
+        </div>
       </section>
     </div>
   );

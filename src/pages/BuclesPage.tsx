@@ -1,14 +1,41 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function BuclesPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Bucles</h1>
-      <p className="text-text-muted text-lg mb-8">for, while, do-while y for-each</p>
+      <DayHeader
+        day={8}
+        title="Bucles"
+        duration="50 min"
+        commitMsg="dia-8: for, while, do-while, for-each, break, continue"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy vas a dominar las 4 formas de repetir código en Java. Además aprenderás
+        cuándo usar cada una — algo que muchos cursos no explican.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Bucle for</h2>
+
+        <ThinkSection title="¿Cuándo usar cada tipo de bucle?">
+          <p>
+            <strong className="text-text">for clásico</strong> — Cuando sabes cuántas iteraciones necesitas, o cuando necesitas el índice.
+          </p>
+          <p>
+            <strong className="text-text">for-each</strong> — Cuando recorres una colección completa y NO necesitas el índice. Es más limpio.
+          </p>
+          <p>
+            <strong className="text-text">while</strong> — Cuando no sabes cuántas iteraciones habrá (ej: leer un archivo hasta el final).
+          </p>
+          <p>
+            <strong className="text-text">do-while</strong> — Cuando necesitas ejecutar al menos una vez (ej: menú interactivo).
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="BucleFor.java" code={`
 public class BucleFor {
     public static void main(String[] args) {
@@ -136,6 +163,110 @@ public class BreakContinue {
           El <code className="text-primary">break</code> con etiqueta es útil pero poco común. Si lo necesitas 
           frecuentemente, considera refactorizar tu código en métodos separados.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 8</h2>
+
+        <Exercise
+          number={1}
+          title="FizzBuzz"
+          description={`El clásico FizzBuzz. Crea FizzBuzz.java que imprima los números del 1 al 30:
+- Si es divisible por 3, imprime "Fizz"
+- Si es divisible por 5, imprime "Buzz"
+- Si es divisible por ambos, imprime "FizzBuzz"
+- Si no, imprime el número
+
+Este ejercicio aparece en entrevistas técnicas reales.`}
+          hint="Usa el operador módulo (%). Verifica primero divisible por ambos (15), luego por 3, luego por 5."
+          solution={`public class FizzBuzz {
+    public static void main(String[] args) {
+        for (int i = 1; i <= 30; i++) {
+            if (i % 15 == 0) {
+                System.out.println("FizzBuzz");
+            } else if (i % 3 == 0) {
+                System.out.println("Fizz");
+            } else if (i % 5 == 0) {
+                System.out.println("Buzz");
+            } else {
+                System.out.println(i);
+            }
+        }
+    }
+}`}
+          solutionFilename="FizzBuzz.java"
+        />
+
+        <Exercise
+          number={2}
+          title="Tabla de multiplicar"
+          description={`Crea TablaMultiplicar.java que:
+1. Reciba un número (hardcoded, ej: 7)
+2. Imprima su tabla de multiplicar del 1 al 10
+3. Use printf para alinear las columnas
+
+Formato esperado:
+ 7 x  1 =   7
+ 7 x  2 =  14
+ 7 x 10 =  70`}
+          hint="Usa un for del 1 al 10 y printf con %2d para alinear los números."
+          solution={`public class TablaMultiplicar {
+    public static void main(String[] args) {
+        int numero = 7;
+        System.out.println("Tabla del " + numero + ":");
+        for (int i = 1; i <= 10; i++) {
+            System.out.printf("%2d x %2d = %3d%n", numero, i, numero * i);
+        }
+    }
+}`}
+          solutionFilename="TablaMultiplicar.java"
+        />
+
+        <Exercise
+          number={3}
+          title="Números primos"
+          description={`Crea BuscadorPrimos.java con:
+1. Un método static esPrimo(int n) que retorne true si n es primo
+2. En main, imprima todos los primos entre 2 y 50
+
+Un número es primo si solo es divisible por 1 y por sí mismo.`}
+          hint="Para verificar si n es primo, recorre desde 2 hasta la raíz cuadrada de n. Si alguno lo divide exactamente, no es primo."
+          solution={`public class BuscadorPrimos {
+    static boolean esPrimo(int n) {
+        if (n < 2) return false;
+        for (int i = 2; i <= Math.sqrt(n); i++) {
+            if (n % i == 0) return false;
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        System.out.print("Primos del 2 al 50: ");
+        for (int i = 2; i <= 50; i++) {
+            if (esPrimo(i)) {
+                System.out.print(i + " ");
+            }
+        }
+        System.out.println();
+    }
+}`}
+          solutionFilename="BuscadorPrimos.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`
+git add .
+git commit -m "dia-8: bucles for, while, do-while, for-each, FizzBuzz, primos"
+git push origin main
+`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana en el <strong className="text-text">Día 9</strong>: arrays — declaración,
+            iteración, multidimensionales y java.util.Arrays.
+          </p>
+        </div>
       </section>
     </div>
   );

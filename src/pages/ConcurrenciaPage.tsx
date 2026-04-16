@@ -1,14 +1,38 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function ConcurrenciaPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Concurrencia</h1>
-      <p className="text-text-muted text-lg mb-8">Threads, ExecutorService y CompletableFuture</p>
+      <DayHeader
+        day={25}
+        title="Concurrencia"
+        duration="60 min"
+        commitMsg="dia-25: threads, ExecutorService, CompletableFuture"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy entras al mundo de la concurrencia. Entender threads es clave para Spring Boot,
+        donde cada petición HTTP corre en su propio hilo.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Crear Threads</h2>
+
+        <ThinkSection title="Thread = hilo de ejecución independiente">
+          <p>
+            En JavaScript/TypeScript todo es single-threaded con event loop. En Java, puedes tener
+            <strong className="text-text"> múltiples hilos reales</strong> ejecutándose en paralelo.
+          </p>
+          <p>
+            Regla moderna: <strong className="text-text">nunca</strong> crees Threads directamente. Usa
+            <code className="text-primary"> ExecutorService</code> o <code className="text-primary">CompletableFuture</code>.
+            Los threads crudos son como hacer HTTP con sockets — funciona pero no es práctico.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="Threads.java" code={`
 public class Threads {
     public static void main(String[] args) throws InterruptedException {
@@ -107,6 +131,58 @@ public class CompletableFutureEjemplo {
           <code className="text-primary"> exceptionally</code> = <code className="text-primary">.catch()</code>,
           <code className="text-primary"> allOf</code> = <code className="text-primary">Promise.all()</code>.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 25</h2>
+        <Exercise
+          number={1}
+          title="Descarga paralela simulada"
+          description={`Simula descargar 5 archivos en paralelo con CompletableFuture:
+1. Cada "descarga" es un Thread.sleep(random 1-3 segundos)
+2. Imprime cuándo empieza y termina cada descarga
+3. Mide el tiempo total (debe ser ~3s, no 5×3s)
+4. Usa CompletableFuture.allOf() para esperar a todos`}
+          hint="CompletableFuture.supplyAsync(() -> { Thread.sleep(...); return archivo; })"
+          solution={`import java.util.concurrent.*;
+import java.util.*;
+
+public class DescargaParalela {
+    static String descargar(String archivo) {
+        try {
+            int ms = 1000 + new Random().nextInt(2000);
+            System.out.printf("[%s] Descargando %s...%n",
+                Thread.currentThread().getName(), archivo);
+            Thread.sleep(ms);
+            return archivo + " (" + ms + "ms)";
+        } catch (InterruptedException e) { throw new RuntimeException(e); }
+    }
+
+    public static void main(String[] args) {
+        long inicio = System.currentTimeMillis();
+        List<String> archivos = List.of("app.jar","data.csv","img.png","log.txt","config.xml");
+
+        CompletableFuture<?>[] futuros = archivos.stream()
+            .map(a -> CompletableFuture.supplyAsync(() -> descargar(a))
+                .thenAccept(r -> System.out.println("Completado: " + r)))
+            .toArray(CompletableFuture[]::new);
+
+        CompletableFuture.allOf(futuros).join();
+        System.out.printf("Total: %dms%n", System.currentTimeMillis() - inicio);
+    }
+}`}
+          solutionFilename="DescargaParalela.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-25: threads, ExecutorService, CompletableFuture"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 26</strong> — Virtual Threads: millones de hilos con Java 21.
+          </p>
+        </div>
       </section>
     </div>
   );

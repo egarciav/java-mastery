@@ -1,14 +1,34 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function SpringValidacionPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-spring mb-2">Validación con Bean Validation</h1>
-      <p className="text-text-muted text-lg mb-8">@Valid y anotaciones de validación para proteger tu API</p>
+      <DayHeader
+        day={43}
+        title="Validación con Bean Validation"
+        duration="45 min"
+        commitMsg="dia-43: @Valid, @NotBlank, @Email, @Size, grupos de validación"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy aprenderás Bean Validation — proteger tu API con anotaciones de validación
+        declarativas. Nunca confíes solo en la validación del frontend.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Anotaciones de validación</h2>
+
+        <ThinkSection title="Bean Validation = Validators de Angular Reactive Forms">
+          <p>
+            En Angular usas <code className="text-primary">Validators.required</code>, <code className="text-primary">Validators.email</code>.
+            En Java usas <code className="text-primary">@NotBlank</code>, <code className="text-primary">@Email</code> directamente
+            en los campos del DTO. Spring valida automáticamente con <code className="text-primary">@Valid</code>.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="UsuarioDTO.java" code={`
 import jakarta.validation.constraints.*;
 
@@ -137,6 +157,55 @@ public ResponseEntity<?> actualizar(@RequestBody @Validated(OnUpdate.class) Usua
           <code className="text-primary"> @Size</code> = <code className="text-primary">Validators.minLength/maxLength</code>.
           La diferencia: en Spring la validación ocurre en el servidor (nunca confíes solo en el cliente).
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 43</h2>
+        <Exercise
+          number={1}
+          title="DTO con validaciones completas"
+          description={`Crea ProductoCreateRequest con:
+- nombre: @NotBlank, @Size(2-100)
+- precio: @NotNull, @Positive
+- categoria: @NotBlank
+- stock: @Min(0)
+Usa @Valid en el controller y verifica que Spring retorna 400 con mensajes claros.`}
+          hint="@PostMapping public ResponseEntity<?> crear(@RequestBody @Valid ProductoCreateRequest req)"
+          solution={`public record ProductoCreateRequest(
+    @NotBlank(message = "Nombre requerido")
+    @Size(min = 2, max = 100, message = "Nombre: 2-100 chars")
+    String nombre,
+
+    @NotNull(message = "Precio requerido")
+    @Positive(message = "Precio debe ser positivo")
+    Double precio,
+
+    @NotBlank(message = "Categoría requerida")
+    String categoria,
+
+    @Min(value = 0, message = "Stock no puede ser negativo")
+    int stock
+) {}
+
+// En el controller:
+@PostMapping
+public ResponseEntity<ProductoResponse> crear(
+        @RequestBody @Valid ProductoCreateRequest req) {
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(service.crear(req));
+}`}
+          solutionFilename="ProductoCreateRequest.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-43: Bean Validation, @Valid, grupos de validación"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 44</strong> — DTOs y MapStruct: separar API de BD.
+          </p>
+        </div>
       </section>
     </div>
   );

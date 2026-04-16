@@ -1,14 +1,34 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function PatronesDisenoPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Patrones de Diseño</h1>
-      <p className="text-text-muted text-lg mb-8">Los patrones más usados en Java y Spring Boot</p>
+      <DayHeader
+        day={32}
+        title="Patrones de Diseño"
+        duration="55 min"
+        commitMsg="dia-32: singleton, builder, strategy, observer"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy aprenderás los patrones de diseño más usados en Java y Spring Boot.
+        No son teoría abstracta — los usarás diariamente en código profesional.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Singleton</h2>
+
+        <ThinkSection title="Spring ya usa estos patrones por ti">
+          <p>
+            En Spring Boot, <strong className="text-text">Singleton</strong> es el scope por defecto de @Service/@Component.
+            <strong className="text-text"> Strategy</strong> se implementa con múltiples @Service que implementan la misma interfaz.
+            <strong className="text-text"> Observer</strong> con ApplicationEventPublisher. Conocer los patrones te ayuda a entender Spring.
+          </p>
+        </ThinkSection>
+
         <p className="text-text-muted leading-relaxed mb-4">Una sola instancia en toda la aplicación.</p>
         <CodeBlock filename="Singleton.java" code={`
 public class DatabaseConnection {
@@ -142,6 +162,64 @@ manager.notify("Usuario creado"); // ambos listeners reciben el evento
           <strong> Strategy</strong> (múltiples implementaciones de interfaz + @Qualifier),
           <strong> Observer</strong> (ApplicationEventPublisher), <strong>Dependency Injection</strong> en todo.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 32</h2>
+        <Exercise
+          number={1}
+          title="Sistema de descuentos con Strategy"
+          description={`Crea un sistema de descuentos usando el patrón Strategy:
+1. Interface DescuentoStrategy con método double aplicar(double precio)
+2. SinDescuento, Descuento10, DescuentoBlackFriday (50%), DescuentoPorMonto (>100 = 15%)
+3. Clase Carrito que reciba una strategy y calcule el total
+4. En main: prueba cambiando la strategy dinámicamente`}
+          hint="Puedes usar lambdas en lugar de clases: DescuentoStrategy bf = precio -> precio * 0.5;"
+          solution={`import java.util.*;
+
+public class SistemaDescuentos {
+    interface DescuentoStrategy {
+        double aplicar(double precio);
+    }
+
+    static class Carrito {
+        private List<Double> precios = new ArrayList<>();
+        private DescuentoStrategy strategy = p -> p; // sin descuento
+
+        void agregar(double precio) { precios.add(precio); }
+        void setStrategy(DescuentoStrategy s) { this.strategy = s; }
+
+        double total() {
+            return precios.stream()
+                .mapToDouble(strategy::aplicar).sum();
+        }
+    }
+
+    public static void main(String[] args) {
+        Carrito c = new Carrito();
+        c.agregar(100); c.agregar(200); c.agregar(50);
+
+        System.out.printf("Normal: $%.2f%n", c.total());
+
+        c.setStrategy(p -> p * 0.9);
+        System.out.printf("10%% off: $%.2f%n", c.total());
+
+        c.setStrategy(p -> p > 100 ? p * 0.85 : p);
+        System.out.printf("15%% >100: $%.2f%n", c.total());
+    }
+}`}
+          solutionFilename="SistemaDescuentos.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-32: patrones singleton, builder, strategy, observer"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 33</strong> — Text Blocks, var y novedades del lenguaje.
+          </p>
+        </div>
       </section>
     </div>
   );

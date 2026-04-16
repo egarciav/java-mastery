@@ -1,14 +1,33 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function IOArchivosPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">I/O y Archivos</h1>
-      <p className="text-text-muted text-lg mb-8">Leer y escribir archivos con java.nio y java.io</p>
+      <DayHeader
+        day={27}
+        title="I/O y Archivos"
+        duration="45 min"
+        commitMsg="dia-27: Path, Files, BufferedReader, try-with-resources"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy aprenderás a leer y escribir archivos con la API moderna java.nio.file.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">java.nio.file (moderno)</h2>
+
+        <ThinkSection title="java.nio vs java.io — siempre usa nio">
+          <p>
+            Java tiene dos APIs de archivos: la vieja <code className="text-primary">java.io.File</code> y la moderna
+            <code className="text-primary"> java.nio.file</code> (NIO = New I/O). Siempre usa NIO:
+            <code className="text-primary"> Path</code> + <code className="text-primary">Files</code> son más seguras y expresivas.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="NIOArchivos.java" code={`
 import java.nio.file.*;
 import java.io.IOException;
@@ -87,6 +106,56 @@ public class BufferedIO {
     }
 }
 `} />
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 27</h2>
+        <Exercise
+          number={1}
+          title="Contador de palabras en archivo"
+          description={`Crea ContadorArchivo.java que:
+1. Lea un archivo de texto línea por línea
+2. Cuente: total líneas, total palabras, total caracteres
+3. Encuentre la línea más larga
+4. Imprima un resumen estilo wc de Linux`}
+          hint="Usa Files.readAllLines() o Files.lines() (stream). Para palabras: linea.split('\\s+').length"
+          solution={`import java.nio.file.*;
+import java.io.IOException;
+
+public class ContadorArchivo {
+    public static void main(String[] args) throws IOException {
+        Path archivo = Path.of("datos.txt");
+        // Crear archivo de prueba
+        Files.writeString(archivo, "Hola mundo\nJava es genial\nNIO es moderno y potente");
+
+        var lineas = Files.readAllLines(archivo);
+        long totalLineas = lineas.size();
+        long totalPalabras = lineas.stream()
+            .mapToInt(l -> l.split("\\s+").length).sum();
+        long totalChars = lineas.stream()
+            .mapToInt(String::length).sum();
+        String masLarga = lineas.stream()
+            .reduce((a, b) -> a.length() >= b.length() ? a : b)
+            .orElse("");
+
+        System.out.printf("Líneas: %d%n", totalLineas);
+        System.out.printf("Palabras: %d%n", totalPalabras);
+        System.out.printf("Caracteres: %d%n", totalChars);
+        System.out.printf("Línea más larga: %s%n", masLarga);
+    }
+}`}
+          solutionFilename="ContadorArchivo.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-27: I/O archivos, Path, Files, BufferedReader"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 28</strong> — API de Fechas: LocalDate, LocalDateTime, Duration.
+          </p>
+        </div>
       </section>
     </div>
   );

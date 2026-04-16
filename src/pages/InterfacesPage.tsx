@@ -1,14 +1,38 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function InterfacesPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Interfaces</h1>
-      <p className="text-text-muted text-lg mb-8">Contratos que definen qué debe hacer una clase</p>
+      <DayHeader
+        day={15}
+        title="Interfaces"
+        duration="50 min"
+        commitMsg="dia-15: interfaces, default methods, funcionales, lambdas intro"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy aprenderás interfaces — los contratos de Java. A diferencia de las clases abstractas,
+        puedes implementar <strong className="text-text">múltiples</strong> interfaces. Son fundamentales para Spring.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Definir e implementar</h2>
+
+        <ThinkSection title="Interface = contrato. ¿Cuándo usarla?">
+          <p>
+            En TypeScript, las interfaces son solo contratos de tipos (sin código). En Java, las interfaces pueden
+            tener <code className="text-primary">default</code> methods con implementación real (desde Java 8).
+          </p>
+          <p>
+            Usa interfaces cuando una clase necesita <strong className="text-text">capacidades</strong> múltiples:
+            un Pato puede ser <code className="text-primary">Volable</code> y <code className="text-primary">Nadable</code>.
+            Con herencia solo podrías elegir una.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="Volable.java" code={`
 public interface Volable {
     void volar();              // abstracto (sin cuerpo)
@@ -100,6 +124,53 @@ public class Main {
               <tr><td className="py-2 px-3">Uso típico</td><td className="py-2 px-3">Definir capacidades</td><td className="py-2 px-3">Compartir código base</td></tr>
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 15</h2>
+        <Exercise
+          number={1}
+          title="Sistema de notificaciones"
+          description={`Crea interfaces Notificable con método enviar(String mensaje):
+- EmailNotificacion implements Notificable
+- SmsNotificacion implements Notificable
+- PushNotificacion implements Notificable
+Cada una imprime el mensaje con su canal. Crea un array Notificable[] y recórrelo.`}
+          hint="interface Notificable { void enviar(String mensaje); }"
+          solution={`public interface Notificable {
+    void enviar(String mensaje);
+}
+
+class EmailNotificacion implements Notificable {
+    public void enviar(String msg) { System.out.println("EMAIL: " + msg); }
+}
+class SmsNotificacion implements Notificable {
+    public void enviar(String msg) { System.out.println("SMS: " + msg); }
+}
+class PushNotificacion implements Notificable {
+    public void enviar(String msg) { System.out.println("PUSH: " + msg); }
+
+    public static void main(String[] args) {
+        Notificable[] canales = {
+            new EmailNotificacion(),
+            new SmsNotificacion(),
+            new PushNotificacion()
+        };
+        for (Notificable n : canales) n.enviar("Pedido confirmado");
+    }
+}`}
+          solutionFilename="Notificable.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-15: interfaces, default methods, funcionales"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 16</strong> — clases abstractas en profundidad.
+          </p>
         </div>
       </section>
     </div>

@@ -1,23 +1,49 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import StepByStep from '../components/StepByStep';
+import Exercise from '../components/Exercise';
 
 export default function IntroduccionPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Introducción a Java</h1>
-      <p className="text-text-muted text-lg mb-8">Qué es Java, cómo funciona y por qué sigue siendo relevante en 2026</p>
+      <DayHeader
+        day={1}
+        title="Introducción a Java"
+        duration="45 min"
+        commitMsg="dia-1: primer programa Java - HolaMundo"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy vas a entender qué es Java, cómo funciona por dentro, y vas a escribir y ejecutar tu primer programa.
+        No solo leer — vas a <strong className="text-text">hacer</strong>.
+      </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">¿Qué es Java?</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Qué es Java y por qué te importa?</h2>
         <p className="text-text-muted leading-relaxed mb-4">
-          Java es un lenguaje de programación <strong className="text-text">orientado a objetos</strong>, 
+          Java es un lenguaje <strong className="text-text">orientado a objetos</strong>,
           <strong className="text-text"> fuertemente tipado</strong> y <strong className="text-text">compilado</strong>.
-          Fue creado por James Gosling en Sun Microsystems en 1995 y actualmente es mantenido por Oracle.
+          Fue creado en 1995 por James Gosling y hoy lo mantiene Oracle.
         </p>
         <p className="text-text-muted leading-relaxed mb-4">
-          Su filosofía es <strong className="text-text">"Write Once, Run Anywhere" (WORA)</strong>: 
-          escribes el código una vez y se ejecuta en cualquier plataforma que tenga una JVM (Java Virtual Machine).
+          Su filosofía es <strong className="text-text">"Write Once, Run Anywhere" (WORA)</strong>:
+          escribes el código una vez y se ejecuta en cualquier plataforma con una JVM.
         </p>
+
+        <ThinkSection title="¿Por qué debería aprender Java si ya sé TypeScript?">
+          <p>
+            Piénsalo así: TypeScript te da tipado estático <em>opcional</em> sobre JavaScript.
+            Java te da tipado estático <em>obligatorio</em> desde el primer día. Eso significa que
+            el compilador atrapa más errores antes de que tu código se ejecute.
+          </p>
+          <p>
+            El 90% de los sistemas bancarios, aerolíneas y gobiernos corren sobre Java. Si quieres
+            trabajar en backend enterprise, Java es el lenguaje que abre esas puertas. Spring Boot
+            (que aprenderemos en la Fase 7) es el equivalente de NestJS pero con un ecosistema mucho
+            más maduro.
+          </p>
+        </ThinkSection>
 
         <InfoBox type="angular">
           En Angular trabajas con TypeScript, que se <strong>transpila</strong> a JavaScript y se ejecuta en el navegador.
@@ -28,103 +54,60 @@ export default function IntroduccionPage() {
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">JDK, JRE y JVM — Las tres piezas clave</h2>
-        <p className="text-text-muted leading-relaxed mb-4">
-          Estos tres conceptos son fundamentales para entender cómo funciona Java:
-        </p>
+
+        <ThinkSection title="¿Cómo pensar en estas tres piezas?">
+          <p>
+            Imagina una <strong className="text-text">muñeca rusa (matrioska)</strong>. La más grande es el JDK,
+            que contiene al JRE, que contiene a la JVM. Cada capa agrega herramientas:
+          </p>
+          <p>
+            <strong className="text-text">JVM</strong> = el motor que ejecuta tu programa.
+            <strong className="text-text"> JRE</strong> = el motor + las bibliotecas (java.util, java.lang...).
+            <strong className="text-text"> JDK</strong> = todo lo anterior + herramientas para desarrollar (compilador, debugger).
+          </p>
+          <p>
+            Como desarrollador, siempre instalas el <strong className="text-text">JDK</strong>. Es todo lo que necesitas.
+          </p>
+        </ThinkSection>
 
         <div className="space-y-4 mb-6">
           <div className="bg-surface-light border border-border rounded-xl p-4">
             <h3 className="font-semibold text-java mb-2">JVM (Java Virtual Machine)</h3>
             <p className="text-text-muted text-sm">
-              Es la máquina virtual que <strong className="text-text">ejecuta</strong> el bytecode de Java. 
-              Es lo que permite que Java sea multiplataforma. Cada sistema operativo (Windows, macOS, Linux) 
-              tiene su propia implementación de la JVM, pero todos ejecutan el mismo bytecode.
+              Ejecuta el bytecode de Java. Cada sistema operativo tiene su propia JVM,
+              pero todos ejecutan el mismo bytecode. Es lo que hace a Java multiplataforma.
             </p>
           </div>
           <div className="bg-surface-light border border-border rounded-xl p-4">
             <h3 className="font-semibold text-java mb-2">JRE (Java Runtime Environment)</h3>
             <p className="text-text-muted text-sm">
-              Es el entorno de <strong className="text-text">ejecución</strong>. Incluye la JVM más 
-              las bibliotecas estándar de Java (como java.lang, java.util, etc.). 
-              Es lo que necesitas para <strong className="text-text">ejecutar</strong> programas Java.
+              JVM + bibliotecas estándar. Lo que necesitas para <strong className="text-text">ejecutar</strong> programas Java.
             </p>
           </div>
           <div className="bg-surface-light border border-border rounded-xl p-4">
             <h3 className="font-semibold text-java mb-2">JDK (Java Development Kit)</h3>
             <p className="text-text-muted text-sm">
-              Es el kit de <strong className="text-text">desarrollo</strong>. Incluye el JRE más herramientas 
-              para desarrollar: el compilador (<code className="text-primary">javac</code>), 
-              el debugger, y otras utilidades. Es lo que necesitas para <strong className="text-text">escribir y compilar</strong> programas Java.
+              JRE + compilador (<code className="text-primary">javac</code>) + debugger + herramientas.
+              Lo que necesitas para <strong className="text-text">escribir y compilar</strong> programas.
             </p>
           </div>
         </div>
-
-        <CodeBlock language="bash" filename="Relación entre JDK, JRE y JVM" code={`
-# La relación es como una matrioska (muñeca rusa):
-# JDK contiene → JRE contiene → JVM
-
-# JDK = JRE + herramientas de desarrollo (javac, jar, javadoc)
-# JRE = JVM + bibliotecas estándar de Java
-# JVM = Motor que ejecuta el bytecode
-
-# Para DESARROLLAR necesitas: JDK
-# Para solo EJECUTAR necesitas: JRE
-`} />
       </section>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">¿Cómo se compila y ejecuta Java?</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">Instalación paso a paso</h2>
         <p className="text-text-muted leading-relaxed mb-4">
-          El proceso de compilación y ejecución en Java tiene dos pasos:
+          Antes de escribir código, necesitas tener el JDK instalado. Vamos a hacerlo juntos:
         </p>
 
-        <CodeBlock language="bash" filename="Paso 1: Escribir el código" code={`
-# Creas un archivo con extensión .java
-# El nombre del archivo DEBE coincidir con el nombre de la clase pública
-# Ejemplo: HolaMundo.java
-`} />
+        <StepByStep title="Instalar JDK 21 en tu máquina" steps={[
+          { instruction: 'Descarga el JDK 21 (LTS)', detail: 'Ve a adoptium.net o oracle.com/java y descarga JDK 21 para tu sistema operativo.' },
+          { instruction: 'Ejecuta el instalador', detail: 'En Windows: siguiente, siguiente, instalar. En macOS: abre el .dmg y arrastra. En Linux: usa tu gestor de paquetes (apt, dnf, etc.).' },
+          { instruction: 'Verifica la instalación en tu terminal', detail: 'Abre una terminal y ejecuta los comandos de abajo.' },
+          { instruction: 'Instala IntelliJ IDEA Community', detail: 'Descarga de jetbrains.com/idea. La versión Community es gratuita y perfecta para aprender.' },
+        ]} />
 
-        <CodeBlock language="java" filename="HolaMundo.java" code={`
-public class HolaMundo {
-    public static void main(String[] args) {
-        System.out.println("¡Hola, Mundo!");
-    }
-}
-`} />
-
-        <CodeBlock language="bash" filename="Paso 2: Compilar" code={`
-# El compilador (javac) convierte tu código .java en bytecode .class
-javac HolaMundo.java
-# Esto genera: HolaMundo.class (bytecode)
-`} />
-
-        <CodeBlock language="bash" filename="Paso 3: Ejecutar" code={`
-# La JVM ejecuta el bytecode
-java HolaMundo
-# Salida: ¡Hola, Mundo!
-# NOTA: No pones la extensión .class al ejecutar
-`} />
-
-        <InfoBox type="info">
-          En la práctica, cuando uses un IDE como IntelliJ IDEA o VS Code, los pasos de compilar y ejecutar 
-          se hacen con un solo clic o atajo de teclado. Pero es importante que entiendas qué pasa detrás de escenas.
-        </InfoBox>
-      </section>
-
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Instalación del JDK</h2>
-        <p className="text-text-muted leading-relaxed mb-4">
-          Para empezar a programar en Java necesitas instalar el JDK. En 2026, las versiones recomendadas son:
-        </p>
-
-        <div className="bg-surface-light border border-border rounded-xl p-4 mb-4">
-          <ul className="space-y-2 text-text-muted text-sm">
-            <li>• <strong className="text-text">Java 21 (LTS)</strong> — Versión de soporte largo, la más usada en producción</li>
-            <li>• <strong className="text-text">Java 23+</strong> — Última versión con las features más recientes</li>
-          </ul>
-        </div>
-
-        <CodeBlock language="bash" filename="Verificar instalación" code={`
+        <CodeBlock language="bash" filename="Terminal — Verificar instalación" code={`
 # Verificar que Java está instalado
 java --version
 # Debería mostrar algo como: openjdk 21.0.x ...
@@ -134,46 +117,98 @@ javac --version
 # Debería mostrar algo como: javac 21.0.x
 `} />
 
-        <InfoBox type="tip" title="IDEs Recomendados">
-          <strong>IntelliJ IDEA</strong> (Community Edition es gratuita) es el IDE más popular para Java.
-          También puedes usar <strong>VS Code</strong> con el Extension Pack for Java.
-          IntelliJ es especialmente bueno para Spring Boot.
+        <InfoBox type="warning" title="¿No te reconoce el comando java?">
+          Si la terminal dice "java no se reconoce como un comando", necesitas agregar el JDK al PATH
+          de tu sistema. En Windows: Panel de control → Variables de entorno → PATH → agrega la ruta
+          del bin del JDK (ejemplo: <code className="text-primary">C:\Program Files\Java\jdk-21\bin</code>).
         </InfoBox>
       </section>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">¿Por qué Java en 2026?</h2>
-        <div className="space-y-3 text-text-muted leading-relaxed">
+        <h2 className="text-2xl font-bold text-text mb-4">Tu primer programa: HolaMundo</h2>
+        <p className="text-text-muted leading-relaxed mb-4">
+          Ahora sí, manos al código. Vas a crear tu primer archivo Java y ejecutarlo.
+          Presta atención a <strong className="text-text">cada parte</strong> del código:
+        </p>
+
+        <StepByStep title="Crear tu primer proyecto en IntelliJ" steps={[
+          { instruction: 'Abre IntelliJ IDEA', detail: 'Si es la primera vez, selecciona "New Project".' },
+          { instruction: 'Configura el proyecto', detail: 'Name: java-mastery-45-dias, Language: Java, Build system: IntelliJ, JDK: 21. Click "Create".' },
+          { instruction: 'Crea el archivo HolaMundo.java', detail: 'Click derecho en la carpeta "src" → New → Java Class → escribe "HolaMundo".' },
+          { instruction: 'Escribe el código de abajo', detail: 'No copies y pegues. Escríbelo tú mismo — así tu cerebro empieza a memorizar la estructura.' },
+          { instruction: 'Ejecuta el programa', detail: 'Click derecho en el archivo → Run, o usa el atajo Shift+F10 (Windows) / Ctrl+R (Mac).' },
+        ]} />
+
+        <CodeBlock language="java" filename="HolaMundo.java" code={`
+public class HolaMundo {
+    public static void main(String[] args) {
+        System.out.println("¡Hola, Mundo!");
+    }
+}
+`} />
+
+        <ThinkSection title="¿Qué significa cada palabra de este código?">
+          <p>Vamos parte por parte, porque entender esto es la base de TODO lo que viene después:</p>
           <p>
-            <strong className="text-text">1. Ecosistema empresarial masivo:</strong> La mayoría de las empresas grandes 
-            (bancos, aerolíneas, gobiernos) usan Java para sus sistemas backend.
+            <strong className="text-text">public</strong> — Modificador de acceso. Significa que esta clase es visible para todos.
+            Por ahora, siempre pondrás <code className="text-primary">public</code> en tu clase principal.
           </p>
           <p>
-            <strong className="text-text">2. Spring Boot:</strong> El framework más popular para crear APIs REST 
-            y microservicios. Es equivalente a lo que Express/NestJS es para Node.js.
+            <strong className="text-text">class HolaMundo</strong> — Defines una clase llamada HolaMundo.
+            En Java <em>todo</em> el código vive dentro de una clase. El nombre <em>debe</em> coincidir
+            exactamente con el nombre del archivo (HolaMundo.java).
           </p>
           <p>
-            <strong className="text-text">3. Rendimiento:</strong> La JVM es extremadamente eficiente. 
-            Java moderno con GraalVM puede compilar a binarios nativos.
+            <strong className="text-text">public static void main(String[] args)</strong> — Este es el
+            punto de entrada. La JVM busca exactamente este método para arrancar tu programa. No puedes
+            cambiarle el nombre ni la firma. <code className="text-primary">static</code> = no necesita
+            una instancia. <code className="text-primary">void</code> = no retorna nada.
+            <code className="text-primary"> String[] args</code> = argumentos desde la línea de comandos.
           </p>
           <p>
-            <strong className="text-text">4. Evolución constante:</strong> Java lanza nuevas versiones cada 6 meses. 
-            Records, sealed classes, pattern matching, virtual threads — Java moderno es muy diferente al Java de hace 10 años.
+            <strong className="text-text">System.out.println()</strong> — Imprime texto en la consola
+            y agrega un salto de línea al final. <code className="text-primary">System</code> es una clase
+            del sistema, <code className="text-primary">out</code> es el flujo de salida estándar.
           </p>
-          <p>
-            <strong className="text-text">5. Demanda laboral:</strong> Java sigue siendo uno de los lenguajes 
-            más demandados en el mercado laboral, especialmente para posiciones backend senior.
-          </p>
-        </div>
+        </ThinkSection>
       </section>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Java vs TypeScript — Diferencias clave</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Cómo funciona por dentro?</h2>
+        <p className="text-text-muted leading-relaxed mb-4">
+          Cuando hiciste click en "Run" en IntelliJ, esto es lo que pasó detrás de escenas:
+        </p>
+
+        <CodeBlock language="bash" filename="Lo que IntelliJ hizo por ti" code={`
+# Paso 1: El compilador convierte .java → .class (bytecode)
+javac HolaMundo.java
+# Genera: HolaMundo.class
+
+# Paso 2: La JVM ejecuta el bytecode
+java HolaMundo
+# Salida: ¡Hola, Mundo!
+
+# NOTA: No pones .class al ejecutar
+# NOTA: El archivo .class no es legible por humanos — es bytecode
+`} />
+
+        <InfoBox type="info">
+          IntelliJ hace estos dos pasos automáticamente con un solo click. Pero es fundamental que
+          entiendas el proceso: <strong>tu código → compilador → bytecode → JVM → ejecución</strong>.
+          Cuando algo falle, saber en qué paso ocurrió el error te ahorra horas de debugging.
+        </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Java vs TypeScript — Mapa mental</h2>
+        <p className="text-text-muted leading-relaxed mb-4">
+          Si vienes de TypeScript, esta tabla te ayuda a conectar lo que ya sabes:
+        </p>
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-text-muted">
             <thead>
               <tr className="border-b border-border">
-                <th className="text-left py-3 px-4 text-text">Aspecto</th>
+                <th className="text-left py-3 px-4 text-text">Concepto</th>
                 <th className="text-left py-3 px-4 text-angular">TypeScript</th>
                 <th className="text-left py-3 px-4 text-java">Java</th>
               </tr>
@@ -195,27 +230,111 @@ javac --version
                 <td className="py-3 px-4">JVM</td>
               </tr>
               <tr className="border-b border-border/50">
-                <td className="py-3 px-4">Paradigma</td>
-                <td className="py-3 px-4">Multi-paradigma</td>
-                <td className="py-3 px-4">Orientado a Objetos</td>
+                <td className="py-3 px-4">Punto de entrada</td>
+                <td className="py-3 px-4">main.ts / index.ts</td>
+                <td className="py-3 px-4">public static void main()</td>
               </tr>
               <tr className="border-b border-border/50">
-                <td className="py-3 px-4">Null safety</td>
-                <td className="py-3 px-4">strict null checks</td>
-                <td className="py-3 px-4">Optional (desde Java 8)</td>
-              </tr>
-              <tr className="border-b border-border/50">
-                <td className="py-3 px-4">Gestión memoria</td>
-                <td className="py-3 px-4">Garbage Collector (V8)</td>
-                <td className="py-3 px-4">Garbage Collector (JVM)</td>
+                <td className="py-3 px-4">Dependencias</td>
+                <td className="py-3 px-4">npm / yarn / pnpm</td>
+                <td className="py-3 px-4">Maven / Gradle</td>
               </tr>
               <tr>
-                <td className="py-3 px-4">Dependencias</td>
-                <td className="py-3 px-4">npm / yarn</td>
-                <td className="py-3 px-4">Maven / Gradle</td>
+                <td className="py-3 px-4">Imprimir</td>
+                <td className="py-3 px-4">console.log()</td>
+                <td className="py-3 px-4">System.out.println()</td>
               </tr>
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 1</h2>
+        <p className="text-text-muted leading-relaxed mb-4">
+          No avances al Día 2 sin completar estos ejercicios. Escríbelos tú mismo en IntelliJ,
+          ejecútalos y verifica que funcionen.
+        </p>
+
+        <Exercise
+          number={1}
+          title="Saluda con tu nombre"
+          description={`Crea una clase llamada MiSaludo.java que imprima:
+"Hola, me llamo [TU NOMBRE] y estoy aprendiendo Java"
+
+Recuerda: el nombre de la clase debe coincidir con el nombre del archivo.`}
+          hint="Usa System.out.println() con tu nombre dentro de las comillas."
+          solution={`public class MiSaludo {
+    public static void main(String[] args) {
+        System.out.println("Hola, me llamo Carlos y estoy aprendiendo Java");
+    }
+}`}
+          solutionFilename="MiSaludo.java"
+        />
+
+        <Exercise
+          number={2}
+          title="Múltiples líneas"
+          description={`Crea una clase llamada MiPerfil.java que imprima tu perfil en 4 líneas separadas:
+- Tu nombre
+- Tu edad
+- Tu lenguaje favorito actual
+- Lo que esperas aprender con Java
+
+Usa 4 llamadas separadas a System.out.println().`}
+          hint="Cada System.out.println() imprime una línea. Necesitas 4 sentencias separadas, cada una terminando con punto y coma."
+          solution={`public class MiPerfil {
+    public static void main(String[] args) {
+        System.out.println("Nombre: Carlos García");
+        System.out.println("Edad: 28");
+        System.out.println("Lenguaje favorito: TypeScript");
+        System.out.println("Meta: Aprender Spring Boot para backend");
+    }
+}`}
+          solutionFilename="MiPerfil.java"
+        />
+
+        <Exercise
+          number={3}
+          title="print vs println"
+          description={`Crea una clase Impresion.java que demuestre la diferencia entre print y println:
+1. Usa System.out.print("Java ") (sin ln)
+2. Usa System.out.print("es ") (sin ln)
+3. Usa System.out.println("genial!") (con ln)
+4. Usa System.out.println("--- fin ---")
+
+¿Qué diferencia notas en la salida?`}
+          hint='print() NO agrega salto de línea al final, println() SÍ. Las primeras tres palabras deberían aparecer en la misma línea.'
+          solution={`public class Impresion {
+    public static void main(String[] args) {
+        System.out.print("Java ");      // NO salto de línea
+        System.out.print("es ");        // NO salto de línea
+        System.out.println("genial!");  // SÍ salto de línea
+        System.out.println("--- fin ---");
+        // Salida:
+        // Java es genial!
+        // --- fin ---
+    }
+}`}
+          solutionFilename="Impresion.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <p className="text-text-muted text-sm mb-3">
+            Si completaste los 3 ejercicios, haz tu primer commit:
+          </p>
+          <CodeBlock language="bash" code={`
+git add .
+git commit -m "dia-1: primer programa Java - HolaMundo, MiSaludo, MiPerfil, Impresion"
+git push origin main
+`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana en el <strong className="text-text">Día 2</strong> vas a aprender la estructura completa
+            de un programa Java: paquetes, imports, convenciones y más.
+          </p>
         </div>
       </section>
     </div>

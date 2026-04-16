@@ -1,14 +1,33 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function SpringSetupPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-spring mb-2">Setup del Proyecto</h1>
-      <p className="text-text-muted text-lg mb-8">Crear y configurar un proyecto Spring Boot desde cero</p>
+      <DayHeader
+        day={35}
+        title="Setup del Proyecto"
+        duration="50 min"
+        commitMsg="dia-35: spring initializr, pom.xml, application.properties"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy crearás tu primer proyecto Spring Boot desde cero con Spring Initializr.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Spring Initializr</h2>
+
+        <ThinkSection title="start.spring.io = ng new para Java">
+          <p>
+            Así como Angular CLI genera la estructura del proyecto con <code className="text-primary">ng new</code>,
+            Spring Initializr genera un proyecto Maven/Gradle con todas las dependencias configuradas.
+            Solo elige las dependencias y descarga el ZIP.
+          </p>
+        </ThinkSection>
+
         <p className="text-text-muted leading-relaxed mb-4">
           Ve a <strong className="text-text">start.spring.io</strong> y configura tu proyecto:
         </p>
@@ -103,6 +122,49 @@ spring.h2.console.enabled=true
           El <code className="text-primary">pom.xml</code> de Maven es como el <code className="text-primary">package.json</code> de npm. 
           Las dependencias se descargan del repositorio central de Maven (como npmjs.com).
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 35</h2>
+        <Exercise
+          number={1}
+          title="Tu primer Hello World en Spring Boot"
+          description={`1. Ve a start.spring.io y genera un proyecto con Spring Web
+2. Importa en IntelliJ
+3. Crea HolaController.java en el paquete controller
+4. Agrega @RestController y un @GetMapping("/hola") que retorne "Hola Spring Boot!"
+5. Ejecuta y visita http://localhost:8080/hola`}
+          hint='@GetMapping("/hola") public String hola() { return "Hola Spring Boot!"; }'
+          solution={`package com.miapp.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HolaController {
+
+    @GetMapping("/hola")
+    public String hola() {
+        return "Hola Spring Boot!";
+    }
+
+    @GetMapping("/fecha")
+    public String fecha() {
+        return "Hoy es: " + java.time.LocalDate.now();
+    }
+}`}
+          solutionFilename="HolaController.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-35: setup Spring Boot, primer endpoint /hola"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 36</strong> — Anotaciones de Spring: el lenguaje del framework.
+          </p>
+        </div>
       </section>
     </div>
   );

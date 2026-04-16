@@ -1,14 +1,34 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function TextBlocksPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Text Blocks y otras novedades</h1>
-      <p className="text-text-muted text-lg mb-8">Text Blocks (Java 13+), var (Java 10+) y otras mejoras del lenguaje</p>
+      <DayHeader
+        day={33}
+        title="Text Blocks y Novedades"
+        duration="40 min"
+        commitMsg="dia-33: text blocks, var, string enhancements"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy cierras la sección de Java Moderno con Text Blocks, var y mejoras de String.
+        Estas features hacen tu código más limpio y expresivo.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Text Blocks (Java 13+)</h2>
+
+        <ThinkSection title="Text Blocks = template literals sin interpolación">
+          <p>
+            En TypeScript usas backticks: <code className="text-primary">{"`Hola ${nombre}`"}</code>.
+            En Java, Text Blocks usan <code className="text-primary">{"\"\"\"....\"\"\""}</code> para multilínea,
+            pero <strong className="text-text">no tienen interpolación</strong>. Usa <code className="text-primary">.formatted()</code> para eso.
+          </p>
+        </ThinkSection>
+
         <p className="text-text-muted leading-relaxed mb-4">
           Los <strong className="text-text">Text Blocks</strong> permiten escribir strings multilínea de forma legible 
           con <code className="text-primary">"""..."""</code>. El indentado se gestiona automáticamente.
@@ -132,6 +152,66 @@ multilinea.lines()
 "Hola %s, tienes %d años".formatted("Carlos", 25);
 // = String.format("Hola %s, tienes %d años", "Carlos", 25)
 `} />
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 33</h2>
+        <Exercise
+          number={1}
+          title="Generador de HTML con Text Blocks"
+          description={`Crea GeneradorHTML.java que:
+1. Use Text Blocks para definir un template HTML con placeholders %s
+2. Método static String generarPagina(String titulo, String contenido)
+3. Método static String generarTabla(List<String[]> filas)
+4. Use .formatted() para insertar valores
+5. Imprima el HTML resultante`}
+          hint={'String template = """\n<html>...\n""".formatted(titulo, contenido);'}
+          solution={`import java.util.List;
+
+public class GeneradorHTML {
+    static String generarPagina(String titulo, String contenido) {
+        return """
+            <html>
+              <head><title>%s</title></head>
+              <body>
+                <h1>%s</h1>
+                <div>%s</div>
+              </body>
+            </html>
+            """.formatted(titulo, titulo, contenido);
+    }
+
+    static String generarTabla(List<String[]> filas) {
+        var sb = new StringBuilder("<table>\\n");
+        for (var fila : filas) {
+            sb.append("  <tr>");
+            for (var celda : fila) sb.append("<td>%s</td>".formatted(celda));
+            sb.append("</tr>\\n");
+        }
+        sb.append("</table>");
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        var tabla = generarTabla(List.of(
+            new String[]{"Java", "17"},
+            new String[]{"Spring", "3.2"}
+        ));
+        System.out.println(generarPagina("Mi App", tabla));
+    }
+}`}
+          solutionFilename="GeneradorHTML.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-33: text blocks, var, string enhancements"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 34</strong> — Spring Boot: introducción al framework.
+          </p>
+        </div>
       </section>
     </div>
   );

@@ -1,14 +1,38 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function StringsPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Strings</h1>
-      <p className="text-text-muted text-lg mb-8">Todo sobre cadenas de texto en Java</p>
+      <DayHeader
+        day={6}
+        title="Strings"
+        duration="50 min"
+        commitMsg="dia-6: strings, inmutabilidad, metodos, StringBuilder"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy vas a dominar Strings — el tipo de dato que más usarás en Java. La clave es entender
+        que son <strong className="text-text">inmutables</strong> y cuándo usar <code className="text-primary">StringBuilder</code>.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Crear Strings</h2>
+
+        <ThinkSection title="¿Por qué los Strings son inmutables?">
+          <p>
+            En TypeScript/JavaScript, los strings también son inmutables, pero casi nadie lo piensa.
+            En Java es <strong className="text-text">crucial</strong> porque afecta rendimiento: cada vez que
+            "modificas" un String con <code className="text-primary">+</code>, se crea un objeto nuevo en memoria.
+          </p>
+          <p>
+            Si concatenas en un bucle de 10,000 iteraciones, creas 10,000 objetos String. Por eso existe
+            <code className="text-primary"> StringBuilder</code>: modifica el mismo objeto internamente.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="CrearStrings.java" code={`
 public class CrearStrings {
     public static void main(String[] args) {
@@ -172,6 +196,131 @@ public class StringBuilderEjemplo {
           la forma estándar de formatear strings. En Java usas <code className="text-primary">String.format()</code>,
           el operador <code className="text-primary">+</code>, o <code className="text-primary">StringBuilder</code> para casos de rendimiento.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 6</h2>
+
+        <Exercise
+          number={1}
+          title="Procesador de nombres"
+          description={`Crea ProcesadorNombres.java con un método static procesarNombre(String nombreCompleto) que:
+1. Reciba un nombre completo (ej: "  carlos GARCÍA  ")
+2. Elimine espacios al inicio y final (trim)
+3. Convierta a Title Case: primera letra mayúscula, el resto minúscula para cada palabra
+4. Retorne el nombre procesado
+
+Prueba con: "  carlos GARCÍA  ", "ANA maría LÓPEZ", "  juan  "`}
+          hint="Usa trim(), split() para separar por espacios, luego para cada palabra: substring(0,1).toUpperCase() + substring(1).toLowerCase()"
+          solution={`public class ProcesadorNombres {
+    static String procesarNombre(String nombreCompleto) {
+        String limpio = nombreCompleto.trim();
+        String[] partes = limpio.split("\\\\s+");
+        StringBuilder resultado = new StringBuilder();
+
+        for (int i = 0; i < partes.length; i++) {
+            if (i > 0) resultado.append(" ");
+            String palabra = partes[i];
+            resultado.append(palabra.substring(0, 1).toUpperCase())
+                     .append(palabra.substring(1).toLowerCase());
+        }
+        return resultado.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(procesarNombre("  carlos GARCÍA  "));
+        System.out.println(procesarNombre("ANA maría LÓPEZ"));
+        System.out.println(procesarNombre("  juan  "));
+    }
+}`}
+          solutionFilename="ProcesadorNombres.java"
+        />
+
+        <Exercise
+          number={2}
+          title="Analizador de texto"
+          description={`Crea AnalizadorTexto.java con un método static analizarTexto(String texto) que imprima:
+- Longitud del texto
+- Número de palabras (split por espacios)
+- Número de vocales (a, e, i, o, u — sin importar mayúsculas)
+- El texto en reversa
+
+Prueba con: "Java es un lenguaje genial"`}
+          hint="Para contar vocales, convierte a minúsculas y recorre con charAt() verificando si es vocal. Para reversa, usa new StringBuilder(texto).reverse().toString()"
+          solution={`public class AnalizadorTexto {
+    static void analizarTexto(String texto) {
+        System.out.println("Texto: " + texto);
+        System.out.println("Longitud: " + texto.length());
+        System.out.println("Palabras: " + texto.split("\\\\s+").length);
+
+        int vocales = 0;
+        String lower = texto.toLowerCase();
+        for (int i = 0; i < lower.length(); i++) {
+            char c = lower.charAt(i);
+            if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+                vocales++;
+            }
+        }
+        System.out.println("Vocales: " + vocales);
+
+        String reversa = new StringBuilder(texto).reverse().toString();
+        System.out.println("Reversa: " + reversa);
+    }
+
+    public static void main(String[] args) {
+        analizarTexto("Java es un lenguaje genial");
+    }
+}`}
+          solutionFilename="AnalizadorTexto.java"
+        />
+
+        <Exercise
+          number={3}
+          title="Generador de email"
+          description={`Crea GeneradorEmail.java con un método static generarEmail(String nombre, String apellido, String empresa) que:
+1. Tome nombre, apellido y empresa
+2. Genere un email: nombre.apellido@empresa.com
+3. Todo en minúsculas, sin espacios, sin acentos (simplifica: no te preocupes por acentos por ahora)
+
+Prueba con: ("Carlos", "García", "Google") → carlos.garcia@google.com
+
+Bonus: usa StringBuilder para construir el email.`}
+          hint='new StringBuilder().append(nombre.toLowerCase()).append(".").append(apellido.toLowerCase()).append("@")...'
+          solution={`public class GeneradorEmail {
+    static String generarEmail(String nombre, String apellido, String empresa) {
+        return new StringBuilder()
+            .append(nombre.toLowerCase().trim())
+            .append(".")
+            .append(apellido.toLowerCase().trim())
+            .append("@")
+            .append(empresa.toLowerCase().trim())
+            .append(".com")
+            .toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(generarEmail("Carlos", "García", "Google"));
+        System.out.println(generarEmail("Ana", "López", "Microsoft"));
+        System.out.println(generarEmail("Juan", "Pérez", "Amazon"));
+    }
+}`}
+          solutionFilename="GeneradorEmail.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`
+git add .
+git commit -m "dia-6: strings, inmutabilidad, metodos, StringBuilder, formateo"
+git push origin main
+`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana en el <strong className="text-text">Día 7</strong>: condicionales — if/else,
+            switch, y pattern matching.
+          </p>
+        </div>
       </section>
     </div>
   );

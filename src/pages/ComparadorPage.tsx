@@ -1,19 +1,37 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function ComparadorPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Comparable y Comparator</h1>
-      <p className="text-text-muted text-lg mb-8">Cómo ordenar objetos en Java</p>
+      <DayHeader
+        day={21}
+        title="Comparable y Comparator"
+        duration="45 min"
+        commitMsg="dia-21: Comparable, Comparator, ordenamiento de objetos"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy aprenderás a ordenar objetos en Java. Es fundamental para trabajar con colecciones
+        y streams — lo usarás constantemente en código profesional.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Comparable — orden natural</h2>
-        <p className="text-text-muted leading-relaxed mb-4">
-          Implementa <code className="text-primary">Comparable&lt;T&gt;</code> en tu clase para definir su 
-          <strong className="text-text"> orden natural</strong>. Permite usar <code className="text-primary">Collections.sort()</code> y 
-          <code className="text-primary"> Arrays.sort()</code> directamente.
-        </p>
+
+        <ThinkSection title="¿Comparable o Comparator?">
+          <p>
+            <strong className="text-text">Comparable</strong>: la clase "sabe" cómo ordenarse. Implementas <code className="text-primary">compareTo()</code>
+            dentro de la clase. Solo un orden natural.
+          </p>
+          <p>
+            <strong className="text-text">Comparator</strong>: el orden se define fuera. Puedes tener múltiples Comparators
+            para la misma clase. Más flexible, ideal con lambdas.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="Producto.java" code={`
 public class Producto implements Comparable<Producto> {
     private String nombre;
@@ -123,6 +141,79 @@ Optional<Producto> masCaro = productos.stream()
           para tu clase (ej: productos por precio, personas por nombre). Usa <code className="text-primary">Comparator</code> 
           para ordenamientos alternativos o cuando no controlas la clase.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 21</h2>
+        <Exercise
+          number={1}
+          title="Ordenar estudiantes"
+          description={`Crea Estudiante implements Comparable<Estudiante> con:
+- Campos: nombre, promedio, edad
+- Orden natural: por promedio descendente (mayor primero)
+- En main: crea una lista de 5 estudiantes, ordénalos naturalmente
+- Luego ordénalos con Comparator.comparing por nombre A-Z
+- Luego por edad ascendente, y si empatan, por nombre`}
+          hint="Para orden descendente en compareTo: return Double.compare(otro.promedio, this.promedio);"
+          solution={`import java.util.*;
+
+public class Estudiante implements Comparable<Estudiante> {
+    private String nombre;
+    private double promedio;
+    private int edad;
+
+    public Estudiante(String nombre, double promedio, int edad) {
+        this.nombre = nombre;
+        this.promedio = promedio;
+        this.edad = edad;
+    }
+
+    public String getNombre() { return nombre; }
+    public double getPromedio() { return promedio; }
+    public int getEdad() { return edad; }
+
+    @Override
+    public int compareTo(Estudiante otro) {
+        return Double.compare(otro.promedio, this.promedio);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s (%.1f, %d años)", nombre, promedio, edad);
+    }
+
+    public static void main(String[] args) {
+        List<Estudiante> lista = new ArrayList<>(List.of(
+            new Estudiante("Carlos", 8.5, 22),
+            new Estudiante("Ana", 9.2, 20),
+            new Estudiante("Luis", 7.8, 22),
+            new Estudiante("María", 9.2, 21),
+            new Estudiante("Pedro", 8.0, 23)
+        ));
+
+        Collections.sort(lista);
+        System.out.println("Por promedio desc: " + lista);
+
+        lista.sort(Comparator.comparing(Estudiante::getNombre));
+        System.out.println("Por nombre: " + lista);
+
+        lista.sort(Comparator.comparingInt(Estudiante::getEdad)
+                             .thenComparing(Estudiante::getNombre));
+        System.out.println("Por edad+nombre: " + lista);
+    }
+}`}
+          solutionFilename="Estudiante.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-21: Comparable, Comparator, ordenamiento de objetos"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 22</strong> — Lambdas: funciones como ciudadanos de primera clase.
+          </p>
+        </div>
       </section>
     </div>
   );

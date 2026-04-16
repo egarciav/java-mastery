@@ -1,14 +1,34 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function SpringPerfilesPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-spring mb-2">Perfiles y Configuración</h1>
-      <p className="text-text-muted text-lg mb-8">Profiles, @Value, @ConfigurationProperties y CORS</p>
+      <DayHeader
+        day={45}
+        title="Perfiles y Configuración"
+        duration="50 min"
+        commitMsg="dia-45: profiles, @Value, @ConfigurationProperties, CORS"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Último día del roadmap. Hoy aprenderás perfiles de entorno, configuración avanzada
+        y CORS para conectar tu API con el frontend Angular.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Perfiles de entorno</h2>
+
+        <ThinkSection title="Profiles = environment.ts de Angular">
+          <p>
+            En Angular tienes <code className="text-primary">environment.ts</code> y <code className="text-primary">environment.prod.ts</code>.
+            En Spring Boot creas <code className="text-primary">application-dev.properties</code> y
+            <code className="text-primary"> application-prod.properties</code>. Misma idea, diferente formato.
+          </p>
+        </ThinkSection>
+
         <p className="text-text-muted leading-relaxed mb-4">
           Los <strong className="text-text">profiles</strong> permiten tener configuraciones diferentes para desarrollo, 
           pruebas y producción, activándolas con una simple propiedad.
@@ -169,6 +189,64 @@ public class UsuarioController { ... }
           En Angular dev puedes usar un proxy (<code className="text-primary">proxy.conf.json</code>), pero en producción 
           necesitas configurar CORS en Spring obligatoriamente para que el navegador permita las peticiones.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 45</h2>
+        <Exercise
+          number={1}
+          title="Configuración completa por entorno"
+          description={`Configura tu proyecto con:
+1. application-dev.properties (H2, DEBUG, puerto 8080)
+2. application-prod.properties (PostgreSQL con env vars, WARN, puerto 8080)
+3. CorsConfig que permita http://localhost:4200 en dev
+4. DataInitializer con @Profile("dev") que cargue datos de prueba
+5. @ConfigurationProperties para propiedades custom de tu app`}
+          hint='spring.profiles.active=dev en application.properties. @Profile("dev") en DataInitializer.'
+          solution={`// application-dev.properties
+// spring.datasource.url=jdbc:h2:mem:devdb
+// spring.jpa.show-sql=true
+// spring.h2.console.enabled=true
+
+@Component
+@Profile("dev")
+public class DataInitializer implements CommandLineRunner {
+    private final ProductoRepository repo;
+    public DataInitializer(ProductoRepository repo) { this.repo = repo; }
+
+    @Override
+    public void run(String... args) {
+        repo.save(new Producto("Laptop", 1200, "Tech"));
+        repo.save(new Producto("Mouse", 25, "Tech"));
+        System.out.println("Datos dev cargados");
+    }
+}
+
+@Configuration
+public class CorsConfig {
+    @Bean
+    public WebMvcConfigurer cors() {
+        return new WebMvcConfigurer() {
+            public void addCorsMappings(CorsRegistry reg) {
+                reg.addMapping("/api/**")
+                    .allowedOrigins("http://localhost:4200")
+                    .allowedMethods("*");
+            }
+        };
+    }
+}`}
+          solutionFilename="DataInitializer.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-45: profiles, CORS, ConfigurationProperties - ROADMAP COMPLETO!"`} />
+          <p className="text-text-muted text-xs mt-2">
+            🎉 <strong className="text-text">Felicidades!</strong> Has completado los 45 días del roadmap Java + Spring Boot.
+          </p>
+        </div>
       </section>
     </div>
   );

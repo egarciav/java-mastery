@@ -1,14 +1,39 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function GenericsPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Generics</h1>
-      <p className="text-text-muted text-lg mb-8">Tipos paramétricos para código reutilizable y type-safe</p>
+      <DayHeader
+        day={19}
+        title="Generics"
+        duration="55 min"
+        commitMsg="dia-19: generics, clases genericas, bounded types, wildcards"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy aprenderás Generics — el sistema de tipos paramétricos de Java. Es como los generics
+        de TypeScript pero con type erasure y bounded types más potentes.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Clases genéricas</h2>
+
+        <ThinkSection title="Generics = TypeScript generics, pero con 'borrado'">
+          <p>
+            En TypeScript: <code className="text-primary">{"function f<T>(x: T): T"}</code> — los tipos solo existen en compilación.
+            En Java es igual... pero hay una trampa: <strong className="text-text">type erasure</strong>. El compilador borra
+            los tipos genéricos al compilar, así que en runtime <code className="text-primary">{"List<String>"}</code> y
+            <code className="text-primary">{"List<Integer>"}</code> son la misma clase.
+          </p>
+          <p>
+            Esto significa que no puedes hacer <code className="text-primary">{"new T()"}</code> ni
+            <code className="text-primary">{"T.class"}</code> en runtime. Pero la seguridad de tipos en compilación vale la pena.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="Caja.java" code={`
 // T es un parámetro de tipo (puede ser cualquier letra/nombre)
 public class Caja<T> {
@@ -102,6 +127,62 @@ public class Wildcards {
           La diferencia es que Java borra los tipos genéricos en compilación (type erasure), mientras que
           TypeScript los mantiene solo en tiempo de compilación de todas formas.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 19</h2>
+        <Exercise
+          number={1}
+          title="Par genérico"
+          description={`Crea una clase Par<A, B> con:
+- Campos: primero (A), segundo (B)
+- Constructor, getters
+- toString que muestre "(primero, segundo)"
+- Método static of(A a, B b) que retorne un nuevo Par
+
+Prueba con Par<String, Integer>, Par<Integer, Boolean>, etc.`}
+          hint='public class Par<A, B> { private A primero; private B segundo; ... }'
+          solution={`public class Par<A, B> {
+    private A primero;
+    private B segundo;
+
+    public Par(A primero, B segundo) {
+        this.primero = primero;
+        this.segundo = segundo;
+    }
+
+    public A getPrimero() { return primero; }
+    public B getSegundo() { return segundo; }
+
+    public static <A, B> Par<A, B> of(A a, B b) {
+        return new Par<>(a, b);
+    }
+
+    @Override
+    public String toString() {
+        return "(" + primero + ", " + segundo + ")";
+    }
+
+    public static void main(String[] args) {
+        Par<String, Integer> p1 = Par.of("edad", 25);
+        Par<Integer, Boolean> p2 = Par.of(42, true);
+        System.out.println(p1);
+        System.out.println(p2);
+        System.out.println(p1.getPrimero().toUpperCase());
+    }
+}`}
+          solutionFilename="Par.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-19: generics, bounded types, wildcards"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 20</strong> — Enums: constantes con superpoderes.
+          </p>
+        </div>
       </section>
     </div>
   );

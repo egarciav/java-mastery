@@ -1,14 +1,38 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function ArraysPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Arrays</h1>
-      <p className="text-text-muted text-lg mb-8">Colecciones de tamaño fijo en Java</p>
+      <DayHeader
+        day={9}
+        title="Arrays"
+        duration="50 min"
+        commitMsg="dia-9: arrays, multidimensionales, java.util.Arrays"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy vas a dominar arrays — la estructura de datos más básica de Java.
+        Son de tamaño fijo, pero son la base para entender colecciones dinámicas después.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Declarar y crear Arrays</h2>
+
+        <ThinkSection title="Arrays en Java vs TypeScript — diferencia clave">
+          <p>
+            En TypeScript, los arrays son <strong className="text-text">dinámicos</strong>: puedes hacer
+            <code className="text-primary"> arr.push()</code>, <code className="text-primary">.pop()</code>, y el tamaño cambia.
+          </p>
+          <p>
+            En Java, los arrays tienen <strong className="text-text">tamaño fijo</strong>. Una vez creados con
+            <code className="text-primary"> new int[5]</code>, siempre tendrán 5 elementos. Si necesitas algo dinámico,
+            usarás <code className="text-primary">ArrayList</code> (Día 17). Pero primero domina los arrays — son la base.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="Arrays.java" code={`
 public class Arrays {
     public static void main(String[] args) {
@@ -110,6 +134,158 @@ public class ArraysUtil {
           <code className="text-primary">.map()</code>, <code className="text-primary">.filter()</code>. En Java los arrays primitivos son fijos. 
           Para funcionalidad similar usa <code className="text-primary">ArrayList</code> y <code className="text-primary">Streams</code>.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 9</h2>
+
+        <Exercise
+          number={1}
+          title="Estadísticas de array"
+          description={`Crea EstadisticasArray.java con métodos static que reciban un int[] y retornen:
+- encontrarMaximo(int[] nums) → el valor máximo
+- encontrarMinimo(int[] nums) → el valor mínimo
+- calcularPromedio(int[] nums) → el promedio como double
+
+Prueba con: {45, 12, 78, 3, 56, 91, 23}`}
+          hint="Recorre el array con for, lleva una variable para el máximo/mínimo actual. Para promedio, suma todo y divide entre length."
+          solution={`public class EstadisticasArray {
+    static int encontrarMaximo(int[] nums) {
+        int max = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] > max) max = nums[i];
+        }
+        return max;
+    }
+
+    static int encontrarMinimo(int[] nums) {
+        int min = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] < min) min = nums[i];
+        }
+        return min;
+    }
+
+    static double calcularPromedio(int[] nums) {
+        int suma = 0;
+        for (int num : nums) {
+            suma += num;
+        }
+        return (double) suma / nums.length;
+    }
+
+    public static void main(String[] args) {
+        int[] datos = {45, 12, 78, 3, 56, 91, 23};
+        System.out.println("Datos: " + java.util.Arrays.toString(datos));
+        System.out.println("Máximo: " + encontrarMaximo(datos));
+        System.out.println("Mínimo: " + encontrarMinimo(datos));
+        System.out.printf("Promedio: %.2f%n", calcularPromedio(datos));
+    }
+}`}
+          solutionFilename="EstadisticasArray.java"
+        />
+
+        <Exercise
+          number={2}
+          title="Invertir array"
+          description={`Crea InvertirArray.java con un método static invertir(int[] arr) que:
+1. Invierta el array IN-PLACE (sin crear uno nuevo)
+2. Use dos punteros: uno al inicio y otro al final
+3. Intercambie los elementos hasta que se crucen
+
+Prueba con: {1, 2, 3, 4, 5} → {5, 4, 3, 2, 1}
+Y con: {10, 20, 30, 40} → {40, 30, 20, 10}`}
+          hint="Usa int izq = 0 y int der = arr.length - 1. Intercambia arr[izq] y arr[der], luego izq++ y der-- hasta que izq >= der."
+          solution={`public class InvertirArray {
+    static void invertir(int[] arr) {
+        int izq = 0;
+        int der = arr.length - 1;
+        while (izq < der) {
+            int temp = arr[izq];
+            arr[izq] = arr[der];
+            arr[der] = temp;
+            izq++;
+            der--;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {1, 2, 3, 4, 5};
+        System.out.println("Antes: " + java.util.Arrays.toString(nums));
+        invertir(nums);
+        System.out.println("Después: " + java.util.Arrays.toString(nums));
+
+        int[] nums2 = {10, 20, 30, 40};
+        invertir(nums2);
+        System.out.println("Invertido: " + java.util.Arrays.toString(nums2));
+    }
+}`}
+          solutionFilename="InvertirArray.java"
+        />
+
+        <Exercise
+          number={3}
+          title="Matriz transpuesta"
+          description={`Crea MatrizTranspuesta.java que:
+1. Cree una matriz 3x3 con valores
+2. Imprima la matriz original
+3. Cree la matriz transpuesta (filas ↔ columnas)
+4. Imprima la transpuesta
+
+Ejemplo:
+Original:     Transpuesta:
+1 2 3         1 4 7
+4 5 6         2 5 8
+7 8 9         3 6 9`}
+          hint="Para transponer: transpuesta[j][i] = original[i][j]. Necesitas dos bucles anidados."
+          solution={`public class MatrizTranspuesta {
+    static void imprimirMatriz(int[][] m) {
+        for (int[] fila : m) {
+            for (int val : fila) {
+                System.out.printf("%3d", val);
+            }
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        int[][] original = {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+        };
+
+        System.out.println("Original:");
+        imprimirMatriz(original);
+
+        int[][] transpuesta = new int[3][3];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                transpuesta[j][i] = original[i][j];
+            }
+        }
+
+        System.out.println("Transpuesta:");
+        imprimirMatriz(transpuesta);
+    }
+}`}
+          solutionFilename="MatrizTranspuesta.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`
+git add .
+git commit -m "dia-9: arrays, multidimensionales, java.util.Arrays, invertir, transponer"
+git push origin main
+`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana en el <strong className="text-text">Día 10</strong>: métodos — parámetros,
+            retorno, overloading, varargs y paso por valor.
+          </p>
+        </div>
       </section>
     </div>
   );

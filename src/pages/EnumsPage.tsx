@@ -1,14 +1,38 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function EnumsPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Enums</h1>
-      <p className="text-text-muted text-lg mb-8">Tipos enumerados con valores fijos y seguros</p>
+      <DayHeader
+        day={20}
+        title="Enums"
+        duration="45 min"
+        commitMsg="dia-20: enums basicos, con campos y metodos, en switch"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy descubrirás que los enums de Java son clases completas con superpoderes.
+        Pueden tener campos, constructores, métodos e implementar interfaces.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Enum básico</h2>
+
+        <ThinkSection title="Enums Java vs TypeScript — son clases completas">
+          <p>
+            En TypeScript, los enums son básicamente constantes numéricas o strings. En Java,
+            cada valor de un enum es una <strong className="text-text">instancia de una clase</strong>.
+            Esto significa que pueden tener campos, métodos y constructores.
+          </p>
+          <p>
+            Compara con <code className="text-primary">==</code> (no <code className="text-primary">.equals()</code>)
+            porque cada valor es una instancia singleton.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="DiaSemana.java" code={`
 public enum DiaSemana {
     LUNES, MARTES, MIERCOLES, JUEVES, VIERNES, SABADO, DOMINGO
@@ -77,6 +101,55 @@ public enum Planeta {
           tener campos, constructores, métodos e implementar interfaces. Úsalos siempre que tengas un
           conjunto fijo de valores conocidos.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 20</h2>
+        <Exercise
+          number={1}
+          title="Enum Moneda con conversión"
+          description={`Crea un enum Moneda con valores: USD, EUR, MXN, GBP.
+Cada uno tiene un campo tasaCambioAUSD (double):
+- USD: 1.0, EUR: 1.08, MXN: 0.058, GBP: 1.27
+
+Métodos:
+- convertir(double monto, Moneda destino) — convierte monto de esta moneda a la destino
+- toString con formato "USD (1 USD = 1.00 USD)"
+
+Prueba convirtiendo 100 EUR a MXN.`}
+          hint="Convierte primero a USD multiplicando por tasaCambioAUSD, luego divide entre la tasa destino."
+          solution={`public enum Moneda {
+    USD(1.0), EUR(1.08), MXN(0.058), GBP(1.27);
+
+    private final double tasaAUSD;
+
+    Moneda(double tasaAUSD) { this.tasaAUSD = tasaAUSD; }
+
+    public double convertir(double monto, Moneda destino) {
+        double enUSD = monto * this.tasaAUSD;
+        return enUSD / destino.tasaAUSD;
+    }
+
+    public static void main(String[] args) {
+        double resultado = EUR.convertir(100, MXN);
+        System.out.printf("100 EUR = %.2f MXN%n", resultado);
+
+        double r2 = GBP.convertir(50, USD);
+        System.out.printf("50 GBP = %.2f USD%n", r2);
+    }
+}`}
+          solutionFilename="Moneda.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-20: enums con campos, metodos, switch"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 21</strong> — Comparable y Comparator: ordenar objetos.
+          </p>
+        </div>
       </section>
     </div>
   );

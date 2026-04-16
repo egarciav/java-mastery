@@ -1,14 +1,35 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function SpringDTOsPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-spring mb-2">DTOs y MapStruct</h1>
-      <p className="text-text-muted text-lg mb-8">Data Transfer Objects — separar la API de la base de datos</p>
+      <DayHeader
+        day={44}
+        title="DTOs y MapStruct"
+        duration="50 min"
+        commitMsg="dia-44: DTOs, records, mapper manual, MapStruct"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy aprenderás DTOs — la capa que protege tu API de tu modelo de BD.
+        Nunca expongas entidades JPA directamente.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Por qué usar DTOs?</h2>
+
+        <ThinkSection title="DTOs = interfaces de Angular para tipar la API">
+          <p>
+            En Angular creas interfaces como <code className="text-primary">UserResponse</code> y
+            <code className="text-primary"> CreateUserRequest</code> para tipar lo que envías/recibes del backend.
+            En Spring, los DTOs (records) son esas mismas estructuras pero del lado servidor,
+            garantizando que nunca expongas campos internos como passwords.
+          </p>
+        </ThinkSection>
+
         <p className="text-text-muted leading-relaxed mb-4">
           Exponer directamente tus entidades JPA a la API es un error común. Los <strong className="text-text">DTOs</strong> 
           son objetos específicos para transferir datos entre capas, sin acoplar la API al modelo de BD.
@@ -162,6 +183,51 @@ public class UsuarioService {
           lo que llega del HTTP. <code className="text-primary">UsuarioCreateRequest</code> = los datos del formulario 
           que envías al backend.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 44</h2>
+        <Exercise
+          number={1}
+          title="DTOs completos para Producto"
+          description={`Crea el set completo de DTOs para Producto:
+1. ProductoResponse(Long id, String nombre, double precio, String categoria)
+2. ProductoCreateRequest con validaciones (@NotBlank, @Positive)
+3. ProductoUpdateRequest (nombre y precio opcionales)
+4. ProductoMapper manual con toResponse(), toEntity(), toResponseList()
+5. Úsalos en el Controller y Service`}
+          hint="Los records son perfectos para DTOs. El mapper convierte entre entidad y DTO."
+          solution={`public record ProductoResponse(Long id, String nombre, double precio, String cat) {}
+public record ProductoCreateRequest(
+    @NotBlank String nombre, @Positive double precio, @NotBlank String cat) {}
+public record ProductoUpdateRequest(String nombre, Double precio) {}
+
+@Component
+public class ProductoMapper {
+    public ProductoResponse toResponse(Producto p) {
+        return new ProductoResponse(p.getId(), p.getNombre(), p.getPrecio(), p.getCategoria());
+    }
+    public Producto toEntity(ProductoCreateRequest r) {
+        var p = new Producto();
+        p.setNombre(r.nombre()); p.setPrecio(r.precio()); p.setCategoria(r.cat());
+        return p;
+    }
+    public List<ProductoResponse> toResponseList(List<Producto> list) {
+        return list.stream().map(this::toResponse).toList();
+    }
+}`}
+          solutionFilename="ProductoMapper.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-44: DTOs, records, mapper, separar API de BD"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 45</strong> — Perfiles, configuración y CORS.
+          </p>
+        </div>
       </section>
     </div>
   );

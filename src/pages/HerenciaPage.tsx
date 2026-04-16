@@ -1,14 +1,39 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function HerenciaPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Herencia</h1>
-      <p className="text-text-muted text-lg mb-8">Reutilizar código extendiendo clases existentes</p>
+      <DayHeader
+        day={13}
+        title="Herencia"
+        duration="60 min"
+        commitMsg="dia-13: herencia, extends, super, override, clases abstractas"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy vas a aprender a reutilizar código con herencia. Una clase hija hereda todo de la padre
+        y puede agregar o sobrescribir comportamiento.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">extends — Heredar de una clase</h2>
+
+        <ThinkSection title="Herencia = 'es un'. ¿Cuándo usarla?">
+          <p>
+            Un <code className="text-primary">Perro</code> <strong className="text-text">es un</strong>
+            <code className="text-primary"> Animal</code>. Un <code className="text-primary">Círculo</code>
+            <strong className="text-text"> es una</strong> <code className="text-primary">Figura</code>.
+            Si la relación "es un" tiene sentido, herencia es apropiada.
+          </p>
+          <p>
+            Java solo permite <strong className="text-text">herencia simple</strong>: una clase extiende UNA sola clase padre.
+            Para "herencia múltiple", usarás interfaces (Día 15).
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="Herencia.java" code={`
 // Clase padre (superclase)
 public class Animal {
@@ -169,6 +194,91 @@ public class Rectangulo extends Figura {
           Usa clases abstractas cuando quieras definir un <strong>comportamiento común</strong> + obligar a 
           las subclases a implementar ciertos métodos. Es un punto medio entre una clase normal y una interfaz.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 13</h2>
+
+        <Exercise
+          number={1}
+          title="Jerarquía de empleados"
+          description={`Crea una jerarquía:
+- Empleado (clase padre): nombre, salarioBase. Método calcularSalario() retorna salarioBase.
+- Gerente extends Empleado: tiene bono (double). calcularSalario() retorna salarioBase + bono.
+- Desarrollador extends Empleado: tiene horasExtra (int). calcularSalario() retorna salarioBase + (horasExtra * 50).
+
+Crea un array de Empleado[] con mezcla de Gerentes y Desarrolladores, recórrelo e imprime nombre + salario.`}
+          hint="Usa super(nombre, salarioBase) en los constructores hijos. Override calcularSalario() en cada subclase."
+          solution={`public class Empleado {
+    protected String nombre;
+    protected double salarioBase;
+
+    public Empleado(String nombre, double salarioBase) {
+        this.nombre = nombre;
+        this.salarioBase = salarioBase;
+    }
+
+    public double calcularSalario() { return salarioBase; }
+
+    @Override
+    public String toString() {
+        return String.format("%s - Salario: $%.2f", nombre, calcularSalario());
+    }
+}
+
+class Gerente extends Empleado {
+    private double bono;
+
+    public Gerente(String nombre, double salarioBase, double bono) {
+        super(nombre, salarioBase);
+        this.bono = bono;
+    }
+
+    @Override
+    public double calcularSalario() { return salarioBase + bono; }
+}
+
+class Desarrollador extends Empleado {
+    private int horasExtra;
+
+    public Desarrollador(String nombre, double salarioBase, int horasExtra) {
+        super(nombre, salarioBase);
+        this.horasExtra = horasExtra;
+    }
+
+    @Override
+    public double calcularSalario() { return salarioBase + (horasExtra * 50); }
+
+    public static void main(String[] args) {
+        Empleado[] equipo = {
+            new Gerente("Ana", 5000, 2000),
+            new Desarrollador("Carlos", 4000, 20),
+            new Desarrollador("Luis", 4000, 10),
+            new Gerente("María", 5500, 1500)
+        };
+
+        for (Empleado e : equipo) {
+            System.out.println(e);
+        }
+    }
+}`}
+          solutionFilename="Empleado.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`
+git add .
+git commit -m "dia-13: herencia, extends, super, override, clases abstractas"
+git push origin main
+`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana en el <strong className="text-text">Día 14</strong>: polimorfismo —
+            upcasting, downcasting, instanceof, pattern matching.
+          </p>
+        </div>
       </section>
     </div>
   );

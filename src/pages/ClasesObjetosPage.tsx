@@ -1,19 +1,38 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function ClasesObjetosPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Clases y Objetos</h1>
-      <p className="text-text-muted text-lg mb-8">El corazón de la Programación Orientada a Objetos en Java</p>
+      <DayHeader
+        day={11}
+        title="Clases y Objetos"
+        duration="60 min"
+        commitMsg="dia-11: clases, objetos, constructores, this, static, equals"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy entras al corazón de Java: la Programación Orientada a Objetos. Una clase es un plano,
+        un objeto es una instancia concreta. Dominar esto cambia tu forma de pensar en código.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Qué es una Clase?</h2>
-        <p className="text-text-muted leading-relaxed mb-4">
-          Una <strong className="text-text">clase</strong> es un plano/molde que define las propiedades (campos) y 
-          comportamientos (métodos) de un tipo de objeto. Un <strong className="text-text">objeto</strong> es una 
-          instancia concreta de esa clase.
-        </p>
+
+        <ThinkSection title="Clase = TypeScript class, pero con superpoderes">
+          <p>
+            En TypeScript/Angular ya usas clases. En Java la idea es la misma: <strong className="text-text">campos</strong> (propiedades)
+            + <strong className="text-text">métodos</strong> (comportamiento). La diferencia clave: en Java el constructor
+            se llama con el <em>nombre de la clase</em>, no con <code className="text-primary">constructor()</code>.
+          </p>
+          <p>
+            Además, Java requiere <strong className="text-text">un archivo por clase pública</strong>. Si la clase se
+            llama <code className="text-primary">Persona</code>, el archivo debe llamarse <code className="text-primary">Persona.java</code>.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="Persona.java" code={`
 public class Persona {
     // Campos (atributos/propiedades)
@@ -168,6 +187,137 @@ public class Producto {
           también <code className="text-primary">hashCode()</code>. Es un contrato de Java — objetos iguales 
           deben tener el mismo hashCode. Si no lo haces, las colecciones como HashMap fallarán.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 11</h2>
+
+        <Exercise
+          number={1}
+          title="Clase CuentaBancaria"
+          description={`Crea CuentaBancaria.java con:
+- Campos: titular (String), saldo (double), numeroCuenta (String)
+- Constructor con los 3 parámetros
+- Métodos: depositar(double monto), retirar(double monto), getSaldo()
+- depositar debe rechazar montos negativos
+- retirar debe rechazar si no hay saldo suficiente
+- toString que muestre la info de la cuenta
+
+Crea un Main.java que pruebe depositar, retirar e imprimir la cuenta.`}
+          hint="En retirar: if (monto > saldo) { System.out.println('Saldo insuficiente'); return; }"
+          solution={`public class CuentaBancaria {
+    private String titular;
+    private double saldo;
+    private String numeroCuenta;
+
+    public CuentaBancaria(String titular, double saldo, String numeroCuenta) {
+        this.titular = titular;
+        this.saldo = saldo;
+        this.numeroCuenta = numeroCuenta;
+    }
+
+    public void depositar(double monto) {
+        if (monto <= 0) {
+            System.out.println("Error: monto debe ser positivo");
+            return;
+        }
+        saldo += monto;
+        System.out.printf("Depositado: $%.2f. Nuevo saldo: $%.2f%n", monto, saldo);
+    }
+
+    public void retirar(double monto) {
+        if (monto <= 0) {
+            System.out.println("Error: monto debe ser positivo");
+            return;
+        }
+        if (monto > saldo) {
+            System.out.println("Error: saldo insuficiente");
+            return;
+        }
+        saldo -= monto;
+        System.out.printf("Retirado: $%.2f. Nuevo saldo: $%.2f%n", monto, saldo);
+    }
+
+    public double getSaldo() { return saldo; }
+
+    @Override
+    public String toString() {
+        return String.format("Cuenta[%s] %s - Saldo: $%.2f",
+                             numeroCuenta, titular, saldo);
+    }
+
+    public static void main(String[] args) {
+        CuentaBancaria cuenta = new CuentaBancaria("Carlos", 1000, "001-234");
+        System.out.println(cuenta);
+        cuenta.depositar(500);
+        cuenta.retirar(200);
+        cuenta.retirar(5000);
+        System.out.println(cuenta);
+    }
+}`}
+          solutionFilename="CuentaBancaria.java"
+        />
+
+        <Exercise
+          number={2}
+          title="Contador con static"
+          description={`Crea Estudiante.java con:
+- Campo static: totalEstudiantes (int)
+- Campos de instancia: nombre (String), matricula (String)
+- Constructor que auto-incremente totalEstudiantes y genere la matrícula como "EST-" + totalEstudiantes
+- Método static getTotalEstudiantes()
+- toString con nombre y matrícula
+
+Crea 3 estudiantes y verifica que el contador y las matrículas son correctas.`}
+          hint='En el constructor: totalEstudiantes++; this.matricula = "EST-" + totalEstudiantes;'
+          solution={`public class Estudiante {
+    private static int totalEstudiantes = 0;
+    private String nombre;
+    private String matricula;
+
+    public Estudiante(String nombre) {
+        totalEstudiantes++;
+        this.nombre = nombre;
+        this.matricula = "EST-" + totalEstudiantes;
+    }
+
+    public static int getTotalEstudiantes() {
+        return totalEstudiantes;
+    }
+
+    @Override
+    public String toString() {
+        return matricula + ": " + nombre;
+    }
+
+    public static void main(String[] args) {
+        Estudiante e1 = new Estudiante("Carlos");
+        Estudiante e2 = new Estudiante("Ana");
+        Estudiante e3 = new Estudiante("Luis");
+
+        System.out.println(e1);
+        System.out.println(e2);
+        System.out.println(e3);
+        System.out.println("Total: " + Estudiante.getTotalEstudiantes());
+    }
+}`}
+          solutionFilename="Estudiante.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`
+git add .
+git commit -m "dia-11: clases, objetos, constructores, this, static, getters, equals"
+git push origin main
+`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana en el <strong className="text-text">Día 12</strong>: encapsulamiento —
+            modificadores de acceso, validación en setters.
+          </p>
+        </div>
       </section>
     </div>
   );

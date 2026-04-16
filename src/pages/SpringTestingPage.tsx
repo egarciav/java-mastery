@@ -1,14 +1,33 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function SpringTestingPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-spring mb-2">Testing en Spring Boot</h1>
-      <p className="text-text-muted text-lg mb-8">Unit tests, integration tests y MockMvc</p>
+      <DayHeader
+        day={41}
+        title="Testing en Spring Boot"
+        duration="55 min"
+        commitMsg="dia-41: JUnit 5, Mockito, MockMvc, integration tests"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy aprenderás testing profesional: unit tests con Mockito y integration tests con MockMvc.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Unit Test con JUnit 5 + Mockito</h2>
+
+        <ThinkSection title="Arrange → Act → Assert (AAA pattern)">
+          <p>
+            Cada test sigue el patrón AAA: <strong className="text-text">Arrange</strong> (preparar datos y mocks),
+            <strong className="text-text"> Act</strong> (ejecutar el método), <strong className="text-text">Assert</strong> (verificar resultado).
+            Mockito reemplaza dependencias reales con mocks para aislar la clase bajo prueba.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="UsuarioServiceTest.java" code={`
 @ExtendWith(MockitoExtension.class)
 class UsuarioServiceTest {
@@ -102,6 +121,59 @@ class UsuarioControllerTest {
           <strong> Integration tests</strong>: levantan el contexto de Spring. Testean el flujo completo.
           Usa <code className="text-primary">@SpringBootTest</code> para integration y <code className="text-primary">@ExtendWith(MockitoExtension.class)</code> para unit.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 41</h2>
+        <Exercise
+          number={1}
+          title="Tests para ProductoService"
+          description={`Escribe 3 unit tests para ProductoService:
+1. guardar_precioNegativo_lanzaExcepcion()
+2. guardar_productoValido_retornaGuardado()
+3. buscarPorId_noExiste_retornaVacio()
+Usa @Mock para el repository y @InjectMocks para el service.`}
+          hint="when(repo.save(any())).thenReturn(producto); assertThrows(IllegalArgumentException.class, () -> ...);"
+          solution={`@ExtendWith(MockitoExtension.class)
+class ProductoServiceTest {
+    @Mock ProductoRepository repo;
+    @InjectMocks ProductoService service;
+
+    @Test
+    void guardar_precioNegativo_lanzaExcepcion() {
+        var p = new Producto(null, "Test", -5.0);
+        assertThrows(IllegalArgumentException.class, () -> service.guardar(p));
+    }
+
+    @Test
+    void guardar_valido_retornaGuardado() {
+        var p = new Producto(null, "Laptop", 1200.0);
+        when(repo.existsByNombre("Laptop")).thenReturn(false);
+        when(repo.save(any())).thenReturn(new Producto(1L, "Laptop", 1200.0));
+
+        var result = service.guardar(p);
+        assertEquals("Laptop", result.getNombre());
+        verify(repo).save(any());
+    }
+
+    @Test
+    void buscarPorId_noExiste_retornaVacio() {
+        when(repo.findById(99L)).thenReturn(Optional.empty());
+        assertTrue(service.buscarPorId(99L).isEmpty());
+    }
+}`}
+          solutionFilename="ProductoServiceTest.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-41: JUnit 5, Mockito, MockMvc tests"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 42</strong> — Manejo de excepciones global con @ControllerAdvice.
+          </p>
+        </div>
       </section>
     </div>
   );

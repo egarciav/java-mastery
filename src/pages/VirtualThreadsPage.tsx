@@ -1,14 +1,37 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function VirtualThreadsPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Virtual Threads</h1>
-      <p className="text-text-muted text-lg mb-8">Project Loom — hilos virtuales de Java 21 (LTS)</p>
+      <DayHeader
+        day={26}
+        title="Virtual Threads"
+        duration="45 min"
+        commitMsg="dia-26: virtual threads Java 21, Spring Boot integration"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy descubrirás Virtual Threads — la revolución de Java 21 (Project Loom).
+        Millones de hilos ligeros que simplifican la concurrencia para apps I/O-bound.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Por qué Virtual Threads?</h2>
+
+        <ThinkSection title="Virtual Threads = async/await sin cambiar tu código">
+          <p>
+            En Node.js usas async/await para no bloquear el event loop. En Java clásico,
+            cada thread bloqueante consume ~1MB de RAM del SO. Con Virtual Threads,
+            puedes escribir código bloqueante normal y la JVM lo hace eficiente internamente.
+          </p>
+          <p>
+            Es como tener lo mejor de ambos mundos: código síncrono simple + eficiencia asíncrona.
+          </p>
+        </ThinkSection>
+
         <p className="text-text-muted leading-relaxed mb-4">
           Los <strong className="text-text">hilos de plataforma</strong> (threads clásicos) son costosos: cada uno ocupa ~1MB de memoria 
           del SO. Una JVM puede manejar unos pocos miles. Con <strong className="text-text">Virtual Threads</strong>, puedes crear 
@@ -113,6 +136,54 @@ System.out.println(t.isVirtual()); // true si es virtual thread
           <strong>Regla simple</strong>: si usas Spring Boot con operaciones bloqueantes (JPA, RestTemplate, etc.), 
           habilita virtual threads y obtendrás mayor throughput sin código adicional.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 26</h2>
+        <Exercise
+          number={1}
+          title="Benchmark: Platform vs Virtual Threads"
+          description={`Crea un benchmark que:
+1. Lance 10,000 tareas que duermen 100ms cada una (simulando I/O)
+2. Primero con Executors.newFixedThreadPool(100)
+3. Luego con Executors.newVirtualThreadPerTaskExecutor()
+4. Mide y compara el tiempo total de ambos enfoques`}
+          hint="Usa System.currentTimeMillis() antes y después. El pool fijo tardará ~10s, virtual threads ~100ms."
+          solution={`import java.util.concurrent.*;
+import java.time.*;
+
+public class BenchmarkThreads {
+    static void benchmark(String nombre, ExecutorService executor) throws Exception {
+        long inicio = System.currentTimeMillis();
+        for (int i = 0; i < 10_000; i++) {
+            executor.submit(() -> {
+                try { Thread.sleep(100); }
+                catch (InterruptedException e) { throw new RuntimeException(e); }
+            });
+        }
+        executor.shutdown();
+        executor.awaitTermination(1, TimeUnit.MINUTES);
+        long ms = System.currentTimeMillis() - inicio;
+        System.out.printf("%s: %dms%n", nombre, ms);
+    }
+
+    public static void main(String[] args) throws Exception {
+        benchmark("FixedPool(100)", Executors.newFixedThreadPool(100));
+        benchmark("VirtualThreads", Executors.newVirtualThreadPerTaskExecutor());
+    }
+}`}
+          solutionFilename="BenchmarkThreads.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-26: virtual threads, benchmark, Spring Boot config"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 27</strong> — I/O y archivos: leer, escribir, Path, Files.
+          </p>
+        </div>
       </section>
     </div>
   );

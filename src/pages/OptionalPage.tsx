@@ -1,14 +1,37 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function OptionalPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Optional</h1>
-      <p className="text-text-muted text-lg mb-8">Eliminar NullPointerException de forma elegante</p>
+      <DayHeader
+        day={24}
+        title="Optional"
+        duration="40 min"
+        commitMsg="dia-24: Optional, orElse, map, flatMap, ifPresent"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy aprenderás Optional — la forma elegante de eliminar NullPointerException.
+        En Spring Boot lo verás constantemente en repositorios y servicios.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Crear y usar Optional</h2>
+
+        <ThinkSection title="Optional = un contenedor que puede estar vacío">
+          <p>
+            En TypeScript puedes usar <code className="text-primary">?.</code> y <code className="text-primary">??</code> para manejar nulls.
+            En Java, <code className="text-primary">Optional</code> es un wrapper explícito: te obliga a pensar qué pasa cuando no hay valor.
+          </p>
+          <p>
+            Regla de oro: <strong className="text-text">nunca</strong> retornes null de un método. Retorna <code className="text-primary">Optional.empty()</code>.
+            Pero <strong className="text-text">nunca</strong> uses Optional como parámetro ni como campo de clase.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="OptionalEjemplo.java" code={`
 import java.util.Optional;
 
@@ -84,6 +107,70 @@ public class OptionalChain {
           <strong> Nunca</strong> uses Optional como parámetro de método ni como campo de clase.
           Su propósito es comunicar al llamador que el resultado puede estar ausente.
         </InfoBox>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 24</h2>
+        <Exercise
+          number={1}
+          title="Repositorio con Optional"
+          description={`Crea un mini repositorio en memoria:
+1. Clase Usuario(int id, String nombre, String email)
+2. Clase UsuarioRepo con Map<Integer, Usuario> interno
+3. Método Optional<Usuario> buscarPorId(int id)
+4. Método Optional<Usuario> buscarPorEmail(String email)
+5. En main: busca usuarios existentes y no existentes, usa orElse, map, ifPresent`}
+          hint="return Optional.ofNullable(usuarios.get(id));"
+          solution={`import java.util.*;
+
+public class UsuarioRepo {
+    record Usuario(int id, String nombre, String email) {}
+
+    private Map<Integer, Usuario> usuarios = new HashMap<>();
+
+    public void guardar(Usuario u) { usuarios.put(u.id(), u); }
+
+    public Optional<Usuario> buscarPorId(int id) {
+        return Optional.ofNullable(usuarios.get(id));
+    }
+
+    public Optional<Usuario> buscarPorEmail(String email) {
+        return usuarios.values().stream()
+            .filter(u -> u.email().equals(email))
+            .findFirst();
+    }
+
+    public static void main(String[] args) {
+        UsuarioRepo repo = new UsuarioRepo();
+        repo.guardar(new Usuario(1, "Carlos", "carlos@mail.com"));
+        repo.guardar(new Usuario(2, "Ana", "ana@mail.com"));
+
+        repo.buscarPorId(1).ifPresent(u -> System.out.println("Encontrado: " + u));
+
+        String nombre = repo.buscarPorId(99)
+            .map(Usuario::nombre)
+            .orElse("Desconocido");
+        System.out.println("Nombre: " + nombre);
+
+        repo.buscarPorEmail("ana@mail.com")
+            .ifPresentOrElse(
+                u -> System.out.println("Email de: " + u.nombre()),
+                () -> System.out.println("No encontrado")
+            );
+    }
+}`}
+          solutionFilename="UsuarioRepo.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-24: Optional, orElse, map, flatMap, ifPresent"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 25</strong> — Concurrencia: threads, synchronized, ExecutorService.
+          </p>
+        </div>
       </section>
     </div>
   );

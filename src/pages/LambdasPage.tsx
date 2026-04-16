@@ -1,14 +1,37 @@
 import CodeBlock from '../components/CodeBlock';
 import InfoBox from '../components/InfoBox';
+import DayHeader from '../components/DayHeader';
+import ThinkSection from '../components/ThinkSection';
+import Exercise from '../components/Exercise';
 
 export default function LambdasPage() {
   return (
     <div>
-      <h1 className="text-4xl font-bold text-java mb-2">Expresiones Lambda</h1>
-      <p className="text-text-muted text-lg mb-8">Funciones anónimas concisas — la base de la programación funcional en Java</p>
+      <DayHeader
+        day={22}
+        title="Expresiones Lambda"
+        duration="55 min"
+        commitMsg="dia-22: lambdas, interfaces funcionales, method references"
+      />
+      <p className="text-text-muted leading-relaxed mb-8">
+        Hoy entras a la programación funcional de Java. Las lambdas son como las arrow functions
+        de TypeScript, pero solo funcionan donde se espera una interfaz funcional.
+      </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Sintaxis Lambda</h2>
+
+        <ThinkSection title="Lambda = arrow function con restricciones">
+          <p>
+            En TypeScript: <code className="text-primary">{"const f = (a, b) => a + b"}</code> — puedes asignar a cualquier variable.
+            En Java, una lambda solo puede asignarse a una <strong className="text-text">interfaz funcional</strong> (interfaz con un solo método abstracto).
+          </p>
+          <p>
+            No existen funciones sueltas en Java. Las lambdas son azúcar sintáctico para clases anónimas que implementan
+            interfaces funcionales.
+          </p>
+        </ThinkSection>
+
         <CodeBlock filename="Lambdas.java" code={`
 import java.util.List;
 import java.util.ArrayList;
@@ -119,6 +142,51 @@ public class MethodRef {
     }
 }
 `} />
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-text mb-4">Ejercicios del Día 22</h2>
+        <Exercise
+          number={1}
+          title="Pipeline de transformación"
+          description={`Crea PipelineLambda.java con:
+1. Una lista de nombres: "carlos", "ANA", " luis ", "MARÍA", " pedro "
+2. Usa lambdas para: trim → toLowerCase → capitalize (primera letra mayúscula)
+3. Filtra los que tengan más de 4 letras
+4. Ordénalos alfabéticamente
+5. Imprime el resultado
+
+Todo con lambdas, sin bucles for.`}
+          hint="Usa List.stream().map(String::trim).map(String::toLowerCase).map(s -> ...).filter(...).sorted().forEach(...);"
+          solution={`import java.util.*;
+import java.util.stream.*;
+
+public class PipelineLambda {
+    public static void main(String[] args) {
+        List<String> nombres = List.of("carlos", "ANA", " luis ", "MARÍA", " pedro ");
+
+        nombres.stream()
+            .map(String::trim)
+            .map(String::toLowerCase)
+            .map(s -> s.substring(0, 1).toUpperCase() + s.substring(1))
+            .filter(s -> s.length() > 4)
+            .sorted()
+            .forEach(System.out::println);
+        // Carlos, María, Pedro
+    }
+}`}
+          solutionFilename="PipelineLambda.java"
+        />
+      </section>
+
+      <section className="mb-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-success font-semibold mb-2 text-sm">Commit del día</h3>
+          <CodeBlock language="bash" code={`git commit -m "dia-22: lambdas, interfaces funcionales, method references"`} />
+          <p className="text-text-muted text-xs mt-2">
+            Mañana: <strong className="text-text">Día 23</strong> — Streams API: filter, map, reduce, collect.
+          </p>
+        </div>
       </section>
     </div>
   );
