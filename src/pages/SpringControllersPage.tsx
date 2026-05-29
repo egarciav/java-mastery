@@ -14,19 +14,51 @@ export default function SpringControllersPage() {
         commitMsg="dia-37: @RestController, CRUD, ResponseEntity, @PathVariable"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy construirás REST APIs completas con @RestController y ResponseEntity.
+        Hoy construirás REST APIs completas. Un Controller es la puerta de entrada HTTP a tu
+        aplicación — recibe peticiones, las valida, delega al Service, y construye la respuesta
+        con el código HTTP apropiado (200, 201, 404, etc.).
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">CRUD completo</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Qué es un @RestController?</h2>
 
         <ThinkSection title="Controller = la fachada HTTP de tu aplicación">
           <p>
-            El Controller solo recibe HTTP y delega al Service. <strong className="text-text">Nunca</strong> pongas
-            lógica de negocio en el Controller. Es como un Component de Angular que solo conecta
-            la UI con el Service.
+            En Angular, un Component recibe input del usuario (clicks, forms) y delega al Service.
+            En Spring, un <code className="text-primary">@RestController</code> recibe peticiones HTTP (GET, POST, PUT, DELETE)
+            y delega al Service. <strong className="text-text">Nunca</strong> pongas lógica de negocio, validaciones complejas,
+            ni acceso a BD en el Controller. Su única responsabilidad es traducir HTTP ↔ Java.
+          </p>
+          <p>
+            <code className="text-primary">@RestController</code> = <code className="text-primary">@Controller</code> +
+            <code className="text-primary"> @ResponseBody</code>. Significa que cada método retorna datos (JSON) directamente,
+            no una vista HTML. Spring usa Jackson para convertir automáticamente tus objetos Java a JSON.
           </p>
         </ThinkSection>
+
+        <p className="text-text-muted leading-relaxed mb-4">
+          El flujo completo de una petición es: <strong className="text-text">Cliente HTTP → DispatcherServlet → Controller → Service →
+          Repository → BD</strong>, y la respuesta viaja de vuelta en sentido inverso. El Controller solo maneja
+          la capa HTTP: extrae parámetros, llama al service, y envuelve el resultado en un ResponseEntity.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+          {[
+            { a: '@GetMapping', d: 'Maneja GET — obtener datos (listar, buscar por ID).' },
+            { a: '@PostMapping', d: 'Maneja POST — crear nuevos recursos.' },
+            { a: '@PutMapping', d: 'Maneja PUT — reemplazar un recurso completo.' },
+            { a: '@DeleteMapping', d: 'Maneja DELETE — eliminar un recurso.' },
+            { a: '@PathVariable', d: 'Extrae valor de la URL: /api/users/{id}' },
+            { a: '@RequestParam', d: 'Extrae query params: /api/users?name=Carlos' },
+            { a: '@RequestBody', d: 'Deserializa el body JSON a un objeto Java.' },
+            { a: 'ResponseEntity<T>', d: 'Control total: código HTTP + headers + body.' },
+          ].map(({ a, d }) => (
+            <div key={a} className="p-3 bg-bg-secondary rounded-lg border border-border">
+              <code className="text-primary text-sm">{a}</code>
+              <p className="text-text-muted text-xs mt-1">{d}</p>
+            </div>
+          ))}
+        </div>
 
         <CodeBlock filename="UsuarioController.java" code={`
 @RestController

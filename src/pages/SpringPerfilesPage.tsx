@@ -14,24 +14,34 @@ export default function SpringPerfilesPage() {
         commitMsg="dia-45: profiles, @Value, @ConfigurationProperties, CORS"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Último día del roadmap. Hoy aprenderás perfiles de entorno, configuración avanzada
-        y CORS para conectar tu API con el frontend Angular.
+        Último día del roadmap. Hoy aprenderás a configurar tu aplicación para diferentes entornos
+        (desarrollo, testing, producción) usando perfiles, a externalizar configuración de forma segura,
+        y a configurar CORS para que tu frontend Angular pueda comunicarse con tu API Spring Boot.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Perfiles de entorno</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">Perfiles de entorno (Profiles)</h2>
 
-        <ThinkSection title="Profiles = environment.ts de Angular">
+        <ThinkSection title="Profiles = environment.ts de Angular (pero más potente)">
           <p>
-            En Angular tienes <code className="text-primary">environment.ts</code> y <code className="text-primary">environment.prod.ts</code>.
-            En Spring Boot creas <code className="text-primary">application-dev.properties</code> y
-            <code className="text-primary"> application-prod.properties</code>. Misma idea, diferente formato.
+            En Angular tienes <code className="text-primary">environment.ts</code> y <code className="text-primary">environment.prod.ts</code>
+            para cambiar URLs de API y flags según el entorno. En Spring Boot es el mismo concepto pero más completo:
+            creas <code className="text-primary">application-dev.properties</code> y
+            <code className="text-primary"> application-prod.properties</code>, y Spring carga automáticamente el archivo
+            correcto según el perfil activo.
+          </p>
+          <p>
+            La ventaja: en Angular los environments se compilan en el bundle (si cambias algo, reconstruyes).
+            En Spring Boot, los profiles se activan con una variable de entorno o argumento — el mismo JAR funciona
+            en dev o producción sin recompilar. Además puedes tener secrets en variables de entorno que nunca
+            entran al código fuente.
           </p>
         </ThinkSection>
 
         <p className="text-text-muted leading-relaxed mb-4">
-          Los <strong className="text-text">profiles</strong> permiten tener configuraciones diferentes para desarrollo, 
-          pruebas y producción, activándolas con una simple propiedad.
+          Los <strong className="text-text">profiles</strong> permiten tener configuraciones completamente diferentes para
+          cada entorno: BD en memoria para desarrollo (H2), BD real para producción (PostgreSQL), diferentes
+          puertos, niveles de log, etc. Se activan con una sola propiedad o variable de entorno.
         </p>
         <CodeBlock language="bash" filename="src/main/resources/application.properties" code={`
 # Perfil activo (cambiar según entorno)

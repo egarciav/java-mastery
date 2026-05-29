@@ -14,22 +14,32 @@ export default function ConcurrenciaPage() {
         commitMsg="dia-25: threads, ExecutorService, CompletableFuture"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy entras al mundo de la concurrencia. Entender threads es clave para Spring Boot,
-        donde cada petición HTTP corre en su propio hilo.
+        Hoy entras al mundo de la concurrencia — uno de los temas más importantes y complejos de Java.
+        Entender threads es clave porque en Spring Boot, <strong className="text-text">cada petición HTTP corre en su propio
+        hilo</strong>. Si tu código no es thread-safe, tendrás bugs que solo aparecen en producción bajo carga.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Crear Threads</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Qué es un Thread y por qué importa?</h2>
 
-        <ThinkSection title="Thread = hilo de ejecución independiente">
+        <ThinkSection title="Java = multi-threaded real (no event loop)">
           <p>
-            En JavaScript/TypeScript todo es single-threaded con event loop. En Java, puedes tener
-            <strong className="text-text"> múltiples hilos reales</strong> ejecutándose en paralelo.
+            En JavaScript/TypeScript todo es <strong className="text-text">single-threaded con event loop</strong>: un solo
+            hilo ejecuta tu código y las operaciones async se manejan con callbacks/promises. Nunca hay
+            dos funciones ejecutándose simultáneamente en el mismo proceso.
           </p>
           <p>
-            Regla moderna: <strong className="text-text">nunca</strong> crees Threads directamente. Usa
-            <code className="text-primary"> ExecutorService</code> o <code className="text-primary">CompletableFuture</code>.
-            Los threads crudos son como hacer HTTP con sockets — funciona pero no es práctico.
+            En Java, puedes tener <strong className="text-text">múltiples hilos reales del sistema operativo</strong>
+            ejecutándose en paralelo sobre múltiples cores de CPU. Esto da mucho más rendimiento para
+            operaciones CPU-intensivas, pero introduce problemas de sincronización: ¿qué pasa si dos hilos
+            modifican la misma variable al mismo tiempo? → <strong className="text-text">Race conditions</strong>,
+            datos corruptos, deadlocks.
+          </p>
+          <p>
+            <strong className="text-text">Regla moderna:</strong> nunca crees <code className="text-primary">new Thread()</code> directamente.
+            Usa <code className="text-primary">ExecutorService</code> (pool de hilos reutilizables) o
+            <code className="text-primary"> CompletableFuture</code> (programación asíncrona declarativa). Los threads
+            crudos son como hacer HTTP con sockets raw — funciona pero es innecesariamente complejo.
           </p>
         </ThinkSection>
 

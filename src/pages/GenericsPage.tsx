@@ -14,23 +14,38 @@ export default function GenericsPage() {
         commitMsg="dia-19: generics, clases genericas, bounded types, wildcards"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy aprenderás Generics — el sistema de tipos paramétricos de Java. Es como los generics
-        de TypeScript pero con type erasure y bounded types más potentes.
+        Hoy aprenderás Generics — el sistema de tipos paramétricos de Java que te permite escribir
+        código reutilizable y type-safe. Son fundamentales para colecciones, Spring Data, y cualquier
+        código que trabaje con tipos variados sin perder seguridad de tipos.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Clases genéricas</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Qué son los Generics y por qué importan?</h2>
 
-        <ThinkSection title="Generics = TypeScript generics, pero con 'borrado'">
+        <p className="text-text-muted leading-relaxed mb-4">
+          Sin generics, una lista solo podría almacenar <code className="text-primary">Object</code> y necesitarías
+          hacer casting manual cada vez que sacas un elemento — propenso a errores en runtime. Con generics,
+          declaras <code className="text-primary">{"List<String>"}</code> y el compilador garantiza que solo entran Strings.
+          Si intentas meter un Integer, el error aparece al compilar, no al ejecutar.
+        </p>
+
+        <ThinkSection title="Generics = TypeScript generics, pero con 'borrado de tipos'">
           <p>
-            En TypeScript: <code className="text-primary">{"function f<T>(x: T): T"}</code> — los tipos solo existen en compilación.
-            En Java es igual... pero hay una trampa: <strong className="text-text">type erasure</strong>. El compilador borra
-            los tipos genéricos al compilar, así que en runtime <code className="text-primary">{"List<String>"}</code> y
-            <code className="text-primary">{"List<Integer>"}</code> son la misma clase.
+            En TypeScript: <code className="text-primary">{"function f<T>(x: T): T"}</code> — los tipos genéricos solo existen
+            en tiempo de compilación y desaparecen en el JavaScript resultante. En Java pasa exactamente lo mismo:
+            se llama <strong className="text-text">type erasure</strong> (borrado de tipos).
           </p>
           <p>
-            Esto significa que no puedes hacer <code className="text-primary">{"new T()"}</code> ni
-            <code className="text-primary">{"T.class"}</code> en runtime. Pero la seguridad de tipos en compilación vale la pena.
+            El compilador Java verifica los tipos genéricos, pero al generar el bytecode los borra. En runtime,
+            <code className="text-primary">{"List<String>"}</code> y <code className="text-primary">{"List<Integer>"}</code>
+            son la MISMA clase (<code className="text-primary">List</code>). Esto tiene consecuencias: no puedes hacer
+            <code className="text-primary">{"new T()"}</code>, ni <code className="text-primary">{"instanceof List<String>"}</code>,
+            ni crear arrays genéricos <code className="text-primary">{"new T[10]"}</code>.
+          </p>
+          <p>
+            <strong className="text-text">A pesar de estas limitaciones</strong>, los generics te dan seguridad completa
+            en compilación. Si compila sin warnings, sabes que no habrá <code className="text-primary">ClassCastException</code>
+            en runtime. Eso es un contrato muy valioso.
           </p>
         </ThinkSection>
 

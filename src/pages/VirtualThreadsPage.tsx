@@ -14,21 +14,32 @@ export default function VirtualThreadsPage() {
         commitMsg="dia-26: virtual threads Java 21, Spring Boot integration"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy descubrirás Virtual Threads — la revolución de Java 21 (Project Loom).
-        Millones de hilos ligeros que simplifican la concurrencia para apps I/O-bound.
+        Hoy descubrirás Virtual Threads (Java 21, Project Loom) — una revolución que permite crear
+        millones de hilos ligeros sin cambiar tu código. Escribes código síncrono normal y la JVM
+        lo hace eficiente por debajo, eliminando la necesidad de reactive programming en la mayoría de casos.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">¿Por qué Virtual Threads?</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Por qué son revolucionarios?</h2>
 
         <ThinkSection title="Virtual Threads = async/await sin cambiar tu código">
           <p>
-            En Node.js usas async/await para no bloquear el event loop. En Java clásico,
-            cada thread bloqueante consume ~1MB de RAM del SO. Con Virtual Threads,
-            puedes escribir código bloqueante normal y la JVM lo hace eficiente internamente.
+            En Node.js usas <code className="text-primary">async/await</code> para no bloquear el event loop.
+            Si haces una query a BD o una llamada HTTP, usas await para que el hilo no se quede esperando.
+            En Java clásico, cada thread bloqueante consume ~1MB de RAM del sistema operativo. Si tienes
+            10,000 conexiones simultáneas, necesitas 10,000 threads = ~10GB de RAM solo en stacks.
           </p>
           <p>
-            Es como tener lo mejor de ambos mundos: código síncrono simple + eficiencia asíncrona.
+            Con <strong className="text-text">Virtual Threads</strong>, puedes crear MILLONES de hilos porque son
+            gestionados por la JVM (no por el SO). Cada uno ocupa solo unos pocos KB. Cuando un virtual thread
+            se bloquea esperando I/O (BD, HTTP, archivo), la JVM lo "desmonta" del thread real y monta otro.
+            Es como async/await pero <strong className="text-text">transparente</strong> — tu código sigue siendo
+            secuencial y simple.
+          </p>
+          <p>
+            <strong className="text-text">Impacto práctico:</strong> Spring Boot 3.2+ puede usar virtual threads
+            para manejar peticiones HTTP. Activando una sola propiedad, cada petición corre en un virtual thread,
+            permitiendo miles de conexiones concurrentes sin reactive programming (WebFlux/Reactor).
           </p>
         </ThinkSection>
 

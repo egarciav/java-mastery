@@ -14,17 +14,32 @@ export default function SpringTestingPage() {
         commitMsg="dia-41: JUnit 5, Mockito, MockMvc, integration tests"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy aprenderás testing profesional: unit tests con Mockito y integration tests con MockMvc.
+        Hoy aprenderás testing profesional en Spring Boot: unit tests aislados con Mockito para
+        probar tu lógica de negocio, e integration tests con MockMvc para verificar tus endpoints
+        HTTP completos sin levantar un servidor real.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Unit Test con JUnit 5 + Mockito</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">Unit Tests con JUnit 5 + Mockito</h2>
+
+        <p className="text-text-muted leading-relaxed mb-4">
+          Un <strong className="text-text">unit test</strong> prueba UNA clase aislada. Si tu Service depende de un
+          Repository, no quieres que el test dependa de una BD real — sería lento y frágil. En su lugar,
+          usas <strong className="text-text">Mockito</strong> para crear un "doble" (mock) del Repository que simula
+          su comportamiento sin conectarse a ninguna BD.
+        </p>
 
         <ThinkSection title="Arrange → Act → Assert (AAA pattern)">
           <p>
-            Cada test sigue el patrón AAA: <strong className="text-text">Arrange</strong> (preparar datos y mocks),
-            <strong className="text-text"> Act</strong> (ejecutar el método), <strong className="text-text">Assert</strong> (verificar resultado).
-            Mockito reemplaza dependencias reales con mocks para aislar la clase bajo prueba.
+            Cada test sigue el patrón AAA: <strong className="text-text">Arrange</strong> (preparar datos y configurar
+            qué van a retornar los mocks), <strong className="text-text">Act</strong> (ejecutar el método que estás
+            probando), <strong className="text-text">Assert</strong> (verificar que el resultado es lo que esperabas).
+          </p>
+          <p>
+            <code className="text-primary">@Mock</code> crea un mock del Repository (un objeto falso que puedes programar).
+            <code className="text-primary"> @InjectMocks</code> crea el Service real pero le inyecta los mocks como dependencias.
+            <code className="text-primary"> when(...).thenReturn(...)</code> programa lo que el mock va a retornar cuando se llame.
+            <code className="text-primary"> verify(...)</code> confirma que el mock fue llamado como esperabas.
           </p>
         </ThinkSection>
 

@@ -14,22 +14,33 @@ export default function PatronesDisenoPage() {
         commitMsg="dia-32: singleton, builder, strategy, observer"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy aprenderás los patrones de diseño más usados en Java y Spring Boot.
-        No son teoría abstracta — los usarás diariamente en código profesional.
+        Hoy aprenderás los patrones de diseño más usados en Java empresarial. Los patrones de diseño
+        son soluciones probadas a problemas recurrentes en el diseño de software. No son código que copias,
+        sino <strong className="text-text">recetas mentales</strong> para resolver problemas de forma elegante y mantenible.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Singleton</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">Singleton — Una sola instancia global</h2>
 
-        <ThinkSection title="Spring ya usa estos patrones por ti">
+        <ThinkSection title="Spring Boot YA usa todos estos patrones por ti">
           <p>
-            En Spring Boot, <strong className="text-text">Singleton</strong> es el scope por defecto de @Service/@Component.
-            <strong className="text-text"> Strategy</strong> se implementa con múltiples @Service que implementan la misma interfaz.
-            <strong className="text-text"> Observer</strong> con ApplicationEventPublisher. Conocer los patrones te ayuda a entender Spring.
+            No necesitas implementar Singleton manualmente — Spring lo hace con <code className="text-primary">@Service</code> (scope singleton por defecto).
+            No necesitas implementar Strategy manualmente — Spring lo hace con múltiples <code className="text-primary">@Service</code> que implementan
+            la misma interfaz + <code className="text-primary">@Qualifier</code>. No necesitas Observer — Spring tiene
+            <code className="text-primary"> ApplicationEventPublisher</code>.
+          </p>
+          <p>
+            Entonces, ¿por qué aprenderlos? Porque <strong className="text-text">entender los patrones te permite entender cómo
+            funciona Spring internamente</strong>. Cuando ves <code className="text-primary">@Bean</code> sabes que es una Factory.
+            Cuando ves filtros de seguridad encadenados, sabes que es Chain of Responsibility.
+            Cuando ves <code className="text-primary">ResponseEntity.ok().body()</code>, sabes que es un Builder.
           </p>
         </ThinkSection>
 
-        <p className="text-text-muted leading-relaxed mb-4">Una sola instancia en toda la aplicación.</p>
+        <p className="text-text-muted leading-relaxed mb-4">
+          El patrón <strong className="text-text">Singleton</strong> garantiza que solo exista UNA instancia de una clase
+          en toda la aplicación y provee un punto de acceso global. Útil para conexiones de BD, caches, y configuración.
+        </p>
         <CodeBlock filename="Singleton.java" code={`
 public class DatabaseConnection {
     private static volatile DatabaseConnection instance;

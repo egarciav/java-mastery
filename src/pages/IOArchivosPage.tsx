@@ -14,17 +14,31 @@ export default function IOArchivosPage() {
         commitMsg="dia-27: Path, Files, BufferedReader, try-with-resources"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy aprenderás a leer y escribir archivos con la API moderna java.nio.file.
+        Hoy aprenderás a leer y escribir archivos con <code className="text-primary">java.nio.file</code> — la
+        API moderna de I/O. Entenderás Path, Files, try-with-resources, y cuándo usar cada método
+        según el tamaño del archivo.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">java.nio.file (moderno)</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">java.nio.file — La API moderna</h2>
 
         <ThinkSection title="java.nio vs java.io — siempre usa nio">
           <p>
-            Java tiene dos APIs de archivos: la vieja <code className="text-primary">java.io.File</code> y la moderna
-            <code className="text-primary"> java.nio.file</code> (NIO = New I/O). Siempre usa NIO:
-            <code className="text-primary"> Path</code> + <code className="text-primary">Files</code> son más seguras y expresivas.
+            Java tiene dos APIs de archivos: la vieja <code className="text-primary">java.io.File</code> (Java 1.0, de 1996)
+            y la moderna <code className="text-primary">java.nio.file</code> (NIO.2, Java 7+). <strong className="text-text">Siempre usa NIO.2</strong>.
+            La API vieja tiene problemas: no lanza excepciones informativas cuando falla, no soporta links simbólicos
+            bien, y su diseño es confuso.
+          </p>
+          <p>
+            Con NIO.2, <code className="text-primary">Path</code> representa la ruta del archivo (como una dirección) y
+            <code className="text-primary"> Files</code> es la clase utilitaria con métodos estáticos para leer, escribir,
+            copiar, mover y eliminar archivos. Es como <code className="text-primary">fs</code> en Node.js pero tipado y más robusto.
+          </p>
+          <p>
+            <strong className="text-text">Regla del tamaño:</strong> Para archivos pequeños (&lt;10MB), usa
+            <code className="text-primary"> Files.readString()</code> o <code className="text-primary">Files.readAllLines()</code>.
+            Para archivos grandes, usa <code className="text-primary">Files.lines()</code> (Stream lazy) o
+            <code className="text-primary"> BufferedReader</code> para no cargar todo en RAM.
           </p>
         </ThinkSection>
 

@@ -14,23 +14,39 @@ export default function StreamsPage() {
         commitMsg="dia-23: streams, filter, map, reduce, collect, groupingBy"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy dominarás la Streams API — la herramienta más poderosa para procesar colecciones.
-        Es como RxJS pipe() pero para datos en memoria.
+        Hoy dominarás la Streams API — la herramienta más poderosa de Java para procesar colecciones
+        de forma declarativa. Si conoces RxJS en Angular, los Streams te resultarán familiares:
+        encadenas operaciones como <code className="text-primary">filter → map → collect</code> en un pipeline fluido.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Operaciones básicas</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Qué es un Stream?</h2>
 
         <ThinkSection title="Stream = pipeline de datos (como RxJS pipe)">
           <p>
-            En Angular usas <code className="text-primary">pipe(filter(), map())</code> con observables.
-            En Java, <code className="text-primary">.stream().filter().map().collect()</code> es lo mismo pero para datos en memoria.
+            En Angular usas <code className="text-primary">pipe(filter(), map(), tap())</code> con observables para
+            transformar flujos de datos. En Java, <code className="text-primary">.stream().filter().map().collect()</code>
+            es el mismo concepto aplicado a colecciones en memoria.
           </p>
           <p>
-            Diferencia clave: los Streams se consumen <strong className="text-text">una sola vez</strong> y son lazy
-            (no procesan hasta la operación terminal). Son síncronos, no reactivos.
+            <strong className="text-text">Diferencias clave con RxJS:</strong> (1) Los Streams se consumen <strong className="text-text">una sola vez</strong>
+            — no puedes reusar un Stream como un Observable. (2) Son <strong className="text-text">lazy</strong> — no procesan
+            nada hasta que llamas una operación terminal (collect, forEach, count). (3) Son <strong className="text-text">síncronos</strong>
+            — no manejan eventos asíncronos ni tiempo.
           </p>
         </ThinkSection>
+
+        <p className="text-text-muted leading-relaxed mb-4">
+          Un Stream tiene tres partes: (1) una <strong className="text-text">fuente</strong> (lista, array, archivo),
+          (2) cero o más <strong className="text-text">operaciones intermedias</strong> (filter, map, sorted — retornan otro Stream),
+          y (3) una <strong className="text-text">operación terminal</strong> (collect, forEach, count — produce el resultado final).
+          Sin operación terminal, nada se ejecuta.
+        </p>
+
+        <InfoBox type="warning" title="Los Streams NO modifican la colección original">
+          Un Stream nunca muta la lista de origen. Siempre crea una nueva colección o resultado.
+          La lista original queda intacta. Esto es programación funcional: datos inmutables + transformaciones.
+        </InfoBox>
 
         <CodeBlock filename="StreamsBasico.java" code={`
 import java.util.List;
@@ -75,7 +91,13 @@ public class StreamsBasico {
       </section>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Operaciones terminales</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">Operaciones terminales — Donde ocurre la magia</h2>
+        <p className="text-text-muted leading-relaxed mb-4">
+          Las operaciones terminales <strong className="text-text">disparan la ejecución</strong> de todo el pipeline y producen
+          un resultado final (una lista, un número, un boolean, etc.). Sin ellas, las operaciones intermedias
+          simplemente se quedan "esperando". Piénsalo como <code className="text-primary">.subscribe()</code> en RxJS —
+          sin subscribe, el observable no hace nada.
+        </p>
         <CodeBlock filename="StreamsTerminal.java" code={`
 import java.util.List;
 import java.util.Optional;

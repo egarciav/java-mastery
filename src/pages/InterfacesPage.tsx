@@ -14,22 +14,38 @@ export default function InterfacesPage() {
         commitMsg="dia-15: interfaces, default methods, funcionales, lambdas intro"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy aprenderás interfaces — los contratos de Java. A diferencia de las clases abstractas,
-        puedes implementar <strong className="text-text">múltiples</strong> interfaces. Son fundamentales para Spring.
+        Hoy aprenderás interfaces — el mecanismo de Java para definir contratos que las clases deben cumplir.
+        A diferencia de la herencia (solo UNA clase padre), puedes implementar <strong className="text-text">múltiples</strong> interfaces.
+        Son la base de la inyección de dependencias en Spring Boot.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Definir e implementar</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Qué es una Interface?</h2>
 
-        <ThinkSection title="Interface = contrato. ¿Cuándo usarla?">
+        <p className="text-text-muted leading-relaxed mb-4">
+          Una interface define <strong className="text-text">qué</strong> debe hacer una clase, pero no <strong className="text-text">cómo</strong>.
+          Es un contrato: "si implementas esta interface, DEBES tener estos métodos". Cualquier clase que
+          implemente la interface garantiza que puede hacer esas operaciones, sin importar cómo las implemente internamente.
+        </p>
+
+        <ThinkSection title="Interface = contrato de capacidades">
           <p>
-            En TypeScript, las interfaces son solo contratos de tipos (sin código). En Java, las interfaces pueden
-            tener <code className="text-primary">default</code> methods con implementación real (desde Java 8).
+            En TypeScript, las interfaces son solo contratos de forma/tipo — definen qué propiedades y métodos
+            debe tener un objeto. En Java, las interfaces también son contratos, pero desde Java 8 pueden tener
+            <code className="text-primary"> default</code> methods con implementación real. Esto permite agregar
+            métodos nuevos a una interface sin romper todas las clases que la implementan.
           </p>
           <p>
-            Usa interfaces cuando una clase necesita <strong className="text-text">capacidades</strong> múltiples:
-            un Pato puede ser <code className="text-primary">Volable</code> y <code className="text-primary">Nadable</code>.
-            Con herencia solo podrías elegir una.
+            <strong className="text-text">¿Cuándo usar interface vs clase abstracta?</strong> Usa interface cuando defines
+            una <em>capacidad</em> que clases no relacionadas pueden tener: un Pato puede ser
+            <code className="text-primary"> Volable</code> y <code className="text-primary">Nadable</code>.
+            Un Avión también puede ser <code className="text-primary">Volable</code>. No tienen relación de herencia,
+            pero comparten la capacidad de volar.
+          </p>
+          <p>
+            En Spring Boot, la DI funciona principalmente a través de interfaces: tu Controller depende de
+            <code className="text-primary"> UsuarioService</code> (interface), y Spring inyecta la implementación concreta.
+            Esto permite cambiar la implementación sin tocar el código que la usa.
           </p>
         </ThinkSection>
 

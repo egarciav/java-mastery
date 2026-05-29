@@ -14,23 +14,39 @@ export default function OptionalPage() {
         commitMsg="dia-24: Optional, orElse, map, flatMap, ifPresent"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy aprenderás Optional — la forma elegante de eliminar NullPointerException.
-        En Spring Boot lo verás constantemente en repositorios y servicios.
+        Hoy aprenderás <code className="text-primary">Optional&lt;T&gt;</code> — el arma definitiva contra
+        <code className="text-primary"> NullPointerException</code>, el error más común en la historia de Java.
+        En Spring Boot lo verás en cada <code className="text-primary">findById()</code> de tus repositorios.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Crear y usar Optional</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Por qué existe Optional?</h2>
 
         <ThinkSection title="Optional = un contenedor que puede estar vacío">
           <p>
-            En TypeScript puedes usar <code className="text-primary">?.</code> y <code className="text-primary">??</code> para manejar nulls.
-            En Java, <code className="text-primary">Optional</code> es un wrapper explícito: te obliga a pensar qué pasa cuando no hay valor.
+            En TypeScript puedes usar <code className="text-primary">?.</code> (optional chaining) y <code className="text-primary">??</code>
+            (nullish coalescing) para manejar nulls de forma segura. Pero en Java no existían estos operadores
+            hasta que se creó <code className="text-primary">Optional</code> en Java 8.
           </p>
           <p>
-            Regla de oro: <strong className="text-text">nunca</strong> retornes null de un método. Retorna <code className="text-primary">Optional.empty()</code>.
-            Pero <strong className="text-text">nunca</strong> uses Optional como parámetro ni como campo de clase.
+            <strong className="text-text">NullPointerException (NPE)</strong> es el error #1 en Java. Ocurre cuando llamas un
+            método sobre una variable que es <code className="text-primary">null</code>. Optional te obliga a pensar
+            explícitamente: "¿qué hago si no hay valor?" — en vez de confiar en que "seguro no es null".
+          </p>
+          <p>
+            <strong className="text-text">Reglas de oro:</strong> (1) Nunca retornes null — retorna <code className="text-primary">Optional.empty()</code>.
+            (2) Nunca uses Optional como parámetro de método. (3) Nunca uses Optional como campo de clase.
+            Su único propósito legítimo es como <strong className="text-text">tipo de retorno</strong> para comunicar
+            que un resultado puede estar ausente.
           </p>
         </ThinkSection>
+
+        <p className="text-text-muted leading-relaxed mb-4">
+          Piensa en Optional como una caja que puede contener un valor o estar vacía.
+          En vez de verificar <code className="text-primary">if (resultado != null)</code>, usas métodos expresivos
+          como <code className="text-primary">orElse()</code>, <code className="text-primary">map()</code>,
+          <code className="text-primary"> ifPresent()</code> que hacen tu código más legible y seguro.
+        </p>
 
         <CodeBlock filename="OptionalEjemplo.java" code={`
 import java.util.Optional;

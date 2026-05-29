@@ -14,17 +14,27 @@ export default function SpringSetupPage() {
         commitMsg="dia-35: spring initializr, pom.xml, application.properties"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy crearás tu primer proyecto Spring Boot desde cero con Spring Initializr.
+        Hoy crearás tu primer proyecto Spring Boot desde cero. Usarás Spring Initializr para generar
+        la estructura, entenderás qué es <code className="text-primary">pom.xml</code> (tu package.json de Java),
+        y configurarás <code className="text-primary">application.properties</code> (tu environment.ts).
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Spring Initializr</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">Spring Initializr — El generador de proyectos</h2>
 
         <ThinkSection title="start.spring.io = ng new para Java">
           <p>
-            Así como Angular CLI genera la estructura del proyecto con <code className="text-primary">ng new</code>,
-            Spring Initializr genera un proyecto Maven/Gradle con todas las dependencias configuradas.
-            Solo elige las dependencias y descarga el ZIP.
+            Así como <code className="text-primary">ng new mi-app</code> genera un proyecto Angular completo con
+            estructura de carpetas, dependencias y configuración, <strong className="text-text">Spring Initializr</strong>
+            (start.spring.io) genera un proyecto Spring Boot con Maven/Gradle, dependencias configuradas,
+            clase principal y archivos de configuración. Solo eliges qué necesitas y descargas un ZIP.
+          </p>
+          <p>
+            <strong className="text-text">Maven</strong> es el gestor de dependencias más usado en Java (como npm).
+            El archivo <code className="text-primary">pom.xml</code> es tu <code className="text-primary">package.json</code>:
+            lista las dependencias (starters), versiones, y plugins de build. Los "starters" son paquetes
+            preconfigurados: <code className="text-primary">spring-boot-starter-web</code> incluye Tomcat + Spring MVC + Jackson,
+            <code className="text-primary"> spring-boot-starter-data-jpa</code> incluye Hibernate + DataSource.
           </p>
         </ThinkSection>
 

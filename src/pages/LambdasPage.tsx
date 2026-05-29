@@ -14,21 +14,34 @@ export default function LambdasPage() {
         commitMsg="dia-22: lambdas, interfaces funcionales, method references"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy entras a la programación funcional de Java. Las lambdas son como las arrow functions
-        de TypeScript, pero solo funcionan donde se espera una interfaz funcional.
+        Hoy entras a la programación funcional de Java. Las lambdas (Java 8+) son expresiones que representan
+        funciones anónimas — como las arrow functions de TypeScript, pero con una diferencia fundamental:
+        en Java solo puedes usar una lambda donde se espera una <strong className="text-text">interfaz funcional</strong>.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Sintaxis Lambda</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Qué es una Lambda?</h2>
 
-        <ThinkSection title="Lambda = arrow function con restricciones">
+        <ThinkSection title="Lambda = arrow function que implementa una interfaz">
           <p>
-            En TypeScript: <code className="text-primary">{"const f = (a, b) => a + b"}</code> — puedes asignar a cualquier variable.
-            En Java, una lambda solo puede asignarse a una <strong className="text-text">interfaz funcional</strong> (interfaz con un solo método abstracto).
+            En TypeScript: <code className="text-primary">{"const f = (a, b) => a + b"}</code> — puedes asignar
+            una función a cualquier variable. Las funciones son ciudadanos de primera clase.
           </p>
           <p>
-            No existen funciones sueltas en Java. Las lambdas son azúcar sintáctico para clases anónimas que implementan
-            interfaces funcionales.
+            En Java, las funciones NO son ciudadanos de primera clase — todo vive dentro de una clase.
+            Una lambda es azúcar sintáctico para una <strong className="text-text">clase anónima</strong> que implementa
+            una interfaz con un solo método abstracto (llamada <strong className="text-text">interfaz funcional</strong>).
+            Es decir, cuando escribes <code className="text-primary">(a, b) -&gt; a + b</code>, Java lo traduce
+            internamente a: "crea un objeto que implementa esta interfaz y su único método hace a + b".
+          </p>
+          <p>
+            <strong className="text-text">Interfaces funcionales estándar (java.util.function):</strong>{' '}
+            <code className="text-primary">Predicate&lt;T&gt;</code> (T→boolean),{' '}
+            <code className="text-primary">Function&lt;T,R&gt;</code> (T→R),{' '}
+            <code className="text-primary">Consumer&lt;T&gt;</code> (T→void),{' '}
+            <code className="text-primary">Supplier&lt;T&gt;</code> (→T),{' '}
+            <code className="text-primary">Comparator&lt;T&gt;</code> (T,T→int).
+            Estas cubren el 95% de los casos de uso.
           </p>
         </ThinkSection>
 

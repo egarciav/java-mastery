@@ -14,23 +14,34 @@ export default function HerenciaPage() {
         commitMsg="dia-13: herencia, extends, super, override, clases abstractas"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy vas a aprender a reutilizar código con herencia. Una clase hija hereda todo de la padre
-        y puede agregar o sobrescribir comportamiento.
+        Hoy aprenderás <strong className="text-text">herencia</strong> — el mecanismo de OOP que permite crear nuevas
+        clases basadas en clases existentes. La clase hija hereda campos y métodos del padre, y puede
+        agregar nuevos o sobrescribir los heredados para cambiar su comportamiento.
       </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">extends — Heredar de una clase</h2>
 
+        <p className="text-text-muted leading-relaxed mb-4">
+          Cuando una clase <code className="text-primary">extends</code> otra, hereda automáticamente todos sus
+          campos y métodos (excepto los privados, que existen pero no son accesibles directamente). La clase
+          hija puede usar <code className="text-primary">super</code> para llamar al constructor y métodos del padre,
+          y <code className="text-primary">@Override</code> para reemplazar el comportamiento de un método heredado.
+        </p>
+
         <ThinkSection title="Herencia = 'es un'. ¿Cuándo usarla?">
           <p>
-            Un <code className="text-primary">Perro</code> <strong className="text-text">es un</strong>
-            <code className="text-primary"> Animal</code>. Un <code className="text-primary">Círculo</code>
-            <strong className="text-text"> es una</strong> <code className="text-primary">Figura</code>.
-            Si la relación "es un" tiene sentido, herencia es apropiada.
+            La prueba para saber si herencia es correcta: ¿tiene sentido decir que la clase hija "es un" tipo
+            del padre? Un <code className="text-primary">Perro</code> <strong className="text-text">es un</strong>
+            <code className="text-primary"> Animal</code> → ✅ correcto. Un <code className="text-primary">Motor</code>
+            <strong className="text-text"> es un</strong> <code className="text-primary">Auto</code> → ❌ incorrecto
+            (un Motor es PARTE de un Auto — eso es composición, no herencia).
           </p>
           <p>
-            Java solo permite <strong className="text-text">herencia simple</strong>: una clase extiende UNA sola clase padre.
-            Para "herencia múltiple", usarás interfaces (Día 15).
+            Java solo permite <strong className="text-text">herencia simple</strong>: una clase puede extender UNA sola
+            clase padre. Esto evita el "diamond problem" de C++. Para agregar múltiples capacidades a una clase,
+            usarás interfaces (Día 15). En la práctica profesional moderna, se prefiere <strong className="text-text">composición
+            sobre herencia</strong> — pero herencia sigue siendo fundamental para entender frameworks como Spring.
           </p>
         </ThinkSection>
 

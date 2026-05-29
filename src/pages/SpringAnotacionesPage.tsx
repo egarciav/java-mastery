@@ -14,19 +14,33 @@ export default function SpringAnotacionesPage() {
         commitMsg="dia-36: @Component, @Service, @RestController, DI, JPA annotations"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy aprenderás las anotaciones esenciales de Spring. Son el lenguaje del framework
-        — cada @ le dice a Spring qué hacer con tu clase.
+        Hoy aprenderás las anotaciones esenciales de Spring — los "decoradores" que le dicen al
+        framework cómo tratar cada clase, método y campo. Sin anotaciones, Spring no sabe que tu
+        clase existe. Con ellas, Spring la detecta, la instancia, la inyecta y la configura automáticamente.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Anotaciones de componentes</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Qué son las anotaciones en Spring?</h2>
 
-        <ThinkSection title="Anotaciones = decoradores de Angular">
+        <p className="text-text-muted leading-relaxed mb-4">
+          Una <strong className="text-text">anotación</strong> es metadatos que agregas con <code className="text-primary">@</code>
+          encima de una clase, método o campo. Spring escanea tu código al arrancar, encuentra estas anotaciones,
+          y actúa según lo que indican: crear un bean, mapear una URL, inyectar una dependencia, definir una
+          transacción, etc. Son el "lenguaje" con el que te comunicas con el framework.
+        </p>
+
+        <ThinkSection title="Anotaciones = decoradores de Angular (mismo concepto)">
           <p>
-            En Angular usas <code className="text-primary">@Component</code>, <code className="text-primary">@Injectable</code>,
-            <code className="text-primary"> @Input</code>. En Spring es igual: <code className="text-primary">@Service</code>,
-            <code className="text-primary"> @RestController</code>, <code className="text-primary">@GetMapping</code>.
-            Las anotaciones son metadatos que Spring lee para autoconfigurar tu aplicación.
+            En Angular usas <code className="text-primary">@Component()</code>, <code className="text-primary">@Injectable()</code>,
+            <code className="text-primary"> @Input()</code>. Angular lee estos decoradores y sabe qué hacer con cada clase.
+            En Spring es idéntico: <code className="text-primary">@Service</code>,
+            <code className="text-primary"> @RestController</code>, <code className="text-primary">@GetMapping</code>
+            le dicen a Spring el rol y comportamiento de cada pieza.
+          </p>
+          <p>
+            La diferencia: en Angular los decoradores modifican la clase en tiempo de compilación (TypeScript).
+            En Spring, las anotaciones son leídas en <strong className="text-text">runtime</strong> usando reflexión (Java Reflection API).
+            Spring escanea el classpath buscando clases con anotaciones específicas y las registra como beans.
           </p>
         </ThinkSection>
 

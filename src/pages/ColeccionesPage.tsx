@@ -14,23 +14,33 @@ export default function ColeccionesPage() {
         commitMsg="dia-17: ArrayList, HashMap, HashSet, List.of, Map.of"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy pasas de arrays fijos a colecciones dinámicas. List, Set y Map son las estructuras
-        que usarás el 90% del tiempo en Java profesional.
+        Hoy pasas de arrays (tamaño fijo) a colecciones dinámicas. <code className="text-primary">List</code>,
+        <code className="text-primary"> Set</code> y <code className="text-primary">Map</code> son las estructuras de datos
+        que usarás el 90% del tiempo en Java profesional. Son como los arrays y objetos de TypeScript,
+        pero con tipos específicos para cada necesidad.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">ArrayList — Lista dinámica</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">ArrayList — Lista dinámica ordenada</h2>
 
-        <ThinkSection title="¿Por qué no usar arrays siempre?">
+        <ThinkSection title="El framework de colecciones: List vs Set vs Map">
           <p>
-            Los arrays tienen tamaño fijo. <code className="text-primary">ArrayList</code> crece y encoge dinámicamente,
-            como los arrays de TypeScript. Además, las colecciones tienen métodos como
-            <code className="text-primary"> .contains()</code>, <code className="text-primary">.remove()</code>,
-            <code className="text-primary">.sort()</code> que simplifican mucho el código.
+            Java tiene un framework de colecciones organizado en interfaces:
+            <strong className="text-text"> List</strong> (ordenada, permite duplicados — como array de TS),
+            <strong className="text-text"> Set</strong> (sin duplicados, sin orden garantizado — como Set de JS),
+            <strong className="text-text"> Map</strong> (clave→valor — como Map/objeto de JS).
           </p>
           <p>
-            Regla práctica: usa <code className="text-primary">List&lt;T&gt;</code> como tipo de variable (interfaz)
-            y <code className="text-primary">new ArrayList&lt;&gt;()</code> como implementación.
+            <strong className="text-text">Regla fundamental:</strong> declara con la INTERFACE como tipo
+            (<code className="text-primary">List&lt;String&gt;</code>) y usa la IMPLEMENTACIÓN al crear
+            (<code className="text-primary">new ArrayList&lt;&gt;()</code>). Así puedes cambiar de ArrayList a LinkedList
+            sin modificar el código que la usa. Esto se llama "programar contra interfaces" y es un
+            pilar de la buena arquitectura en Java y Spring.
+          </p>
+          <p>
+            <strong className="text-text">¿Cuál usar?</strong> ¿Necesitas acceso por índice y orden? → <code className="text-primary">List</code>.
+            ¿Necesitas unicidad sin duplicados? → <code className="text-primary">Set</code>.
+            ¿Necesitas buscar por clave? → <code className="text-primary">Map</code>.
           </p>
         </ThinkSection>
 

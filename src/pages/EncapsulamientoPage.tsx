@@ -14,22 +14,37 @@ export default function EncapsulamientoPage() {
         commitMsg="dia-12: encapsulamiento, modificadores de acceso, getters/setters"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy vas a aprender a proteger los datos internos de tus clases. La regla de oro:
-        campos <code className="text-primary">private</code>, acceso controlado con getters/setters.
+        Hoy vas a aprender <strong className="text-text">encapsulamiento</strong> — el principio de OOP que dice:
+        "esconde los detalles internos y expone solo lo necesario". Es la diferencia entre código frágil
+        que se rompe cuando alguien modifica un campo directamente, y código robusto que protege su estado.
       </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Modificadores de Acceso</h2>
 
+        <p className="text-text-muted leading-relaxed mb-4">
+          Los modificadores de acceso controlan <strong className="text-text">quién puede ver y usar</strong> tus campos y métodos.
+          Java tiene 4 niveles, de más restrictivo a más permisivo: <code className="text-primary">private</code>,
+          (default/package), <code className="text-primary">protected</code>, <code className="text-primary">public</code>.
+        </p>
+
         <ThinkSection title="¿Por qué no hacer todo public?">
           <p>
-            En TypeScript puedes acceder a cualquier propiedad de un objeto. En Java, la filosofía es diferente:
-            <strong className="text-text"> esconde todo lo que puedas</strong>. Si alguien puede modificar tu
-            <code className="text-primary"> saldo</code> directamente con <code className="text-primary">cuenta.saldo = -1000</code>,
-            tu lógica de negocio no sirve de nada.
+            En TypeScript/JavaScript, las propiedades de un objeto son públicas por defecto y cualquiera puede
+            modificarlas. En Java, la filosofía es opuesta: <strong className="text-text">esconde todo lo que puedas</strong>.
           </p>
           <p>
-            La regla: <strong className="text-text">campos siempre private</strong>, métodos public solo los necesarios.
+            Imagina una clase <code className="text-primary">CuentaBancaria</code>. Si el campo
+            <code className="text-primary"> saldo</code> es público, cualquier código puede hacer
+            <code className="text-primary"> cuenta.saldo = -1000</code> y tu validación de "no permitir saldo negativo"
+            no sirve de nada. Pero si es <code className="text-primary">private</code> con un método
+            <code className="text-primary"> retirar(monto)</code>, tú controlas que solo se retire si hay fondos suficientes.
+          </p>
+          <p>
+            <strong className="text-text">Regla de oro:</strong> campos SIEMPRE <code className="text-primary">private</code>,
+            métodos <code className="text-primary">public</code> solo los que forman tu API pública.
+            Los métodos auxiliares internos deben ser <code className="text-primary">private</code> también.
+            Esto te permite cambiar la implementación interna sin romper el código que usa tu clase.
           </p>
         </ThinkSection>
         <div className="overflow-x-auto mb-6">

@@ -14,25 +14,35 @@ export default function SpringExceptionHandlerPage() {
         commitMsg="dia-42: @ControllerAdvice, @ExceptionHandler, ErrorResponse"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy centralizarás el manejo de errores con @ControllerAdvice — respuestas JSON
-        consistentes y profesionales para toda tu API.
+        Hoy centralizarás el manejo de errores de tu API en un solo lugar usando <code className="text-primary">@ControllerAdvice</code>.
+        En vez de poner try-catch en cada Controller, defines UN handler global que intercepta excepciones
+        de cualquier endpoint y las transforma en respuestas JSON limpias y profesionales.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">¿Por qué es necesario?</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Por qué necesitas manejo global de errores?</h2>
 
         <ThinkSection title="@ControllerAdvice = ErrorHandler global de Angular">
           <p>
-            En Angular usas ErrorHandler o interceptors para capturar errores globalmente.
-            En Spring, <code className="text-primary">@ControllerAdvice</code> intercepta excepciones de cualquier
-            Controller y las transforma en respuestas JSON limpias con el código HTTP correcto.
+            En Angular usas un <code className="text-primary">ErrorHandler</code> global o HTTP interceptors para
+            capturar errores de forma centralizada y mostrar mensajes al usuario. En Spring,
+            <code className="text-primary"> @ControllerAdvice</code> hace exactamente lo mismo: intercepta excepciones
+            que ocurren en cualquier Controller y las transforma en respuestas HTTP con formato consistente.
+          </p>
+          <p>
+            Sin esto, cuando tu código lanza una excepción, Spring retorna un stacktrace completo en el JSON
+            de respuesta (exponiendo detalles internos de tu código) o una página HTML blanca de error.
+            Ambas opciones son inaceptables en una API profesional — necesitas respuestas JSON estructuradas
+            con códigos HTTP correctos (400, 404, 500) y mensajes claros para el frontend.
           </p>
         </ThinkSection>
 
         <p className="text-text-muted leading-relaxed mb-4">
-          Sin manejo de errores global, Spring retorna stacktraces en JSON o páginas HTML de error al cliente. 
-          Con <code className="text-primary">@ControllerAdvice</code> defines respuestas de error <strong className="text-text">consistentes y profesionales</strong> 
-          para toda tu API en un solo lugar.
+          El patrón es: (1) creas excepciones personalizadas para cada caso de error (recurso no encontrado,
+          validación fallida, acceso denegado), (2) las lanzas desde tus Services cuando algo falla, y
+          (3) <code className="text-primary">@ControllerAdvice</code> las captura y las convierte en ResponseEntity
+          con el código HTTP y body JSON apropiados. Tu código de negocio solo lanza excepciones — nunca se
+          preocupa por construir respuestas HTTP de error.
         </p>
       </section>
 

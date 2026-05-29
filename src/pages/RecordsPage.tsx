@@ -14,21 +14,35 @@ export default function RecordsPage() {
         commitMsg="dia-29: records, constructor compacto, DTOs inmutables"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy aprenderás Records — clases de datos inmutables en una línea. Son perfectos para
-        DTOs en Spring Boot y reemplazan toneladas de boilerplate.
+        Hoy aprenderás Records (Java 16+) — la forma moderna de crear clases de datos inmutables
+        con una sola línea de código. Eliminan el 90% del boilerplate que plagaba las clases Java
+        tradicionales y son perfectos como DTOs en Spring Boot.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Definir y usar Records</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Qué problema resuelven los Records?</h2>
 
         <ThinkSection title="Record = interfaz TypeScript + constructor + equals + toString">
           <p>
-            En TypeScript defines <code className="text-primary">{"interface Persona { nombre: string; edad: number; }"}</code>.
-            En Java, un <code className="text-primary">record</code> genera automáticamente: constructor, getters,
-            <code className="text-primary"> equals()</code>, <code className="text-primary">hashCode()</code> y
-            <code className="text-primary"> toString()</code>. Todo inmutable.
+            En TypeScript defines <code className="text-primary">{"interface Persona { nombre: string; edad: number; }"}</code>
+            y ya tienes un tipo con forma definida. Pero en Java, antes de los records, crear una clase de datos
+            simple requería escribir: campos privados, constructor, getters, <code className="text-primary">equals()</code>,
+            <code className="text-primary"> hashCode()</code> y <code className="text-primary">toString()</code> — unas 50+ líneas
+            de código repetitivo para 3 campos.
+          </p>
+          <p>
+            Un <code className="text-primary">record</code> genera TODO eso automáticamente en una línea. Los campos son
+            <code className="text-primary"> final</code> (inmutables), los getters no llevan prefijo "get", y la igualdad
+            se compara por contenido (no por referencia). Son ideales para DTOs, respuestas de API,
+            objetos de valor, y cualquier dato que no cambia después de crearse.
           </p>
         </ThinkSection>
+
+        <p className="text-text-muted leading-relaxed mb-4">
+          <strong className="text-text">¿Cuándo usar record vs clase normal?</strong> Usa record cuando tu objeto es
+          solo un "contenedor de datos" que no cambia (inmutable). Usa clase normal cuando necesitas mutabilidad,
+          herencia, o lógica de estado compleja.
+        </p>
 
         <CodeBlock filename="Records.java" code={`
 // Un record genera automáticamente:

@@ -14,18 +14,33 @@ export default function SpringSecurityPage() {
         commitMsg="dia-40: SecurityFilterChain, BCrypt, JWT, roles"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy aprenderás Spring Security — autenticación y autorización. Es como los guards
-        de Angular pero para el backend.
+        Hoy aprenderás Spring Security — el módulo que protege tu API controlando quién puede acceder
+        (autenticación) y qué puede hacer (autorización). Es el equivalente de los Route Guards e
+        HTTP Interceptors de Angular, pero aplicado a nivel de servidor.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Configuración básica</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">Autenticación vs Autorización</h2>
+
+        <p className="text-text-muted leading-relaxed mb-4">
+          <strong className="text-text">Autenticación</strong> = verificar QUIÉN eres (login con email/contraseña, token JWT).
+          <strong className="text-text"> Autorización</strong> = verificar QUÉ puedes hacer (¿tienes rol ADMIN para borrar usuarios?).
+          Spring Security maneja ambas cosas a través de una cadena de filtros que interceptan cada petición HTTP
+          antes de que llegue a tu Controller.
+        </p>
 
         <ThinkSection title="Spring Security = Route Guards + Interceptors del backend">
           <p>
-            En Angular proteges rutas con guards y adjuntas tokens con interceptors.
-            En Spring Security, <code className="text-primary">SecurityFilterChain</code> define qué rutas requieren
-            autenticación y <code className="text-primary">OncePerRequestFilter</code> valida tokens en cada petición.
+            En Angular proteges rutas con <code className="text-primary">CanActivate</code> guards y adjuntas tokens
+            JWT con HTTP interceptors. En Spring Security es el mismo concepto:
+            <code className="text-primary"> SecurityFilterChain</code> define qué rutas requieren autenticación
+            (como los guards) y <code className="text-primary">OncePerRequestFilter</code> intercepta cada petición
+            para validar el token JWT (como el interceptor).
+          </p>
+          <p>
+            La diferencia clave: en Angular, la seguridad del frontend es "cosmética" — un usuario puede
+            saltarse los guards modificando el código. En Spring Security, la protección es <strong className="text-text">real</strong>
+            porque corre en el servidor. Si no pasas la validación, nunca llegas al Controller.
           </p>
         </ThinkSection>
 

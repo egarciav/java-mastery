@@ -1,6 +1,48 @@
 import { useState } from 'react';
-import { Highlight, themes } from 'prism-react-renderer';
+import { Highlight, themes, Prism } from 'prism-react-renderer';
 import { Copy, Check, FileCode } from 'lucide-react';
+
+// Register Java grammar (NOT included by default in prism-react-renderer v2)
+(Prism.languages as Record<string, unknown>).java = {
+  'comment': [
+    { pattern: /\/\*\*[\s\S]*?\*\//, greedy: true },
+    { pattern: /\/\*[\s\S]*?\*\//, greedy: true },
+    { pattern: /\/\/.*/, greedy: true }
+  ],
+  'string': [
+    { pattern: /"""[\s\S]*?"""/, greedy: true },
+    { pattern: /(["'])(?:\\.|(?!\1)[^\\\r\n])*\1/, greedy: true }
+  ],
+  'annotation': { pattern: /@\w+(?:\.\w+)*/, alias: 'builtin' },
+  'keyword': /\b(?:abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|exports|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|module|native|new|non-sealed|null|open|opens|package|permits|private|protected|provides|public|record|requires|return|sealed|short|static|strictfp|super|switch|synchronized|this|throw|throws|to|transient|transitive|try|uses|var|void|volatile|while|with|yield)\b/,
+  'boolean': /\b(?:true|false)\b/,
+  'number': /\b0(?:x[\da-f_]+|b[01_]+|[0-7_]+)\b|(?:\b\d[\d_]*(?:\.[\d_]*)?|\B\.\d[\d_]*)(?:[eE][+-]?\d[\d_]*)?[dDfFlL]?\b/i,
+  'function': /\b\w+(?=\s*\()/,
+  'operator': /->|[<>]=?|[!=]=?|--?|\+\+?|&&?|\|\|?|[?*/~^%]|<<=?|>>>?=?/,
+  'punctuation': /[{}[\];(),.:]/
+};
+
+// Register SQL grammar
+(Prism.languages as Record<string, unknown>).sql = {
+  'comment': [
+    { pattern: /\/\*[\s\S]*?\*\//, greedy: true },
+    { pattern: /--.*/ }
+  ],
+  'string': { pattern: /(')(?:\\.|(?!\1)[^\\\r\n])*\1/, greedy: true },
+  'keyword': /\b(?:SELECT|FROM|WHERE|INSERT|UPDATE|DELETE|CREATE|DROP|ALTER|TABLE|INDEX|INTO|VALUES|SET|JOIN|LEFT|RIGHT|INNER|OUTER|ON|AND|OR|NOT|NULL|IS|IN|BETWEEN|LIKE|ORDER|BY|GROUP|HAVING|LIMIT|OFFSET|AS|DISTINCT|COUNT|SUM|AVG|MAX|MIN|EXISTS|UNION|ALL|PRIMARY|KEY|FOREIGN|REFERENCES|CONSTRAINT|DEFAULT|AUTO_INCREMENT|CASCADE|UNIQUE|CHECK|VIEW|TRIGGER|PROCEDURE|FUNCTION|BEGIN|END|IF|ELSE|THEN|CASE|WHEN|COMMIT|ROLLBACK|GRANT|REVOKE|VARCHAR|INT|INTEGER|BIGINT|BOOLEAN|DATE|TIMESTAMP|TEXT|FLOAT|DOUBLE|DECIMAL)\b/i,
+  'number': /\b\d+(?:\.\d+)?\b/,
+  'boolean': /\b(?:TRUE|FALSE)\b/i,
+  'operator': /[=<>!]+/,
+  'punctuation': /[;(),.*]/
+};
+
+// Register properties/ini grammar for .properties files
+(Prism.languages as Record<string, unknown>).properties = {
+  'comment': { pattern: /^[#!].*$/m },
+  'key': { pattern: /^[\w.-]+(?=\s*[=:])/m, alias: 'attr-name' },
+  'value': { pattern: /(?<=[=:])\s*.+/m, alias: 'attr-value' },
+  'punctuation': /[=:]/
+};
 
 interface CodeBlockProps {
   code: string;
@@ -8,7 +50,7 @@ interface CodeBlockProps {
   filename?: string;
 }
 
-const theme = themes.oneDark;
+const theme = themes.nightOwl;
 
 export default function CodeBlock({ code, language = 'java', filename }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
@@ -23,7 +65,7 @@ export default function CodeBlock({ code, language = 'java', filename }: CodeBlo
 
   return (
     <div className="rounded-xl overflow-hidden border border-[#2d333b] my-5 shadow-lg shadow-black/20">
-      <div className="flex items-center justify-between px-4 py-2.5" style={{ background: '#1e1e2e' }}>
+      <div className="flex items-center justify-between px-4 py-2.5" style={{ background: '#01111d' }}>
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
             <span className="w-3 h-3 rounded-full bg-[#ff5f57]" />
@@ -54,7 +96,7 @@ export default function CodeBlock({ code, language = 'java', filename }: CodeBlo
             style={{
               margin: 0,
               padding: '1rem 0',
-              background: '#282c34',
+              background: '#011627',
               overflowX: 'auto',
               fontSize: '0.875rem',
               lineHeight: '1.7',

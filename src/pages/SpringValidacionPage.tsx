@@ -14,18 +14,33 @@ export default function SpringValidacionPage() {
         commitMsg="dia-43: @Valid, @NotBlank, @Email, @Size, grupos de validación"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy aprenderás Bean Validation — proteger tu API con anotaciones de validación
-        declarativas. Nunca confíes solo en la validación del frontend.
+        Hoy aprenderás Bean Validation — el estándar de Java para validar datos con anotaciones declarativas.
+        La validación del frontend es para UX (feedback rápido); la del backend es para <strong className="text-text">seguridad</strong>.
+        Nunca confíes en que el cliente envía datos correctos — cualquiera puede usar Postman o curl.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Anotaciones de validación</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Cómo funciona Bean Validation?</h2>
+
+        <p className="text-text-muted leading-relaxed mb-4">
+          <strong className="text-text">Bean Validation</strong> (JSR 380) te permite declarar restricciones con anotaciones
+          (<code className="text-primary">@NotBlank</code>, <code className="text-primary">@Email</code>, <code className="text-primary">@Size</code>)
+          directamente en los campos de tu DTO. Cuando un Controller recibe un request con <code className="text-primary">@Valid</code>,
+          Spring valida automáticamente el objeto ANTES de ejecutar tu método. Si falla, lanza una excepción que
+          puedes manejar para retornar un error 400 con los mensajes apropiados.
+        </p>
 
         <ThinkSection title="Bean Validation = Validators de Angular Reactive Forms">
           <p>
-            En Angular usas <code className="text-primary">Validators.required</code>, <code className="text-primary">Validators.email</code>.
-            En Java usas <code className="text-primary">@NotBlank</code>, <code className="text-primary">@Email</code> directamente
-            en los campos del DTO. Spring valida automáticamente con <code className="text-primary">@Valid</code>.
+            En Angular usas <code className="text-primary">Validators.required</code>, <code className="text-primary">Validators.email</code>,
+            <code className="text-primary"> Validators.minLength()</code> en Reactive Forms. En Java es el mismo concepto
+            pero con anotaciones: <code className="text-primary">@NotBlank</code>, <code className="text-primary">@Email</code>,
+            <code className="text-primary"> @Size(min=2)</code> directamente en los campos del DTO.
+          </p>
+          <p>
+            La diferencia: en Angular la validación es en el navegador del usuario (puede saltarse). En Spring,
+            la validación corre en el servidor — si no pasa, el request nunca llega a tu lógica de negocio.
+            <strong className="text-text"> Siempre valida en ambos lados</strong>: frontend para UX, backend para seguridad.
           </p>
         </ThinkSection>
 

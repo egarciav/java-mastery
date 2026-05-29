@@ -14,24 +14,39 @@ export default function SealedClassesPage() {
         commitMsg="dia-30: sealed classes, permits, exhaustive switch"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy aprenderás Sealed Classes — controlar exactamente qué clases pueden heredar.
-        Combinadas con records y pattern matching, son la base del modelado moderno en Java.
+        Hoy aprenderás Sealed Classes (Java 17) — una forma de declarar exactamente qué clases
+        pueden heredar de otra. Combinadas con records y pattern matching, permiten modelar
+        dominios complejos con seguridad de tipos que el compilador puede verificar exhaustivamente.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">¿Qué son las Sealed Classes?</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Qué son y por qué existen?</h2>
 
-        <ThinkSection title="Sealed = union types de TypeScript">
+        <ThinkSection title="Sealed = union types de TypeScript en Java">
           <p>
-            En TypeScript: <code className="text-primary">{"type Resultado = Exito | Error | Pendiente"}</code>.
-            En Java 17+: <code className="text-primary">sealed interface Resultado permits Exito, Error, Pendiente</code>.
-            El compilador verifica que tu switch cubra todos los casos.
+            En TypeScript puedes definir: <code className="text-primary">{"type Resultado = Exito | Error | Pendiente"}</code>.
+            El compilador sabe que solo existen esos 3 tipos posibles. Si haces un switch/if, TypeScript
+            te avisa si no cubres todos los casos.
+          </p>
+          <p>
+            En Java 17+, <code className="text-primary">sealed interface Resultado permits Exito, Error, Pendiente</code>
+            logra exactamente lo mismo. El compilador sabe que solo esas 3 clases implementan Resultado,
+            y en un switch con pattern matching te obliga a cubrir TODOS los casos o poner un default.
+          </p>
+          <p>
+            <strong className="text-text">¿Cuándo usarlas?</strong> Cuando tienes una jerarquía CERRADA: estados de un
+            proceso (Pendiente/Aprobado/Rechazado), tipos de pago (Tarjeta/Efectivo/Transferencia),
+            nodos de un AST, resultados de operaciones (Ok/Error). Si alguien más pudiera necesitar
+            extender la clase, NO la hagas sealed.
           </p>
         </ThinkSection>
 
         <p className="text-text-muted leading-relaxed mb-4">
-          Una <strong className="text-text">sealed class</strong> restringe qué clases pueden extenderla.
-          Solo las clases listadas en <code className="text-primary">permits</code> pueden heredar.
+          Una <strong className="text-text">sealed class/interface</strong> restringe qué clases pueden extenderla
+          o implementarla. Solo las clases explícitamente listadas en <code className="text-primary">permits</code>
+          tienen permiso de heredar. Cada subclase debe ser <code className="text-primary">final</code> (no se puede
+          extender más), <code className="text-primary">sealed</code> (restringida también), o
+          <code className="text-primary"> non-sealed</code> (abierta a extensión).
         </p>
         <CodeBlock filename="SealedClasses.java" code={`
 // Solo Circulo, Rectangulo y Triangulo pueden extender Figura

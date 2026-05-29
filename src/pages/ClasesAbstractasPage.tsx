@@ -14,21 +14,37 @@ export default function ClasesAbstractasPage() {
         commitMsg="dia-16: clases abstractas, template method pattern"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy profundizamos en clases abstractas: el punto medio entre una clase normal y una interfaz.
-        Pueden tener estado, constructores y métodos con implementación.
+        Hoy profundizamos en clases abstractas — el punto medio entre una clase concreta y una interfaz.
+        Una clase abstracta puede tener campos con estado, constructores, métodos con implementación completa,
+        Y métodos abstractos que las subclases deben implementar obligatoriamente.
       </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Qué es una clase abstracta?</h2>
 
+        <p className="text-text-muted leading-relaxed mb-4">
+          Una clase abstracta es una clase que <strong className="text-text">no se puede instanciar directamente</strong>
+          (no puedes hacer <code className="text-primary">new Figura()</code>). Existe solo para ser heredada.
+          Define un "contrato parcial": parte del código ya está implementado (métodos concretos), y parte
+          queda pendiente para que las subclases lo completen (métodos abstractos marcados con <code className="text-primary">abstract</code>).
+        </p>
+
         <ThinkSection title="Abstracta vs Interface — ¿cuál usar?">
           <p>
-            <strong className="text-text">Clase abstracta</strong>: cuando las subclases comparten
-            <em> estado</em> (campos) y <em>código común</em>. Ejemplo: todas las figuras tienen color.
+            <strong className="text-text">Clase abstracta</strong>: úsala cuando las subclases comparten
+            <em> estado</em> (campos) y <em>código común</em>. Ejemplo: todas las figuras geométricas
+            tienen un color y un método <code className="text-primary">mostrarInfo()</code> que funciona igual para todas.
+            Solo cambia cómo se calcula el área — eso lo defines como abstracto.
           </p>
           <p>
-            <strong className="text-text">Interface</strong>: cuando defines una <em>capacidad</em> que
-            clases no relacionadas pueden tener. Ejemplo: Volable lo puede implementar un Pato y un Avión.
+            <strong className="text-text">Interface</strong>: úsala cuando defines una <em>capacidad</em> que
+            clases no relacionadas pueden tener. Ejemplo: <code className="text-primary">Serializable</code>
+            lo puede implementar un Pato, un Documento, y un Número. No comparten estado ni código.
+          </p>
+          <p>
+            <strong className="text-text">Regla práctica:</strong> ¿Las subclases son "un tipo de" la clase padre
+            (Circulo ES una Figura)? → Clase abstracta. ¿Las clases "pueden hacer" algo (un Pato PUEDE volar)?
+            → Interface. En Java solo puedes heredar de UNA clase abstracta, pero implementar MUCHAS interfaces.
           </p>
         </ThinkSection>
 

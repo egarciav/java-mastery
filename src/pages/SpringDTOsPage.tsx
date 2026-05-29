@@ -14,25 +14,34 @@ export default function SpringDTOsPage() {
         commitMsg="dia-44: DTOs, records, mapper manual, MapStruct"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy aprenderás DTOs — la capa que protege tu API de tu modelo de BD.
-        Nunca expongas entidades JPA directamente.
+        Hoy aprenderás DTOs (Data Transfer Objects) — la capa intermedia que separa tu modelo
+        de base de datos de lo que tu API expone al mundo. Es una práctica esencial en APIs
+        profesionales que protege datos sensibles y desacopla tu API de tu esquema de BD.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">¿Por qué usar DTOs?</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Por qué NUNCA exponer entidades JPA directamente?</h2>
 
-        <ThinkSection title="DTOs = interfaces de Angular para tipar la API">
+        <ThinkSection title="DTOs = interfaces de Angular para tipar la API (pero del lado servidor)">
           <p>
             En Angular creas interfaces como <code className="text-primary">UserResponse</code> y
-            <code className="text-primary"> CreateUserRequest</code> para tipar lo que envías/recibes del backend.
-            En Spring, los DTOs (records) son esas mismas estructuras pero del lado servidor,
-            garantizando que nunca expongas campos internos como passwords.
+            <code className="text-primary"> CreateUserRequest</code> para tipar exactamente lo que envías/recibes del backend.
+            No usas la misma interfaz para todo — el formulario de registro no tiene los mismos campos que
+            el perfil público del usuario.
+          </p>
+          <p>
+            En Spring es lo mismo: creas DTOs (generalmente records) específicos para cada operación.
+            Un <code className="text-primary">CrearUsuarioRequest</code> recibe nombre+email+contraseña.
+            Un <code className="text-primary">UsuarioResponse</code> retorna id+nombre+email (sin contraseña).
+            Tu entidad JPA <code className="text-primary">Usuario</code> tiene todos los campos + relaciones +
+            auditoría — pero nunca sale directamente al JSON de respuesta.
           </p>
         </ThinkSection>
 
         <p className="text-text-muted leading-relaxed mb-4">
-          Exponer directamente tus entidades JPA a la API es un error común. Los <strong className="text-text">DTOs</strong> 
-          son objetos específicos para transferir datos entre capas, sin acoplar la API al modelo de BD.
+          Exponer directamente tus entidades JPA a la API es uno de los errores más comunes en Spring Boot.
+          Los <strong className="text-text">DTOs</strong> son objetos simples (records) diseñados específicamente para
+          cada caso de uso de tu API, sin acoplar el contrato HTTP al modelo interno de BD.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div className="p-4 bg-bg-secondary rounded-xl border border-border">

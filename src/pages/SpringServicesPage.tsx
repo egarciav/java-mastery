@@ -14,17 +14,31 @@ export default function SpringServicesPage() {
         commitMsg="dia-38: @Service, @Transactional, interface + impl pattern"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy aprenderás la capa de servicios — donde vive la lógica de negocio real.
+        Hoy aprenderás la capa de servicios — el corazón de tu aplicación donde vive toda la
+        lógica de negocio. El Controller solo traduce HTTP, el Repository solo accede a datos,
+        pero el Service es donde ocurren las decisiones, validaciones y orquestación.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Service completo</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Qué es un Service y por qué separarlo?</h2>
 
         <ThinkSection title="Service = donde vive la lógica de negocio">
           <p>
-            El Controller recibe HTTP, el Repository accede a la BD. El Service es el intermediario
-            que contiene las reglas de negocio: validaciones, cálculos, orquestación.
-            <code className="text-primary"> @Transactional</code> garantiza que si algo falla, se revierten todos los cambios en BD.
+            El patrón de capas en Spring es: <strong className="text-text">Controller → Service → Repository</strong>.
+            El Controller recibe peticiones HTTP y las traduce a llamadas Java. El Repository se comunica
+            con la base de datos. El Service es el <strong className="text-text">intermediario inteligente</strong>:
+            contiene las reglas de negocio (validaciones, cálculos, decisiones), orquesta múltiples
+            repositorios si es necesario, y define los límites transaccionales.
+          </p>
+          <p>
+            <code className="text-primary">@Transactional</code> es una anotación que envuelve el método en una transacción
+            de base de datos: si cualquier operación dentro del método falla (excepción), Spring hace
+            <strong className="text-text">rollback automático</strong> de todos los cambios. Sin @Transactional,
+            podrías quedar con datos a medio guardar si algo falla entre dos operaciones de BD.
+          </p>
+          <p>
+            En Angular, el patrón es idéntico: Component → Service → HttpClient. El Service es donde
+            pones lógica de transformación y orquestación, no en el componente.
           </p>
         </ThinkSection>
 

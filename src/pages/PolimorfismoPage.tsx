@@ -14,21 +14,33 @@ export default function PolimorfismoPage() {
         commitMsg="dia-14: polimorfismo, upcasting, downcasting, instanceof"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy entenderás el concepto más poderoso de OOP: un mismo método se comporta diferente
-        según el objeto real. Esto es lo que hace que OOP sea tan flexible.
+        Hoy entenderás el concepto más poderoso de la Programación Orientada a Objetos: el <strong className="text-text">polimorfismo</strong>.
+        Significa que un mismo método se comporta de forma diferente según el tipo real del objeto que lo ejecuta.
+        Es lo que permite que frameworks como Spring Boot funcionen con código extensible y desacoplado.
       </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Qué es el Polimorfismo?</h2>
 
-        <ThinkSection title="Polimorfismo = 'muchas formas'">
+        <p className="text-text-muted leading-relaxed mb-4">
+          La palabra viene del griego: <strong className="text-text">"poli"</strong> (muchos) + <strong className="text-text">"morfo"</strong> (formas).
+          En programación significa que una variable de tipo padre puede contener un objeto de cualquier tipo hijo,
+          y al llamar un método, Java ejecuta la versión del <strong className="text-text">tipo real del objeto</strong> (no de la variable).
+          Esto se decide en runtime — se llama <strong className="text-text">dynamic dispatch</strong> o <strong className="text-text">late binding</strong>.
+        </p>
+
+        <ThinkSection title="¿Por qué esto es tan poderoso?">
           <p>
             Imagina un método <code className="text-primary">alimentar(Animal animal)</code>. Puedes pasarle un Perro,
-            un Gato, o cualquier subtipo de Animal. Java ejecutará el método <code className="text-primary">comer()</code>
+            un Gato, un Pájaro — cualquier subtipo de Animal. Java ejecutará el método <code className="text-primary">comer()</code>
             correcto <strong className="text-text">según el tipo real del objeto</strong>, no el tipo de la variable.
           </p>
           <p>
-            Esto te permite escribir código genérico que funciona con cualquier subtipo. Es la base de los frameworks como Spring.
+            Esto te permite escribir código genérico y extensible: puedes agregar un nuevo tipo de Animal
+            sin modificar el método <code className="text-primary">alimentar()</code>. Es el principio
+            <strong className="text-text"> Open/Closed</strong>: abierto a extensión, cerrado a modificación.
+            Es exactamente la misma razón por la que en Angular defines un Service como interface — para poder
+            inyectar diferentes implementaciones sin cambiar el código que las usa.
           </p>
         </ThinkSection>
 

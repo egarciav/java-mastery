@@ -14,21 +14,31 @@ export default function ComparadorPage() {
         commitMsg="dia-21: Comparable, Comparator, ordenamiento de objetos"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy aprenderás a ordenar objetos en Java. Es fundamental para trabajar con colecciones
-        y streams — lo usarás constantemente en código profesional.
+        Hoy aprenderás a ordenar objetos personalizados en Java. En TypeScript, ordenas con
+        <code className="text-primary"> .sort((a, b) =&gt; a.precio - b.precio)</code>. En Java hay dos mecanismos formales:
+        <code className="text-primary"> Comparable</code> (orden natural interno) y <code className="text-primary">Comparator</code>
+        (orden externo flexible). Los usarás constantemente con colecciones, streams y Spring Data.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Comparable — orden natural</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">Comparable — El objeto sabe ordenarse</h2>
 
-        <ThinkSection title="¿Comparable o Comparator?">
+        <ThinkSection title="¿Comparable o Comparator? Depende del caso">
           <p>
-            <strong className="text-text">Comparable</strong>: la clase "sabe" cómo ordenarse. Implementas <code className="text-primary">compareTo()</code>
-            dentro de la clase. Solo un orden natural.
+            <strong className="text-text">Comparable&lt;T&gt;</strong>: la clase implementa <code className="text-primary">compareTo()</code>
+            internamente. Define UN solo orden "natural" (ej: productos por precio). Las colecciones usan este
+            orden por defecto al llamar <code className="text-primary">Collections.sort()</code> o <code className="text-primary">.sorted()</code>.
           </p>
           <p>
-            <strong className="text-text">Comparator</strong>: el orden se define fuera. Puedes tener múltiples Comparators
-            para la misma clase. Más flexible, ideal con lambdas.
+            <strong className="text-text">Comparator&lt;T&gt;</strong>: el orden se define FUERA de la clase. Puedes crear
+            múltiples Comparators para la misma clase (por nombre, por precio, por fecha). Es más flexible y
+            se combina con lambdas y method references. <strong className="text-text">Usa Comparator el 90% del tiempo</strong>
+            — Comparable solo para el orden más obvio y natural de tu clase.
+          </p>
+          <p>
+            <strong className="text-text">Regla del retorno:</strong> <code className="text-primary">compareTo()</code> retorna:
+            negativo (this va antes), cero (iguales), positivo (this va después).
+            Es como <code className="text-primary">(a, b) =&gt; a - b</code> en JavaScript.
           </p>
         </ThinkSection>
 

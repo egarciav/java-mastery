@@ -21,42 +21,124 @@ export default function SpringIntroPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Qué es Spring Boot?</h2>
         <p className="text-text-muted leading-relaxed mb-4">
-          <strong className="text-text">Spring Boot</strong> es un framework que simplifica la creación de aplicaciones 
-          Java basadas en Spring. Proporciona configuración automática, servidor embebido y un enfoque 
-          "opinionado" para que puedas enfocarte en la lógica de negocio.
+          <strong className="text-text">Spring Boot</strong> es un framework de Java que te permite crear aplicaciones
+          backend (APIs REST, microservicios, aplicaciones web) con mínima configuración. Está construido
+          sobre el ecosistema Spring Framework y automatiza todo lo tedioso: configurar servidores,
+          conectar bases de datos, manejar seguridad, serializar JSON, etc.
         </p>
-        <InfoBox type="spring" title="Spring vs Spring Boot">
-          <strong>Spring Framework</strong> es el ecosistema completo (IoC, AOP, MVC, Data, Security...).
-          <strong> Spring Boot</strong> es una capa encima que autoconfigura todo para que arranques rápido.
-          Piensa en Spring como Angular y Spring Boot como Angular CLI — te da estructura y convenciones.
+        <p className="text-text-muted leading-relaxed mb-4">
+          Sin Spring Boot, necesitarías configurar manualmente un servidor Tomcat, definir archivos XML de configuración,
+          y escribir cientos de líneas de boilerplate. Con Spring Boot, una sola anotación y un archivo de propiedades
+          son suficientes para tener una API REST funcionando con conexión a base de datos.
+        </p>
+        <InfoBox type="spring" title="Spring Framework vs Spring Boot — ¿Cuál es la diferencia?">
+          <strong>Spring Framework</strong> es el ecosistema completo de bibliotecas: IoC container, AOP, Spring MVC,
+          Spring Data, Spring Security, Spring Cloud, etc. Es enorme y flexible, pero requiere mucha configuración manual.
+          <strong> Spring Boot</strong> es una capa de conveniencia que autoconfigura Spring Framework con "opiniones sensatas"
+          (defaults inteligentes). Piensa en Spring como Angular y Spring Boot como Angular CLI + Schematics — te da
+          estructura, convenciones y código generado para que arranques en minutos.
         </InfoBox>
       </section>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Conceptos clave</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">Los 3 pilares: IoC, DI y Autoconfiguración</h2>
 
         <ThinkSection title="Spring Boot = Angular para el backend">
           <p>
-            Si ya conoces Angular, Spring Boot es su equivalente backend: tiene DI con constructores,
-            servicios singleton, módulos de configuración, interceptores, guards (Security), y
-            un CLI (Spring Initializr). La curva de aprendizaje es suave viniendo de Angular.
+            Si ya conoces Angular, Spring Boot es su equivalente backend. Angular tiene: DI con constructores,
+            servicios singleton con <code className="text-primary">@Injectable()</code>, módulos de configuración,
+            interceptores HTTP, guards para rutas, y Angular CLI para generar código.
+          </p>
+          <p>
+            Spring Boot tiene: DI con constructores, servicios singleton con <code className="text-primary">@Service</code>,
+            clases de configuración con <code className="text-primary">@Configuration</code>, filtros para peticiones,
+            Spring Security para proteger endpoints, y Spring Initializr para generar proyectos.
+            La transición mental es casi directa.
           </p>
         </ThinkSection>
 
         <div className="space-y-4">
           <div className="p-4 bg-bg-secondary rounded-xl border border-border">
-            <h3 className="font-bold text-text mb-2">Inversión de Control (IoC)</h3>
-            <p className="text-text-muted text-sm">Spring crea y gestiona los objetos (beans) por ti. Tú no usas <code className="text-primary">new</code> — Spring los inyecta donde los necesitas.</p>
+            <h3 className="font-bold text-text mb-2">1. Inversión de Control (IoC) — "No llames, yo te llamo"</h3>
+            <p className="text-text-muted text-sm mb-2">
+              En programación tradicional, TÚ creas objetos con <code className="text-primary">new MiServicio()</code>.
+              Con IoC, el <strong className="text-text">contenedor de Spring</strong> crea los objetos por ti y los gestiona.
+              Tú solo dices "necesito un UsuarioService" y Spring te lo da ya creado y configurado.
+            </p>
+            <p className="text-text-muted text-sm">
+              Los objetos gestionados por Spring se llaman <strong className="text-text">beans</strong>. Spring los crea al arrancar
+              la aplicación, los guarda en su contenedor (ApplicationContext), y los destruye cuando la app se detiene.
+              Por defecto, cada bean es <strong className="text-text">singleton</strong> — solo existe una instancia compartida.
+            </p>
           </div>
           <div className="p-4 bg-bg-secondary rounded-xl border border-border">
-            <h3 className="font-bold text-text mb-2">Inyección de Dependencias (DI)</h3>
-            <p className="text-text-muted text-sm">Spring inyecta automáticamente las dependencias en tus clases. Es como el sistema de DI de Angular con <code className="text-primary">@Injectable()</code>.</p>
+            <h3 className="font-bold text-text mb-2">2. Inyección de Dependencias (DI) — "Te paso lo que necesitas"</h3>
+            <p className="text-text-muted text-sm mb-2">
+              Cuando tu clase necesita otra clase para funcionar (ej: un Controller necesita un Service),
+              Spring detecta esa dependencia y la <strong className="text-text">inyecta automáticamente</strong> por el constructor.
+              No necesitas buscarla ni crearla — Spring la pone ahí.
+            </p>
+            <p className="text-text-muted text-sm">
+              Esto es idéntico a Angular: cuando pones <code className="text-primary">constructor(private userService: UserService)</code>
+              en un componente, Angular inyecta el servicio. En Spring:
+              <code className="text-primary"> public MiController(MiService service)</code> hace lo mismo.
+            </p>
           </div>
           <div className="p-4 bg-bg-secondary rounded-xl border border-border">
-            <h3 className="font-bold text-text mb-2">Autoconfiguración</h3>
-            <p className="text-text-muted text-sm">Spring Boot detecta las dependencias en tu proyecto y configura automáticamente beans, conexiones de BD, seguridad, etc.</p>
+            <h3 className="font-bold text-text mb-2">3. Autoconfiguración — "Adivino qué necesitas"</h3>
+            <p className="text-text-muted text-sm mb-2">
+              Spring Boot escanea las dependencias de tu <code className="text-primary">pom.xml</code> y configura beans
+              automáticamente. Si detecta <code className="text-primary">spring-boot-starter-data-jpa</code> + un driver H2,
+              crea automáticamente un DataSource, un EntityManager, y habilita repositorios JPA.
+            </p>
+            <p className="text-text-muted text-sm">
+              Si detecta <code className="text-primary">spring-boot-starter-web</code>, arranca un servidor Tomcat embebido
+              en el puerto 8080. Si detecta <code className="text-primary">spring-boot-starter-security</code>, protege
+              todos los endpoints con autenticación básica. Todo sin que escribas una línea de configuración.
+            </p>
           </div>
         </div>
+
+        <CodeBlock filename="Ejemplo: DI en acción" code={`
+// Spring crea este bean automáticamente por la anotación @Service
+@Service
+public class UsuarioService {
+    private final UsuarioRepository repository;
+
+    // Spring ve que necesitas un UsuarioRepository y lo inyecta aquí
+    public UsuarioService(UsuarioRepository repository) {
+        this.repository = repository;
+    }
+
+    public List<Usuario> listarTodos() {
+        return repository.findAll();
+    }
+}
+
+// El Controller recibe el Service inyectado
+@RestController
+@RequestMapping("/api/usuarios")
+public class UsuarioController {
+    private final UsuarioService service;
+
+    // Spring inyecta el UsuarioService automáticamente
+    public UsuarioController(UsuarioService service) {
+        this.service = service;
+    }
+
+    @GetMapping
+    public List<Usuario> listar() {
+        return service.listarTodos();
+    }
+}
+`} />
+
+        <InfoBox type="tip" title="¿Cómo sabe Spring qué inyectar?">
+          Spring busca en su contenedor un bean cuyo tipo coincida con el parámetro del constructor.
+          Si tu constructor pide un <code className="text-primary">UsuarioService</code>, Spring busca un bean de tipo
+          UsuarioService. Si encuentra exactamente uno, lo inyecta. Si hay varios del mismo tipo,
+          necesitas <code className="text-primary">@Primary</code> o <code className="text-primary">@Qualifier</code> para desambiguar.
+        </InfoBox>
       </section>
 
       <section className="mb-12">

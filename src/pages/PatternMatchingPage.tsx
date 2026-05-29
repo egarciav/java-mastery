@@ -14,18 +14,32 @@ export default function PatternMatchingPage() {
         commitMsg="dia-31: pattern matching instanceof, switch, guards"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy dominarás Pattern Matching — verificar tipo y extraer datos en una sola expresión.
-        Con sealed classes y records, el compilador verifica exhaustividad.
+        Hoy dominarás Pattern Matching — una característica que permite verificar el tipo de un objeto,
+        extraer sus datos, y usar esa información en una sola expresión compacta. Combinado con sealed
+        classes y records, el compilador puede verificar que cubras todos los casos posibles.
       </p>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">instanceof con Pattern Matching (Java 16+)</h2>
 
-        <ThinkSection title="Pattern Matching = casting inteligente">
+        <p className="text-text-muted leading-relaxed mb-4">
+          Pattern Matching elimina el código repetitivo de verificar tipo + hacer cast. En Java clásico,
+          necesitabas 3 líneas para verificar si un Object es String y usarlo. Con pattern matching,
+          lo haces en una sola expresión segura y legible.
+        </p>
+
+        <ThinkSection title="Pattern Matching = smart cast de Kotlin / narrowing de TypeScript">
           <p>
-            Antes necesitabas: verificar tipo con instanceof, luego hacer cast manual. Ahora Java
-            lo combina en una línea: <code className="text-primary">if (obj instanceof String s)</code> verifica
-            Y crea la variable tipada al mismo tiempo.
+            En TypeScript, cuando haces <code className="text-primary">if (typeof x === "string")</code> dentro del
+            bloque if, TypeScript sabe que x es string (type narrowing). En Java 16+, pattern matching
+            hace lo mismo: <code className="text-primary">if (obj instanceof String s)</code> verifica el tipo Y
+            crea la variable <code className="text-primary">s</code> ya tipada como String en el mismo paso.
+          </p>
+          <p>
+            Con el switch mejorado de Java 21, puedes hacer pattern matching sobre sealed classes
+            y records, descomponiendo sus campos directamente. El compilador verifica que tu switch
+            sea <strong className="text-text">exhaustivo</strong> — que cubra todos los subtipos posibles.
+            Si agregas un nuevo subtipo, te obliga a manejar ese caso.
           </p>
         </ThinkSection>
 

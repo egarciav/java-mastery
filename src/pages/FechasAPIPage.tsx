@@ -14,24 +14,50 @@ export default function FechasAPIPage() {
         commitMsg="dia-28: LocalDate, LocalDateTime, Duration, DateTimeFormatter"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy dominarás java.time — la API moderna de fechas. Inmutable, clara y potente.
-        Olvida java.util.Date para siempre.
+        Hoy dominarás <code className="text-primary">java.time</code> — la API moderna de fechas introducida en Java 8.
+        Es inmutable, thread-safe y clara. Si alguna vez usaste <code className="text-primary">new Date()</code> en
+        JavaScript y sufriste con zonas horarias, aquí encontrarás la solución profesional.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Clases principales</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">¿Por qué java.time y no Date?</h2>
 
         <ThinkSection title="java.time es inmutable — como los strings">
           <p>
             Cada operación retorna un <strong className="text-text">nuevo objeto</strong>. 
             <code className="text-primary">hoy.plusDays(1)</code> no modifica <code className="text-primary">hoy</code>,
-            retorna un nuevo LocalDate. Esto evita bugs sutiles de mutabilidad.
+            retorna un nuevo LocalDate. Esto evita bugs sutiles de mutabilidad que plagan a
+            <code className="text-primary"> new Date()</code> en JavaScript.
           </p>
           <p>
-            En TypeScript usas <code className="text-primary">new Date()</code> que es mutable y confusa.
-            Java aprendió de ese error y creó java.time basado en Joda-Time.
+            En TypeScript usas <code className="text-primary">new Date()</code> que es mutable, tiene meses 0-indexed (enero=0),
+            y mezcla fecha con hora sin forma de separarlas. Java tuvo el mismo problema con <code className="text-primary">java.util.Date</code>,
+            pero lo resolvió creando java.time — una API completamente nueva basada en la biblioteca Joda-Time.
           </p>
         </ThinkSection>
+
+        <p className="text-text-muted leading-relaxed mb-4">
+          La API java.time separa claramente los conceptos: <strong className="text-text">LocalDate</strong> (solo fecha),
+          <strong className="text-text"> LocalTime</strong> (solo hora), <strong className="text-text">LocalDateTime</strong> (fecha+hora sin zona),
+          <strong className="text-text"> ZonedDateTime</strong> (fecha+hora+zona), e <strong className="text-text">Instant</strong> (momento exacto en UTC).
+          Cada clase existe para un propósito específico.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+          {[
+            { a: 'LocalDate', d: 'Solo fecha (cumpleaños, fecha de factura). Sin hora ni zona.' },
+            { a: 'LocalTime', d: 'Solo hora (hora de alarma, horario). Sin fecha ni zona.' },
+            { a: 'LocalDateTime', d: 'Fecha + hora (evento local, cita). Sin zona horaria.' },
+            { a: 'ZonedDateTime', d: 'Fecha + hora + zona (vuelos, reuniones internacionales).' },
+            { a: 'Instant', d: 'Momento en UTC (timestamps, logs, auditoría).' },
+            { a: 'Duration / Period', d: 'Diferencia entre tiempos (Duration) o fechas (Period).' },
+          ].map(({ a, d }) => (
+            <div key={a} className="p-3 bg-bg-secondary rounded-lg border border-border">
+              <code className="text-primary text-sm">{a}</code>
+              <p className="text-text-muted text-xs mt-1">{d}</p>
+            </div>
+          ))}
+        </div>
 
         <CodeBlock filename="FechasModernas.java" code={`
 import java.time.*;

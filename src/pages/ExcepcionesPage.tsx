@@ -14,24 +14,38 @@ export default function ExcepcionesPage() {
         commitMsg="dia-18: try-catch, throw, custom exceptions, try-with-resources"
       />
       <p className="text-text-muted leading-relaxed mb-8">
-        Hoy dominarás el manejo de errores en Java. A diferencia de TypeScript donde los errores
-        son opcionales, Java te obliga a pensar en qué puede fallar.
+        Hoy dominarás el manejo de errores en Java. A diferencia de TypeScript donde capturar errores
+        es totalmente opcional, Java tiene un sistema de excepciones donde el compilador te <strong className="text-text">obliga</strong>
+        a pensar en qué puede fallar y cómo manejar cada caso.
       </p>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">try-catch-finally</h2>
+        <h2 className="text-2xl font-bold text-text mb-4">El sistema de excepciones de Java</h2>
 
-        <ThinkSection title="Checked vs Unchecked — la gran diferencia con TypeScript">
+        <p className="text-text-muted leading-relaxed mb-4">
+          En Java, cuando algo sale mal, se lanza (throw) una <strong className="text-text">excepción</strong> — un objeto
+          que describe el error. El flujo del programa se interrumpe y busca un bloque <code className="text-primary">catch</code>
+          que pueda manejar ese tipo de error. Si no lo encuentra, el programa se detiene con un stack trace.
+        </p>
+
+        <ThinkSection title="Checked vs Unchecked — la diferencia fundamental con TypeScript">
           <p>
-            En TypeScript, todos los errores son opcionales de manejar. En Java hay dos tipos:
+            En TypeScript/JavaScript, todos los errores son opcionales de manejar. Puedes ignorarlos y tu código
+            compila igual (aunque crashee en runtime). Java tiene una filosofía diferente con dos categorías:
           </p>
           <p>
-            <strong className="text-text">Checked</strong> (heredan de Exception): el compilador te <em>obliga</em> a manejarlas.
-            Ejemplo: <code className="text-primary">IOException</code>. Si no haces try-catch, no compila.
+            <strong className="text-text">Checked exceptions</strong> (heredan de <code className="text-primary">Exception</code>):
+            el compilador te <em>obliga</em> a manejarlas con try-catch o declararlas con throws.
+            Representan errores recuperables que tu programa debería anticipar: archivos que no existen
+            (<code className="text-primary">IOException</code>), conexiones a BD fallidas (<code className="text-primary">SQLException</code>).
+            Si no las manejas, <strong className="text-text">tu código no compila</strong>.
           </p>
           <p>
-            <strong className="text-text">Unchecked</strong> (heredan de RuntimeException): opcionales.
-            Ejemplo: <code className="text-primary">NullPointerException</code>, <code className="text-primary">ArrayIndexOutOfBoundsException</code>.
+            <strong className="text-text">Unchecked exceptions</strong> (heredan de <code className="text-primary">RuntimeException</code>):
+            son opcionales de capturar. Representan errores de programación que NO deberían ocurrir si el código
+            es correcto: <code className="text-primary">NullPointerException</code> (usaste null sin verificar),
+            <code className="text-primary"> ArrayIndexOutOfBoundsException</code> (accediste fuera del rango).
+            La solución es arreglar el código, no ponerle try-catch.
           </p>
         </ThinkSection>
 
