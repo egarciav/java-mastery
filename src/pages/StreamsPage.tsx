@@ -154,9 +154,16 @@ public class StreamsTerminal {
         <Exercise
           number={1}
           title="Reporte de ventas con Streams"
-          description={`Crea ReporteVentas.java con record Venta(String producto, double monto, String categoria).
-Usa Streams para: total ventas, venta más cara, agrupar por categoría, top 3, productos únicos.`}
-          hint="Usa mapToDouble().sum(), max(), Collectors.groupingBy(), sorted().limit(), map().distinct().count()"
+          description={`Crea ReporteVentas.java con:
+1. Un record Venta(String producto, double monto, String categoria)
+2. Una lista con al menos 5 ventas de diferentes categorías
+3. Usa Streams para calcular:
+   - Total de ventas (suma de todos los montos)
+   - La venta más cara (usa max con Comparator)
+   - Total por categoría (agrupa con groupingBy y suma con summingDouble)
+   - Top 3 ventas más caras (sorted + limit)
+   - Cantidad de productos únicos vendidos (map + distinct + count)`}
+          hint="Usa mapToDouble().sum(), max(Comparator.comparingDouble()), Collectors.groupingBy(), sorted().limit(), map().distinct().count()"
           solution={`import java.util.*;
 import java.util.stream.*;
 

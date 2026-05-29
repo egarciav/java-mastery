@@ -3377,8 +3377,15 @@ public class StreamsTerminal {
             .toList(); // inmutable
     }
 }
-`}),t.jsxs(F,{type:"angular",children:["Los Streams de Java son como los operadores RxJS en Angular: ",t.jsx("code",{className:"text-primary",children:"pipe(filter(), map())"}),". La diferencia es que los Streams son para datos en memoria y se ejecutan una sola vez, mientras que RxJS maneja flujos asíncronos y observables."]})]}),t.jsxs("section",{className:"mb-12",children:[t.jsx("h2",{className:"text-2xl font-bold text-text mb-4",children:"Ejercicios del Día 23"}),t.jsx(K,{number:1,title:"Reporte de ventas con Streams",description:`Crea ReporteVentas.java con record Venta(String producto, double monto, String categoria).
-Usa Streams para: total ventas, venta más cara, agrupar por categoría, top 3, productos únicos.`,hint:"Usa mapToDouble().sum(), max(), Collectors.groupingBy(), sorted().limit(), map().distinct().count()",solution:`import java.util.*;
+`}),t.jsxs(F,{type:"angular",children:["Los Streams de Java son como los operadores RxJS en Angular: ",t.jsx("code",{className:"text-primary",children:"pipe(filter(), map())"}),". La diferencia es que los Streams son para datos en memoria y se ejecutan una sola vez, mientras que RxJS maneja flujos asíncronos y observables."]})]}),t.jsxs("section",{className:"mb-12",children:[t.jsx("h2",{className:"text-2xl font-bold text-text mb-4",children:"Ejercicios del Día 23"}),t.jsx(K,{number:1,title:"Reporte de ventas con Streams",description:`Crea ReporteVentas.java con:
+1. Un record Venta(String producto, double monto, String categoria)
+2. Una lista con al menos 5 ventas de diferentes categorías
+3. Usa Streams para calcular:
+   - Total de ventas (suma de todos los montos)
+   - La venta más cara (usa max con Comparator)
+   - Total por categoría (agrupa con groupingBy y suma con summingDouble)
+   - Top 3 ventas más caras (sorted + limit)
+   - Cantidad de productos únicos vendidos (map + distinct + count)`,hint:"Usa mapToDouble().sum(), max(Comparator.comparingDouble()), Collectors.groupingBy(), sorted().limit(), map().distinct().count()",solution:`import java.util.*;
 import java.util.stream.*;
 
 public class ReporteVentas {
@@ -4086,7 +4093,7 @@ public class DatabaseConnection {
     }
 }
 // En Spring Boot: @Service, @Component ya son singletons por defecto
-`})]}),t.jsxs("section",{className:"mb-12",children:[t.jsx("h2",{className:"text-2xl font-bold text-text mb-4",children:"Builder"}),t.jsx("p",{className:"text-text-muted leading-relaxed mb-4",children:"Construir objetos complejos paso a paso."}),t.jsx(S,{filename:"Builder.java",code:`
+`})]}),t.jsxs("section",{className:"mb-12",children:[t.jsx("h2",{className:"text-2xl font-bold text-text mb-4",children:"Builder — Construir objetos complejos paso a paso"}),t.jsxs("p",{className:"text-text-muted leading-relaxed mb-4",children:["El patrón ",t.jsx("strong",{className:"text-text",children:"Builder"})," resuelve el problema de constructores con muchos parámetros. Imagina un objeto con 8 campos donde solo 2 son obligatorios — ¿creas un constructor con 8 parámetros? ¿Usas setters y pierdes inmutabilidad? Builder te permite construir el objeto paso a paso con una API fluida (encadenando métodos), manteniendo el objeto final inmutable."]}),t.jsx(S,{filename:"Builder.java",code:`
 public class Usuario {
     private final String nombre;
     private final String email;
@@ -4119,7 +4126,7 @@ Usuario u = new Usuario.Builder("Carlos")
     .email("carlos@mail.com")
     .edad(25)
     .build();
-`})]}),t.jsxs("section",{className:"mb-12",children:[t.jsx("h2",{className:"text-2xl font-bold text-text mb-4",children:"Strategy"}),t.jsx("p",{className:"text-text-muted leading-relaxed mb-4",children:"Cambiar algoritmo en tiempo de ejecución."}),t.jsx(S,{filename:"Strategy.java",code:`
+`})]}),t.jsxs("section",{className:"mb-12",children:[t.jsx("h2",{className:"text-2xl font-bold text-text mb-4",children:"Strategy — Cambiar algoritmo en tiempo de ejecución"}),t.jsxs("p",{className:"text-text-muted leading-relaxed mb-4",children:["El patrón ",t.jsx("strong",{className:"text-text",children:"Strategy"})," encapsula diferentes algoritmos detrás de una misma interfaz, permitiendo intercambiarlos sin modificar el código que los usa. En vez de un gigante ",t.jsx("code",{className:"text-primary",children:"if/else"})," o ",t.jsx("code",{className:"text-primary",children:"switch"})," para decidir qué hacer, delegas la decisión a un objeto Strategy que puedes cambiar dinámicamente. Con lambdas de Java 8+, las strategies se vuelven aún más concisas."]}),t.jsx(S,{filename:"Strategy.java",code:`
 // Interfaz de estrategia
 public interface OrdenStrategy {
     double calcularPrecio(double precioBase);
@@ -4147,7 +4154,7 @@ public class CarritoCompras {
 
 // Con lambdas (más moderno)
 OrdenStrategy blackFriday = precio -> precio * 0.5;
-`})]}),t.jsxs("section",{className:"mb-12",children:[t.jsx("h2",{className:"text-2xl font-bold text-text mb-4",children:"Observer"}),t.jsx("p",{className:"text-text-muted leading-relaxed mb-4",children:"Notificar cambios a múltiples objetos."}),t.jsx(S,{filename:"Observer.java",code:`
+`})]}),t.jsxs("section",{className:"mb-12",children:[t.jsx("h2",{className:"text-2xl font-bold text-text mb-4",children:"Observer — Notificar cambios a múltiples interesados"}),t.jsxs("p",{className:"text-text-muted leading-relaxed mb-4",children:["El patrón ",t.jsx("strong",{className:"text-text",children:"Observer"}),' define una relación de uno-a-muchos: cuando un objeto cambia de estado, notifica automáticamente a todos sus "suscriptores". Es el mismo concepto que los ',t.jsx("code",{className:"text-primary",children:"EventEmitter"})," de Angular o los ",t.jsx("code",{className:"text-primary",children:"Subject"}),"de RxJS — un emisor con múltiples listeners que reaccionan a eventos."]}),t.jsx(S,{filename:"Observer.java",code:`
 import java.util.ArrayList;
 import java.util.List;
 
@@ -4583,6 +4590,14 @@ public class TareaController {
             }
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable long id) {
+        boolean removed = tareas.removeIf(t -> t.id() == id);
+        return removed
+            ? ResponseEntity.noContent().build()   // 204
+            : ResponseEntity.notFound().build();   // 404
     }
 }`,solutionFilename:"TareaController.java"})]}),t.jsx("section",{className:"mb-8",children:t.jsxs("div",{className:"bg-[#161b22] border border-[#30363d] rounded-xl p-5",children:[t.jsx("h3",{className:"text-success font-semibold mb-2 text-sm",children:"Commit del día"}),t.jsx(S,{language:"bash",code:'git commit -m "dia-37: controllers CRUD, ResponseEntity, @PathVariable"'}),t.jsxs("p",{className:"text-text-muted text-xs mt-2",children:["Mañana: ",t.jsx("strong",{className:"text-text",children:"Día 38"})," — Services: lógica de negocio y @Transactional."]})]})})]})}function cS(){return t.jsxs("div",{children:[t.jsx(oe,{day:38,title:"Services",duration:"50 min",commitMsg:"dia-38: @Service, @Transactional, interface + impl pattern"}),t.jsx("p",{className:"text-text-muted leading-relaxed mb-8",children:"Hoy aprenderás la capa de servicios — el corazón de tu aplicación donde vive toda la lógica de negocio. El Controller solo traduce HTTP, el Repository solo accede a datos, pero el Service es donde ocurren las decisiones, validaciones y orquestación."}),t.jsxs("section",{className:"mb-12",children:[t.jsx("h2",{className:"text-2xl font-bold text-text mb-4",children:"¿Qué es un Service y por qué separarlo?"}),t.jsxs(ne,{title:"Service = donde vive la lógica de negocio",children:[t.jsxs("p",{children:["El patrón de capas en Spring es: ",t.jsx("strong",{className:"text-text",children:"Controller → Service → Repository"}),". El Controller recibe peticiones HTTP y las traduce a llamadas Java. El Repository se comunica con la base de datos. El Service es el ",t.jsx("strong",{className:"text-text",children:"intermediario inteligente"}),": contiene las reglas de negocio (validaciones, cálculos, decisiones), orquesta múltiples repositorios si es necesario, y define los límites transaccionales."]}),t.jsxs("p",{children:[t.jsx("code",{className:"text-primary",children:"@Transactional"})," es una anotación que envuelve el método en una transacción de base de datos: si cualquier operación dentro del método falla (excepción), Spring hace",t.jsx("strong",{className:"text-text",children:"rollback automático"})," de todos los cambios. Sin @Transactional, podrías quedar con datos a medio guardar si algo falla entre dos operaciones de BD."]}),t.jsx("p",{children:"En Angular, el patrón es idéntico: Component → Service → HttpClient. El Service es donde pones lógica de transformación y orquestación, no en el componente."})]}),t.jsx(S,{filename:"UsuarioService.java",code:`
 @Service

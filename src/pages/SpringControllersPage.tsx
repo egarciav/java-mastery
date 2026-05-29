@@ -173,6 +173,14 @@ public class TareaController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable long id) {
+        boolean removed = tareas.removeIf(t -> t.id() == id);
+        return removed
+            ? ResponseEntity.noContent().build()   // 204
+            : ResponseEntity.notFound().build();   // 404
+    }
 }`}
           solutionFilename="TareaController.java"
         />

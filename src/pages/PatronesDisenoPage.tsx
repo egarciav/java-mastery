@@ -66,8 +66,13 @@ public class DatabaseConnection {
       </section>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Builder</h2>
-        <p className="text-text-muted leading-relaxed mb-4">Construir objetos complejos paso a paso.</p>
+        <h2 className="text-2xl font-bold text-text mb-4">Builder — Construir objetos complejos paso a paso</h2>
+        <p className="text-text-muted leading-relaxed mb-4">
+          El patrón <strong className="text-text">Builder</strong> resuelve el problema de constructores con muchos parámetros.
+          Imagina un objeto con 8 campos donde solo 2 son obligatorios — ¿creas un constructor con 8 parámetros?
+          ¿Usas setters y pierdes inmutabilidad? Builder te permite construir el objeto paso a paso con una API
+          fluida (encadenando métodos), manteniendo el objeto final inmutable.
+        </p>
         <CodeBlock filename="Builder.java" code={`
 public class Usuario {
     private final String nombre;
@@ -105,8 +110,14 @@ Usuario u = new Usuario.Builder("Carlos")
       </section>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Strategy</h2>
-        <p className="text-text-muted leading-relaxed mb-4">Cambiar algoritmo en tiempo de ejecución.</p>
+        <h2 className="text-2xl font-bold text-text mb-4">Strategy — Cambiar algoritmo en tiempo de ejecución</h2>
+        <p className="text-text-muted leading-relaxed mb-4">
+          El patrón <strong className="text-text">Strategy</strong> encapsula diferentes algoritmos detrás de una
+          misma interfaz, permitiendo intercambiarlos sin modificar el código que los usa. En vez de un
+          gigante <code className="text-primary">if/else</code> o <code className="text-primary">switch</code> para
+          decidir qué hacer, delegas la decisión a un objeto Strategy que puedes cambiar dinámicamente.
+          Con lambdas de Java 8+, las strategies se vuelven aún más concisas.
+        </p>
         <CodeBlock filename="Strategy.java" code={`
 // Interfaz de estrategia
 public interface OrdenStrategy {
@@ -139,8 +150,13 @@ OrdenStrategy blackFriday = precio -> precio * 0.5;
       </section>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-text mb-4">Observer</h2>
-        <p className="text-text-muted leading-relaxed mb-4">Notificar cambios a múltiples objetos.</p>
+        <h2 className="text-2xl font-bold text-text mb-4">Observer — Notificar cambios a múltiples interesados</h2>
+        <p className="text-text-muted leading-relaxed mb-4">
+          El patrón <strong className="text-text">Observer</strong> define una relación de uno-a-muchos: cuando un
+          objeto cambia de estado, notifica automáticamente a todos sus "suscriptores". Es el mismo concepto
+          que los <code className="text-primary">EventEmitter</code> de Angular o los <code className="text-primary">Subject</code>
+          de RxJS — un emisor con múltiples listeners que reaccionan a eventos.
+        </p>
         <CodeBlock filename="Observer.java" code={`
 import java.util.ArrayList;
 import java.util.List;
