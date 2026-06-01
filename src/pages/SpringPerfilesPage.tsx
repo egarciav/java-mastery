@@ -22,19 +22,35 @@ export default function SpringPerfilesPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Perfiles de entorno (Profiles)</h2>
 
-        <ThinkSection title="Profiles = environment.ts de Angular (pero más potente)">
+        <ThinkSection title="Profiles: el mismo JAR, múltiples entornos sin recompilar">
           <p>
-            En Angular tienes <code className="text-primary">environment.ts</code> y <code className="text-primary">environment.prod.ts</code>
-            para cambiar URLs de API y flags según el entorno. En Spring Boot es el mismo concepto pero más completo:
-            creas <code className="text-primary">application-dev.properties</code> y
-            <code className="text-primary"> application-prod.properties</code>, y Spring carga automáticamente el archivo
-            correcto según el perfil activo.
+            En Angular los environments se compilan en el bundle — necesitas <code className="text-primary">ng build --configuration=production</code>
+            para cada entorno. En Spring Boot el enfoque es diferente y más flexible: compilas <strong className="text-text">una vez</strong>
+            y el mismo JAR funciona en desarrollo, staging, y producción activando el perfil correcto.
           </p>
           <p>
-            La ventaja: en Angular los environments se compilan en el bundle (si cambias algo, reconstruyes).
-            En Spring Boot, los profiles se activan con una variable de entorno o argumento — el mismo JAR funciona
-            en dev o producción sin recompilar. Además puedes tener secrets en variables de entorno que nunca
-            entran al código fuente.
+            <strong className="text-text">Cómo funciona:</strong> creas archivos
+            <code className="text-primary"> application.properties</code> (base),
+            <code className="text-primary"> application-dev.properties</code> (sobreescribe para dev),
+            <code className="text-primary"> application-prod.properties</code> (sobreescribe para prod).
+            Spring carga el base más el del perfil activo. El perfil activo se define con:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>Variable de entorno: <code className="text-primary">SPRING_PROFILES_ACTIVE=prod</code></li>
+            <li>Argumento JVM: <code className="text-primary">java -jar app.jar --spring.profiles.active=prod</code></li>
+            <li>En tests: <code className="text-primary">@ActiveProfiles("test")</code></li>
+          </ul>
+          <p>
+            <strong className="text-text">Secretos y variables sensibles:</strong> nunca pongas contraseñas,
+            API keys, o connection strings en el código fuente o en archivos commiteados. Usa variables de
+            entorno del sistema operativo (<code className="text-primary">{"${DB_PASSWORD}"}</code> en
+            <code className="text-primary"> application-prod.properties</code>) o servicios como AWS Secrets
+            Manager, Vault, o las variables de entorno de tu plataforma de deploy (Railway, Heroku, etc.).
+          </p>
+          <p>
+            <strong className="text-text">Caso de uso típico:</strong> en dev usas H2 (BD en memoria, sin instalar nada),
+            en prod usas PostgreSQL. Con profiles, solo cambias las propiedades de conexión —
+            el código Java no cambia nada.
           </p>
         </ThinkSection>
 

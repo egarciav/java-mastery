@@ -22,18 +22,33 @@ export default function SpringRepositoriesPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Qué es JPA y por qué lo necesitas?</h2>
 
-        <ThinkSection title="Repository = HttpClient automático para Base de Datos">
+        <ThinkSection title="El stack de persistencia: JPA → Hibernate → Spring Data → tu código">
           <p>
-            En Angular usas <code className="text-primary">HttpClient</code> para comunicarte con APIs REST.
-            En Spring, <code className="text-primary">JpaRepository</code> es tu "HttpClient para la base de datos":
-            te da métodos como <code className="text-primary">save()</code>, <code className="text-primary">findById()</code>,
-            <code className="text-primary"> findAll()</code> y <code className="text-primary">delete()</code> sin que escribas
-            una sola línea de SQL. Solo defines la interfaz — Spring crea la implementación completa en runtime.
+            Entender la cadena completa es clave para no confundir los niveles:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">JDBC</strong>: la API Java más básica para hablar con BD. Escribes SQL manual, manejas ResultSet, cierras conexiones. Muy verboso.</li>
+            <li><strong className="text-text">JPA (Java Persistence API)</strong>: especificación estándar (no implementación) para mapear objetos Java ↔ tablas relacionales (ORM). Define las anotaciones (<code className="text-primary">@Entity</code>, <code className="text-primary">@Id</code>, <code className="text-primary">@Column</code>).</li>
+            <li><strong className="text-text">Hibernate</strong>: la implementación más popular de JPA. Genera el SQL automáticamente a partir del mapeo de entidades.</li>
+            <li><strong className="text-text">Spring Data JPA</strong>: capa encima de Hibernate. Solo defines una interfaz que extiende <code className="text-primary">JpaRepository</code> y Spring genera la implementación en runtime.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Query derivation</strong>: Spring Data puede generar SQL a partir
+            del nombre del método. <code className="text-primary">findByEmailAndActivo(String email, boolean activo)</code>
+            genera automáticamente <code className="text-primary">WHERE email = ? AND activo = ?</code>. Sin una línea de SQL.
           </p>
           <p>
-            <strong className="text-text">JPA (Java Persistence API)</strong> es la especificación estándar de Java
-            para mapear objetos Java a tablas de base de datos. <strong className="text-text">Hibernate</strong> es la
-            implementación más usada de JPA, y Spring Data JPA es la capa de conveniencia que simplifica todo aún más.
+            <strong className="text-text">El problema N+1</strong> (el bug más común con JPA): si tienes
+            una lista de 100 pedidos y cada pedido tiene un usuario, Hibernate puede hacer 1 query para
+            los pedidos + 100 queries para los usuarios = 101 queries. La solución es
+            <code className="text-primary"> @EntityGraph</code> o <code className="text-primary">JOIN FETCH</code>
+            en JPQL para cargar todo en una sola query.
+          </p>
+          <p>
+            <strong className="text-text">Lazy vs Eager loading</strong>: por defecto las colecciones son
+            <code className="text-primary"> LAZY</code> — se cargan cuando las accedes. Los campos simples son
+            <code className="text-primary"> EAGER</code> — se cargan siempre. Nunca uses
+            <code className="text-primary">FetchType.EAGER</code> en colecciones — genera el problema N+1 silencioso.
           </p>
         </ThinkSection>
 

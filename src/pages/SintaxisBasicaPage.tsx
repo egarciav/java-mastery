@@ -46,13 +46,23 @@ public class Anatomia {
         <ThinkSection title="¿Por qué Java obliga a poner todo dentro de una clase?">
           <p>
             En TypeScript puedes escribir una función suelta en un archivo. En Java, <strong className="text-text">no existe código suelto</strong>.
-            Todo debe estar dentro de una clase. ¿Por qué? Porque Java fue diseñado como un lenguaje
-            100% orientado a objetos. Incluso tu programa más simple es una clase.
+            Todo — absolutamente todo — debe estar dentro de una clase. ¿Por qué? Porque Java fue diseñado
+            como un lenguaje <strong className="text-text">puro de orientación a objetos</strong> desde su concepción.
+            La idea central es que el mundo real se modela con objetos, y cada objeto pertenece a una clase.
           </p>
           <p>
-            Piénsalo como una regla de organización: así como Angular te obliga a poner lógica en
-            componentes, Java te obliga a poner lógica en clases. Es más verboso al inicio,
-            pero a gran escala mantiene el código organizado.
+            <strong className="text-text">La consecuencia práctica:</strong> incluso un programa que solo suma dos números
+            necesita una clase. Parece verboso al inicio, pero esto tiene ventajas reales:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>El compilador sabe exactamente dónde buscar cada elemento del programa.</li>
+            <li>La organización en clases obliga a pensar en <em>responsabilidades</em>: ¿qué hace esta clase? ¿a qué pertenece este método?</li>
+            <li>En proyectos con cientos de archivos, esa estructura hace la diferencia entre código mantenible y código caos.</li>
+          </ul>
+          <p>
+            Nota: Java 21 introduce <code className="text-primary">void main()</code> sin la firma completa (en preview),
+            pero en la práctica profesional siempre escribirás la firma completa.
+            <code className="text-primary"> public static void main(String[] args)</code> será tu firma por los próximos años.
           </p>
         </ThinkSection>
       </section>
@@ -96,21 +106,57 @@ public class FormasDeImprimir {
         <ThinkSection title="¿Cuándo uso printf vs println con concatenación?">
           <p>
             <strong className="text-text">println + concatenación</strong>: Para mensajes simples y debugging rápido.
-            Es lo que usarás el 90% del tiempo al principio.
+            Es lo que usarás el 90% del tiempo al principio. La concatenación con <code className="text-primary">+</code>
+            funciona con cualquier tipo: Java convierte automáticamente números y booleanos a String cuando
+            están junto a un String en una concatenación.
           </p>
           <p>
-            <strong className="text-text">printf</strong>: Cuando necesitas control de formato — como mostrar
-            decimales con exactamente 2 posiciones (<code className="text-primary">%.2f</code>), alinear columnas,
-            o construir salidas tabulares. Es como el template literal de TypeScript pero más potente para números.
+            <strong className="text-text">printf</strong>: Cuando necesitas control de formato preciso — decimales
+            con exactamente 2 posiciones (<code className="text-primary">%.2f</code>), alinear columnas en una tabla,
+            rellenar con espacios o ceros. Es como el template literal de TypeScript pero más potente para números.
+            La <code className="text-primary">f</code> en <code className="text-primary">printf</code> viene de <em>formatted</em>.
+          </p>
+          <p>
+            <strong className="text-text">String.format()</strong>: Igual que printf pero retorna el String formateado
+            en lugar de imprimirlo. Útil cuando quieres construir un String para guardarlo en una variable:
+            <code className="text-primary"> String msg = String.format("Hola %s", nombre);</code>
+          </p>
+          <p>
+            <strong className="text-text">Nota:</strong> <code className="text-primary">%n</code> es el salto de línea
+            dependiente del sistema operativo (usa <code className="text-primary">\r\n</code> en Windows y
+            <code className="text-primary"> \n</code> en Unix/Mac). Siempre preferírelo sobre <code className="text-primary">\n</code>
+            en printf para máxima portabilidad.
           </p>
         </ThinkSection>
 
-        <InfoBox type="tip" title="Formatos comunes de printf">
-          <code className="text-primary">%s</code> = String, <code className="text-primary">%d</code> = entero,{' '}
-          <code className="text-primary">%f</code> = decimal, <code className="text-primary">%.2f</code> = 2 decimales,{' '}
-          <code className="text-primary">%n</code> = nueva línea, <code className="text-primary">%b</code> = booleano,{' '}
-          <code className="text-primary">%10s</code> = alinear a 10 caracteres.
+        <InfoBox type="tip" title="Formatos completos de printf">
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div>
+              <p className="font-semibold text-text mb-1">Tipos básicos</p>
+              <ul className="space-y-1">
+                <li><code className="text-primary">%s</code> — String</li>
+                <li><code className="text-primary">%d</code> — entero (int, long)</li>
+                <li><code className="text-primary">%f</code> — decimal (float, double)</li>
+                <li><code className="text-primary">%.2f</code> — decimal con 2 posiciones</li>
+                <li><code className="text-primary">%b</code> — booleano</li>
+                <li><code className="text-primary">%c</code> — caracter</li>
+                <li><code className="text-primary">%n</code> — nueva línea (OS-independiente)</li>
+              </ul>
+            </div>
+            <div>
+              <p className="font-semibold text-text mb-1">Formato avanzado</p>
+              <ul className="space-y-1">
+                <li><code className="text-primary">%10s</code> — alineado a la derecha en 10 chars</li>
+                <li><code className="text-primary">%-10s</code> — alineado a la izquierda en 10 chars</li>
+                <li><code className="text-primary">%05d</code> — entero con ceros: 00042</li>
+                <li><code className="text-primary">%e</code> — notación científica: 1.23e+05</li>
+                <li><code className="text-primary">%X</code> — hexadecimal: FF</li>
+                <li><code className="text-primary">%%</code> — el carácter %</li>
+              </ul>
+            </div>
+          </div>
         </InfoBox>
+
       </section>
 
       <section className="mb-12">
@@ -122,19 +168,22 @@ public class Comentarios {
     // Atajo IntelliJ: Ctrl+/ (selecciona líneas y presiona Ctrl+/)
 
     /*
-     * Comentario de múltiples líneas
-     * Para explicaciones más largas que necesitan
-     * varias líneas de texto.
+     * Comentario de múltiples líneas.
+     * Útil para desactivar un bloque de código
+     * o para explicaciones que requieren varios párrafos.
      */
 
     /**
-     * Comentario Javadoc — para documentar clases y métodos.
-     * IntelliJ lo usa para mostrarte tooltips de ayuda.
+     * Comentario Javadoc — documentación oficial del método.
+     * IntelliJ muestra esto como tooltip cuando el código se importa.
+     * La herramienta javadoc lo convierte en HTML navegable.
      *
-     * @param nombre el nombre del usuario
-     * @return saludo personalizado
+     * @param nombre el nombre del usuario a saludar
+     * @return cadena con el saludo personalizado
+     * @throws IllegalArgumentException si nombre es null
      */
     public static String saludar(String nombre) {
+        if (nombre == null) throw new IllegalArgumentException("nombre no puede ser null");
         return "Hola, " + nombre;
     }
 
@@ -144,17 +193,39 @@ public class Comentarios {
 }
 `} />
 
+        <ThinkSection title="¿Cuándo escribir comentarios y cuándo no?">
+          <p>
+            <strong className="text-text">El error más común:</strong> comentar <em>qué</em> hace el código
+            en lugar de <em>por qué</em> lo hace. Si el código es claro, el comentario sobra.
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Sí comenta:</strong> decisiones no obvias, workarounds de bugs externos, reglas de negocio complejas, fórmulas matemáticas.</li>
+            <li><strong className="text-text">No comentes:</strong> <code className="text-primary">i++; // incrementa i</code> — eso es ruido, no ayuda.</li>
+            <li><strong className="text-text">Javadoc SIEMPRE</strong> en APIs públicas: métodos y clases que otros van a usar necesitan documentación formal.</li>
+          </ul>
+          <p>
+            El código bien escrito se lee como prosa. Los nombres de variables y métodos descriptivos
+            valen más que cien comentarios. <code className="text-primary">calcularImpuesto(precio)</code> no
+            necesita comentario. <code className="text-primary">calc(p)</code> sí.
+          </p>
+        </ThinkSection>
+
         <InfoBox type="info">
           En IntelliJ, escribe <code className="text-primary">/**</code> justo arriba de un método y presiona Enter.
-          IntelliJ genera automáticamente la estructura del Javadoc con los @param y @return.
+          IntelliJ genera automáticamente la estructura del Javadoc con los <code className="text-primary">@param</code> y
+          <code className="text-primary"> @return</code> según la firma del método. También puedes generar
+          el HTML de la documentación completa con <code className="text-primary">Tools → Generate JavaDoc</code>.
         </InfoBox>
       </section>
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Convenciones de nombres</h2>
         <p className="text-text-muted leading-relaxed mb-4">
-          Java tiene convenciones estrictas. No son obligatorias, pero <strong className="text-text">todo el ecosistema Java las sigue</strong>.
-          Romperlas es como escribir JavaScript sin camelCase — funciona, pero nadie lo hace.
+          Java tiene convenciones estrictas. No son obligatorias por el compilador, pero
+          <strong className="text-text"> todo el ecosistema Java las sigue</strong> — desde la biblioteca
+          estándar hasta Spring Boot. Romperlas no da error, pero hace que tu código se vea amateur
+          para cualquier desarrollador Java que lo lea. Adoptar estas convenciones desde el primer día
+          te entrena para trabajar en cualquier equipo.
         </p>
 
         <CodeBlock filename="Convenciones.java" code={`
@@ -188,15 +259,31 @@ static final String NOMBRE_APP = "MiApp";
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Paquetes — Organizar tu código</h2>
 
-        <ThinkSection title="¿Cómo pensar en los paquetes?">
+        <ThinkSection title="¿Por qué los paquetes usan el dominio invertido?">
           <p>
             Un paquete es la <strong className="text-text">dirección postal</strong> de tu clase. Así como una dirección
             tiene país → ciudad → calle → número, un paquete tiene dominio → empresa → proyecto → módulo.
           </p>
           <p>
-            La convención es usar tu dominio invertido: si tu sitio es <code className="text-primary">miempresa.com</code>,
-            tu paquete base es <code className="text-primary">com.miempresa</code>. Y la carpeta física
-            <strong className="text-text"> debe coincidir</strong> con el paquete.
+            <strong className="text-text">¿Por qué dominio invertido?</strong> Para garantizar unicidad global.
+            Si dos empresas distintas crean una clase llamada <code className="text-primary">Usuario</code>, habría
+            conflicto de nombres. Con dominios invertidos:
+            <code className="text-primary"> com.google.Usuario</code> vs <code className="text-primary">com.miempresa.Usuario</code>
+            son inequívocamente diferentes. Los dominios de internet son únicos por definición, así que
+            invertirlos garantiza que tus paquetes nunca colisionarán con los de nadie más.
+          </p>
+          <p>
+            <strong className="text-text">Estructura típica de paquetes en Spring Boot:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">com.empresa.proyecto.controller</code> — controladores REST</li>
+            <li><code className="text-primary">com.empresa.proyecto.service</code> — lógica de negocio</li>
+            <li><code className="text-primary">com.empresa.proyecto.repository</code> — acceso a datos</li>
+            <li><code className="text-primary">com.empresa.proyecto.model</code> — entidades y DTOs</li>
+          </ul>
+          <p>
+            La carpeta física <strong className="text-text">debe coincidir exactamente</strong> con el paquete.
+            IntelliJ crea esa estructura de carpetas automáticamente cuando declaras el paquete.
           </p>
         </ThinkSection>
 

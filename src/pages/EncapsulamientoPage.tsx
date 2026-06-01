@@ -28,23 +28,36 @@ export default function EncapsulamientoPage() {
           (default/package), <code className="text-primary">protected</code>, <code className="text-primary">public</code>.
         </p>
 
-        <ThinkSection title="¿Por qué no hacer todo public?">
+        <ThinkSection title="¿Por qué no hacer todo public? El principio de mínima exposición">
           <p>
-            En TypeScript/JavaScript, las propiedades de un objeto son públicas por defecto y cualquiera puede
-            modificarlas. En Java, la filosofía es opuesta: <strong className="text-text">esconde todo lo que puedas</strong>.
+            En TypeScript/JavaScript, las propiedades de un objeto son públicas por defecto. En Java,
+            la filosofía es opuesta: <strong className="text-text">esconde todo lo que no necesites exponer</strong>.
+            Esto se llama <em>Principio de Mínima Exposición</em> y es uno de los pilares del buen diseño.
           </p>
           <p>
-            Imagina una clase <code className="text-primary">CuentaBancaria</code>. Si el campo
-            <code className="text-primary"> saldo</code> es público, cualquier código puede hacer
-            <code className="text-primary"> cuenta.saldo = -1000</code> y tu validación de "no permitir saldo negativo"
-            no sirve de nada. Pero si es <code className="text-primary">private</code> con un método
-            <code className="text-primary"> retirar(monto)</code>, tú controlas que solo se retire si hay fondos suficientes.
+            <strong className="text-text">El problema de los campos públicos:</strong> imagina
+            <code className="text-primary"> CuentaBancaria</code> con <code className="text-primary">public double saldo</code>.
+            Cualquier código puede hacer <code className="text-primary">cuenta.saldo = -99999</code> y tu regla
+            de negocio de "no permitir saldo negativo" no sirve de nada. Pero con
+            <code className="text-primary">private double saldo</code> y un método
+            <code className="text-primary">retirar(monto)</code>, <em>tú controlas</em> que el saldo solo cambia
+            por caminos controlados con validaciones.
           </p>
           <p>
-            <strong className="text-text">Regla de oro:</strong> campos SIEMPRE <code className="text-primary">private</code>,
-            métodos <code className="text-primary">public</code> solo los que forman tu API pública.
-            Los métodos auxiliares internos deben ser <code className="text-primary">private</code> también.
-            Esto te permite cambiar la implementación interna sin romper el código que usa tu clase.
+            <strong className="text-text">Cada nivel tiene su propósito:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">private</code>: implementación interna que nadie más necesita ver. Campos, métodos auxiliares.</li>
+            <li><code className="text-primary">package-private</code> (sin keyword): para clases del mismo módulo que colaboran entre sí pero no deben ser visibles afuera.</li>
+            <li><code className="text-primary">protected</code>: para subclases. Úsalo cuando una clase hija necesita acceder al campo o método del padre, pero no quieres que cualquiera lo haga.</li>
+            <li><code className="text-primary">public</code>: la API que expones al mundo. Piensa bien qué pones aquí — una vez que es público, cambiar esa API rompe el código de todos los que la usen.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Regla de oro en Spring:</strong> en una aplicación Spring Boot profesional,
+            las entidades tienen campos <code className="text-primary">private</code> con getters/setters.
+            Los servicios tienen métodos <code className="text-primary">public</code> para su API y
+            <code className="text-primary">private</code> para lógica interna. Los repositorios extienden interfaces públicas.
+            Nunca verás campos públicos en código enterprise profesional.
           </p>
         </ThinkSection>
         <div className="overflow-x-auto mb-6">

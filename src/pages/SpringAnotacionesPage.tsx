@@ -29,18 +29,38 @@ export default function SpringAnotacionesPage() {
           transacción, etc. Son el "lenguaje" con el que te comunicas con el framework.
         </p>
 
-        <ThinkSection title="Anotaciones = decoradores de Angular (mismo concepto)">
+        <ThinkSection title="Anotaciones Spring: decoradores que el framework lee en runtime">
           <p>
-            En Angular usas <code className="text-primary">@Component()</code>, <code className="text-primary">@Injectable()</code>,
-            <code className="text-primary"> @Input()</code>. Angular lee estos decoradores y sabe qué hacer con cada clase.
-            En Spring es idéntico: <code className="text-primary">@Service</code>,
-            <code className="text-primary"> @RestController</code>, <code className="text-primary">@GetMapping</code>
-            le dicen a Spring el rol y comportamiento de cada pieza.
+            En Angular los decoradores como <code className="text-primary">@Component()</code>,
+            <code className="text-primary"> @Injectable()</code> son procesados por TypeScript en compilación
+            y emiten metadatos. En Spring las anotaciones son leidas mediante
+            <strong className="text-text"> Java Reflection API en runtime</strong>: al arrancar la aplicación,
+            Spring escanea el classpath buscando clases con sus anotaciones y las registra como beans.
           </p>
           <p>
-            La diferencia: en Angular los decoradores modifican la clase en tiempo de compilación (TypeScript).
-            En Spring, las anotaciones son leídas en <strong className="text-text">runtime</strong> usando reflexión (Java Reflection API).
-            Spring escanea el classpath buscando clases con anotaciones específicas y las registra como beans.
+            <strong className="text-text">Las anotaciones de estereotipo</strong> (todas equivalentes funcionalmente,
+            pero con significado semántico diferente):
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">@Component</code>: bean genérico. Usa las demás cuando apliquen.</li>
+            <li><code className="text-primary">@Service</code>: bean de lógica de negocio. Semánticamente indica que contiene reglas de negocio.</li>
+            <li><code className="text-primary">@Repository</code>: bean de acceso a datos. Además, Spring traduce automáticamente excepciones de BD a <code className="text-primary">DataAccessException</code>.</li>
+            <li><code className="text-primary">@Controller</code> / <code className="text-primary">@RestController</code>: bean que maneja peticiones HTTP.</li>
+            <li><code className="text-primary">@Configuration</code>: bean que define otros beans con métodos <code className="text-primary">@Bean</code>.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Inyección de dependencias — 3 formas:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Constructor</strong> (recomendada): <code className="text-primary">public MiService(MiRepository repo) {'{'} this.repo = repo; {'}'}</code>. Inmutable, testeable, y el IDE puede marcar errores de ciclo.</li>
+            <li><strong className="text-text">Campo con @Autowired</strong>: conveniente pero dificulta los tests unitarios (no puedes inyectar mocks fácilmente sin reflexión).</li>
+            <li><strong className="text-text">Setter</strong>: para dependencias opcionales. Raro en código moderno.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Lombok</strong>: muchos proyectos usan
+            <code className="text-primary"> @RequiredArgsConstructor</code> (Lombok) que genera automáticamente el
+            constructor con todos los campos <code className="text-primary">final</code>, eliminando el boilerplate
+            del constructor de inyección.
           </p>
         </ThinkSection>
 

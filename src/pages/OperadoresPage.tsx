@@ -23,13 +23,27 @@ export default function OperadoresPage() {
 
         <ThinkSection title="La trampa #1 de Java: la división entera">
           <p>
-            En TypeScript, <code className="text-primary">10 / 3</code> da <code className="text-primary">3.333...</code>.
+            En TypeScript/JavaScript, <code className="text-primary">10 / 3</code> da <code className="text-primary">3.333...</code>.
             En Java, <code className="text-primary">10 / 3</code> da <code className="text-primary">3</code>. Punto. Sin decimales.
           </p>
           <p>
-            ¿Por qué? Porque ambos operandos son <code className="text-primary">int</code>, así que Java hace <strong className="text-text">división entera</strong>.
-            Para obtener decimales, al menos uno debe ser <code className="text-primary">double</code>:
-            <code className="text-primary"> 10.0 / 3</code> o <code className="text-primary">(double) 10 / 3</code>.
+            ¿Por qué? Porque cuando <strong className="text-text">ambos operandos son enteros</strong>, Java realiza
+            <strong className="text-text"> división entera</strong>: el resultado se trunca (no redondea) hacia cero.
+            <code className="text-primary"> 7 / 2 = 3</code> (no 3.5), <code className="text-primary">-7 / 2 = -3</code> (no -3.5).
+          </p>
+          <p>
+            Para obtener decimales, al menos un operando debe ser <code className="text-primary">double</code>:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">10.0 / 3</code> — el literal <code className="text-primary">10.0</code> es double</li>
+            <li><code className="text-primary">(double) 10 / 3</code> — cast explícito antes de la operación</li>
+            <li><code className="text-primary">10 / 3.0</code> — el divisor es double</li>
+          </ul>
+          <p>
+            Este bug silencioso ocurre constantemente en código de principiantes. Ejemplo clásico:
+            calcular un porcentaje con <code className="text-primary">int parcial = 7; int total = 10;
+            double pct = parcial / total;</code> — result: <code className="text-primary">0.0</code>, no
+            <code className="text-primary"> 0.7</code>. Necesitas el cast: <code className="text-primary">(double) parcial / total</code>.
           </p>
         </ThinkSection>
 
@@ -114,17 +128,36 @@ public class Comparacion {
     }
 }
 `} />
-        <ThinkSection title="== vs .equals() — La trampa #2 más común">
+        <ThinkSection title="== vs .equals() — La trampa #2 que causa bugs en producción">
           <p>
-            En TypeScript tienes <code className="text-primary">===</code> (estricto) y <code className="text-primary">==</code> (flexible).
-            En Java solo existe <code className="text-primary">==</code>.
+            En TypeScript tienes <code className="text-primary">===</code> (valor + tipo) y <code className="text-primary">==</code>
+            (con coerción). En Java solo existe <code className="text-primary">==</code>, pero se comporta
+            <em>diferente según el tipo</em>:
           </p>
           <p>
-            Para <strong className="text-text">primitivos</strong> (int, double, boolean): <code className="text-primary">==</code> compara <em>valores</em>. Funciona perfecto.
+            Para <strong className="text-text">primitivos</strong> (<code className="text-primary">int</code>,
+            <code className="text-primary"> double</code>, <code className="text-primary">boolean</code>): <code className="text-primary">==</code>
+            compara <em>valores</em>. Funciona exactamente como esperas. <code className="text-primary">5 == 5</code> es <code className="text-primary">true</code>.
           </p>
           <p>
-            Para <strong className="text-text">objetos</strong> (String, Integer, etc.): <code className="text-primary">==</code> compara <em>referencias</em> (direcciones de memoria).
-            Usa <code className="text-primary">.equals()</code> para comparar contenido. Esta es una fuente constante de bugs en código Java de principiantes.
+            Para <strong className="text-text">objetos</strong> (<code className="text-primary">String</code>,
+            <code className="text-primary"> Integer</code>, cualquier clase): <code className="text-primary">==</code> compara
+            <em>referencias de memoria</em> — ¿apuntan al mismo objeto en el heap? Casi siempre NO,
+            aunque tengan el mismo valor. Usa <code className="text-primary">.equals()</code> para comparar contenido.
+          </p>
+          <p>
+            <strong className="text-text">Excepción importante con String literals:</strong> Java optimiza los
+            literales String reutilizándolos en el <em>String Pool</em>. Por eso
+            <code className="text-primary"> "hola" == "hola"</code> puede dar <code className="text-primary">true</code>
+            (mismo objeto en el pool), pero <code className="text-primary">new String("hola") == new String("hola")</code>
+            da <code className="text-primary">false</code> (dos objetos distintos). Nunca confundas en esta ambigüedad:
+            <strong className="text-text"> siempre usa <code className="text-primary">.equals()</code> para Strings</strong>.
+          </p>
+          <p>
+            <strong className="text-text">Buena práctica:</strong> cuando compares con un literal, ponlo primero para
+            evitar NullPointerException: <code className="text-primary">"admin".equals(rol)</code> en lugar de
+            <code className="text-primary"> rol.equals("admin")</code> (si rol es null, el primero retorna false,
+            el segundo explota).
           </p>
         </ThinkSection>
       </section>

@@ -21,15 +21,29 @@ export default function ClasesObjetosPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Qué es una Clase?</h2>
 
-        <ThinkSection title="Clase = TypeScript class, pero con superpoderes">
+        <ThinkSection title="Clase = plano. Objeto = instancia concreta. ¿Cómo pensar en esto?">
           <p>
-            En TypeScript/Angular ya usas clases. En Java la idea es la misma: <strong className="text-text">campos</strong> (propiedades)
-            + <strong className="text-text">métodos</strong> (comportamiento). La diferencia clave: en Java el constructor
-            se llama con el <em>nombre de la clase</em>, no con <code className="text-primary">constructor()</code>.
+            Una <strong className="text-text">clase</strong> es como el molde de una galleta o el plano de una casa:
+            define la estructura y el comportamiento, pero no es ninguna casa concreta. Un
+            <strong className="text-text"> objeto</strong> es una instancia creada a partir de ese molde —
+            <em>una</em> casa específica con <em>su</em> dirección y <em>sus</em> inquilinos.
           </p>
           <p>
-            Además, Java requiere <strong className="text-text">un archivo por clase pública</strong>. Si la clase se
-            llama <code className="text-primary">Persona</code>, el archivo debe llamarse <code className="text-primary">Persona.java</code>.
+            En TypeScript/Angular ya usas clases. En Java la idea es la misma: <strong className="text-text">campos</strong>
+            (el estado del objeto: propiedades, atributos) + <strong className="text-text">métodos</strong>
+            (el comportamiento: lo que puede hacer). Diferencias clave con TypeScript:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>El constructor en Java se llama igual que la clase (<code className="text-primary">Persona(...)</code>), no con la keyword <code className="text-primary">constructor</code>.</li>
+            <li>Una clase pública Java <strong className="text-text">debe</strong> estar en un archivo con el mismo nombre. <code className="text-primary">Persona</code> → <code className="text-primary">Persona.java</code>. El compilador exige esto.</li>
+            <li>Puedes tener múltiples constructores con diferentes parámetros (overloading de constructores).</li>
+            <li>Todos los objetos Java heredan implícitamente de <code className="text-primary">Object</code>, igual que en TypeScript todo hereda de <code className="text-primary">Object</code>.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Acceso a memoria:</strong> cuando haces <code className="text-primary">Persona p = new Persona()</code>,
+            la variable <code className="text-primary">p</code> está en el stack y contiene la <em>dirección</em> del objeto.
+            El objeto en sí (sus campos) está en el heap. Cuando el método termina, la variable en el stack
+            desaparece pero el objeto en el heap persiste hasta que el GC lo recolecta.
           </p>
         </ThinkSection>
 
@@ -139,8 +153,18 @@ public class Contador {
 }
 `} />
         <InfoBox type="info">
-          <strong>static</strong> = pertenece a la clase, no a la instancia. No necesitas crear un objeto.
-          <strong> this</strong> = referencia a la instancia actual. <strong>final</strong> = constante, no se puede reasignar.
+          <strong>static</strong>: pertenece a la clase, no a una instancia. Existe desde que la clase
+          se carga, sin necesitar un <code className="text-primary">new</code>. Se accede como
+          <code className="text-primary"> Clase.campo</code> o <code className="text-primary">Clase.metodo()</code>.
+          <br/><br/>
+          <strong>this</strong>: referencia a la instancia actual del objeto. Lo usas cuando hay
+          ambigüedad entre un campo y un parámetro con el mismo nombre
+          (<code className="text-primary">this.nombre = nombre</code>), o cuando quieres llamar a otro
+          constructor de la misma clase (<code className="text-primary">this()</code>).
+          <br/><br/>
+          <strong>final en campo de instancia</strong>: un campo <code className="text-primary">final</code> debe
+          inicializarse en el constructor. Una vez asignado, no puede cambiar. Esto crea objetos
+          inmutables (como los Records de Java 16+).
         </InfoBox>
       </section>
 
@@ -183,9 +207,14 @@ public class Producto {
 }
 `} />
         <InfoBox type="warning">
-          Si sobreescribes <code className="text-primary">equals()</code>, <strong>siempre</strong> sobreescribe 
-          también <code className="text-primary">hashCode()</code>. Es un contrato de Java — objetos iguales 
-          deben tener el mismo hashCode. Si no lo haces, las colecciones como HashMap fallarán.
+          El contrato <code className="text-primary">equals()</code> / <code className="text-primary">hashCode()</code>
+          es fundamental en Java:
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            <li>Si <code className="text-primary">a.equals(b)</code> es <code className="text-primary">true</code>, entonces <code className="text-primary">a.hashCode() == b.hashCode()</code> debe ser <code className="text-primary">true</code> también.</li>
+            <li>Si rompes este contrato (overrides equals pero no hashCode), las colecciones como <code className="text-primary">HashMap</code> y <code className="text-primary">HashSet</code> funcionarán incorrectamente: objetos iguales pueden aparecer duplicados o no encontrarse.</li>
+            <li>IntelliJ puede generar ambos automáticamente: <code className="text-primary">Alt+Insert → equals() and hashCode()</code>.</li>
+            <li>Alternativa moderna: usa Records (Java 16+) que generan equals/hashCode/toString automáticamente.</li>
+          </ul>
         </InfoBox>
       </section>
 

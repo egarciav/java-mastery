@@ -30,17 +30,43 @@ export default function SpringValidacionPage() {
           puedes manejar para retornar un error 400 con los mensajes apropiados.
         </p>
 
-        <ThinkSection title="Bean Validation = Validators de Angular Reactive Forms">
+        <ThinkSection title="Bean Validation: anotaciones declarativas que sustituyen el código de validación manual">
           <p>
-            En Angular usas <code className="text-primary">Validators.required</code>, <code className="text-primary">Validators.email</code>,
-            <code className="text-primary"> Validators.minLength()</code> en Reactive Forms. En Java es el mismo concepto
-            pero con anotaciones: <code className="text-primary">@NotBlank</code>, <code className="text-primary">@Email</code>,
-            <code className="text-primary"> @Size(min=2)</code> directamente en los campos del DTO.
+            En Angular usas <code className="text-primary">Validators.required</code>,
+            <code className="text-primary"> Validators.email</code>, <code className="text-primary">Validators.minLength()</code>
+            en Reactive Forms. Bean Validation (Jakarta Validation) es el equivalente para el servidor Java:
+            anotaciones directamente en los campos del DTO que el framework valida automáticamente.
           </p>
           <p>
-            La diferencia: en Angular la validación es en el navegador del usuario (puede saltarse). En Spring,
-            la validación corre en el servidor — si no pasa, el request nunca llega a tu lógica de negocio.
-            <strong className="text-text"> Siempre valida en ambos lados</strong>: frontend para UX, backend para seguridad.
+            <strong className="text-text">Sin Bean Validation</strong> tendrías que escribir en cada servicio:
+            <code className="text-primary"> if (email == null || email.isBlank()) throw new ValidationException(...)</code>
+            para cada campo — código repetitivo y propenso a olvidar casos. Con
+            <code className="text-primary"> @NotBlank</code>, <code className="text-primary">@Email</code>,
+            <code className="text-primary"> @Size(min=2)</code> en el DTO + <code className="text-primary">@Valid</code> en el
+            Controller, Spring lo hace automáticamente.
+          </p>
+          <p>
+            <strong className="text-text">El trigger: <code className="text-primary">@Valid</code></strong> en el parámetro
+            del Controller activa la validación. Si falla, Spring lanza
+            <code className="text-primary"> MethodArgumentNotValidException</code> antes de que tu método se ejecute.
+            Tu <code className="text-primary">@ControllerAdvice</code> la captura y retorna 400 con los mensajes de error.
+          </p>
+          <p>
+            <strong className="text-text">Las anotaciones más importantes:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">@NotNull</code>: no puede ser null</li>
+            <li><code className="text-primary">@NotBlank</code>: no puede ser null ni vacío ni solo espacios (para Strings)</li>
+            <li><code className="text-primary">@Size(min, max)</code>: longitud de String o tamaño de colección</li>
+            <li><code className="text-primary">@Min / @Max</code>: rango numérico</li>
+            <li><code className="text-primary">@Email</code>: formato de email válido</li>
+            <li><code className="text-primary">@Pattern(regexp)</code>: validación con regex personalizada</li>
+            <li><code className="text-primary">@Valid</code>: valida objetos anidados en el DTO</li>
+          </ul>
+          <p>
+            <strong className="text-text">Validación frontend vs backend:</strong> la validación de Angular
+            mejora la UX mostrando errores antes de enviar. La validación de Spring protege tu API de
+            datos malformados independientemente del cliente. <em>Siempre valida en ambos lados</em>.
           </p>
         </ThinkSection>
 

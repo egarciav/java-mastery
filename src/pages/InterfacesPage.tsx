@@ -28,24 +28,34 @@ export default function InterfacesPage() {
           implemente la interface garantiza que puede hacer esas operaciones, sin importar cómo las implemente internamente.
         </p>
 
-        <ThinkSection title="Interface = contrato de capacidades">
+        <ThinkSection title="Interface = contrato de capacidades, no de identidad">
           <p>
-            En TypeScript, las interfaces son solo contratos de forma/tipo — definen qué propiedades y métodos
-            debe tener un objeto. En Java, las interfaces también son contratos, pero desde Java 8 pueden tener
-            <code className="text-primary"> default</code> methods con implementación real. Esto permite agregar
-            métodos nuevos a una interface sin romper todas las clases que la implementan.
+            En TypeScript, las interfaces son contratos estructurales — definen la <em>forma</em> de un objeto.
+            En Java, las interfaces son contratos de <em>comportamiento</em>: declaran qué un objeto
+            <strong className="text-text"> puede hacer</strong>, no qué <em>es</em>.
           </p>
           <p>
-            <strong className="text-text">¿Cuándo usar interface vs clase abstracta?</strong> Usa interface cuando defines
-            una <em>capacidad</em> que clases no relacionadas pueden tener: un Pato puede ser
-            <code className="text-primary"> Volable</code> y <code className="text-primary">Nadable</code>.
-            Un Avión también puede ser <code className="text-primary">Volable</code>. No tienen relación de herencia,
-            pero comparten la capacidad de volar.
+            <strong className="text-text">Evolución de las interfaces en Java:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Java 7 y anterior</strong>: solo constantes (<code className="text-primary">public static final</code>) y métodos abstractos. Una interface era puramente un contrato sin ninguna implementación.</li>
+            <li><strong className="text-text">Java 8</strong>: se añadieron <code className="text-primary">default</code> methods (con implementación) y <code className="text-primary">static</code> methods. Esto permitió añadir métodos a interfaces existentes sin romper todas sus implementaciones — algo que antes era imposible.</li>
+            <li><strong className="text-text">Java 9+</strong>: se añadieron métodos <code className="text-primary">private</code> en interfaces para compartir código entre default methods sin exponerlo.</li>
+          </ul>
+          <p>
+            <strong className="text-text">¿Por qué interfaces son fundamentales en Spring Boot?</strong>
+            La Inyección de Dependencias de Spring trabaja principalmente con interfaces.
+            Tu <code className="text-primary">ProductoController</code> depende de
+            <code className="text-primary"> ProductoService</code> (interface).
+            Spring inyecta <code className="text-primary">ProductoServiceImpl</code> en runtime.
+            Si mañana necesitas una implementación diferente (mock para tests, caché distinto),
+            cambias solo la implementación sin tocar el controller. Esto es el principio
+            <strong className="text-text"> Abierto/Cerrado</strong> del SOLID.
           </p>
           <p>
-            En Spring Boot, la DI funciona principalmente a través de interfaces: tu Controller depende de
-            <code className="text-primary"> UsuarioService</code> (interface), y Spring inyecta la implementación concreta.
-            Esto permite cambiar la implementación sin tocar el código que la usa.
+            <strong className="text-text">Interfaces funcionales</strong> (Java 8+): una interface con exactamente
+            un método abstracto. Se pueden implementar con una lambda. <code className="text-primary">@FunctionalInterface</code>
+            marca esta intención y hace que el compilador verifique que solo hay un método abstracto.
           </p>
         </ThinkSection>
 

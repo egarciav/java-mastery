@@ -22,17 +22,38 @@ export default function FechasAPIPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Por qué java.time y no Date?</h2>
 
-        <ThinkSection title="java.time es inmutable — como los strings">
+        <ThinkSection title="java.time: la API de fechas que corrige todos los errores de Date">
           <p>
-            Cada operación retorna un <strong className="text-text">nuevo objeto</strong>. 
-            <code className="text-primary">hoy.plusDays(1)</code> no modifica <code className="text-primary">hoy</code>,
-            retorna un nuevo LocalDate. Esto evita bugs sutiles de mutabilidad que plagan a
-            <code className="text-primary"> new Date()</code> en JavaScript.
+            <code className="text-primary">java.util.Date</code> (Java original) tenía los mismos problemas que
+            <code className="text-primary"> new Date()</code> de JavaScript: mutable, meses 0-indexed,
+            mezcla fecha y hora, y problemas de timezone. Java 8 introdujo
+            <strong className="text-text"> java.time</strong> — una API completamente nueva, inmutable y con
+            separación clara de conceptos, inspirada en Joda-Time.
           </p>
           <p>
-            En TypeScript usas <code className="text-primary">new Date()</code> que es mutable, tiene meses 0-indexed (enero=0),
-            y mezcla fecha con hora sin forma de separarlas. Java tuvo el mismo problema con <code className="text-primary">java.util.Date</code>,
-            pero lo resolvió creando java.time — una API completamente nueva basada en la biblioteca Joda-Time.
+            <strong className="text-text">Inmutabilidad:</strong> cada operación retorna un nuevo objeto.
+            <code className="text-primary"> hoy.plusDays(1)</code> NO modifica <code className="text-primary">hoy</code> —
+            retorna un nuevo <code className="text-primary">LocalDate</code>. Esto elimina una clase entera de bugs
+            donde un método recibe una fecha y la modifica sin que quien la pasó lo sepa.
+          </p>
+          <p>
+            <strong className="text-text">Separación de conceptos — elige la clase correcta:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">LocalDate</code>: solo fecha (2024-01-15). Para cumpleaños, fechas de vencimiento.</li>
+            <li><code className="text-primary">LocalTime</code>: solo hora (14:30:00). Para horarios de apertura.</li>
+            <li><code className="text-primary">LocalDateTime</code>: fecha + hora, sin timezone. Para eventos locales.</li>
+            <li><code className="text-primary">ZonedDateTime</code>: fecha + hora + timezone. Para eventos globales.</li>
+            <li><code className="text-primary">Instant</code>: un momento exacto en UTC (nanosegundos desde epoch). Para logs, timestamps en BD.</li>
+            <li><code className="text-primary">Duration</code>: cantidad de tiempo entre dos Instants.</li>
+            <li><code className="text-primary">Period</code>: diferencia en términos de días/meses/años entre dos LocalDates.</li>
+          </ul>
+          <p>
+            <strong className="text-text">En base de datos:</strong> guarda siempre en UTC usando
+            <code className="text-primary"> Instant</code> o <code className="text-primary">OffsetDateTime</code>.
+            Convierte a la zona horaria local solo en la capa de presentación.
+            JPA mapea automáticamente <code className="text-primary">LocalDate</code> a columnas SQL <code className="text-primary">DATE</code>
+            y <code className="text-primary">LocalDateTime</code> a <code className="text-primary">TIMESTAMP</code>.
           </p>
         </ThinkSection>
 

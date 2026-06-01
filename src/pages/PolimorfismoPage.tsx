@@ -29,18 +29,35 @@ export default function PolimorfismoPage() {
           Esto se decide en runtime — se llama <strong className="text-text">dynamic dispatch</strong> o <strong className="text-text">late binding</strong>.
         </p>
 
-        <ThinkSection title="¿Por qué esto es tan poderoso?">
+        <ThinkSection title="¿Por qué el polimorfismo es el pilar de la extensibilidad?">
           <p>
-            Imagina un método <code className="text-primary">alimentar(Animal animal)</code>. Puedes pasarle un Perro,
-            un Gato, un Pájaro — cualquier subtipo de Animal. Java ejecutará el método <code className="text-primary">comer()</code>
-            correcto <strong className="text-text">según el tipo real del objeto</strong>, no el tipo de la variable.
+            <strong className="text-text">Dynamic dispatch</strong> (despacho dinámico): cuando llamas
+            <code className="text-primary"> animal.comer()</code>, Java no decide en compilación qué método
+            ejecutar. Lo decide en <em>runtime</em> basándose en el tipo real del objeto en memoria.
+            Aunque la variable sea de tipo <code className="text-primary">Animal</code>, si el objeto real es
+            un <code className="text-primary">Perro</code>, se ejecuta <code className="text-primary">Perro.comer()</code>.
+            Esto se llama <strong className="text-text">late binding</strong>.
           </p>
           <p>
-            Esto te permite escribir código genérico y extensible: puedes agregar un nuevo tipo de Animal
-            sin modificar el método <code className="text-primary">alimentar()</code>. Es el principio
-            <strong className="text-text"> Open/Closed</strong>: abierto a extensión, cerrado a modificación.
-            Es exactamente la misma razón por la que en Angular defines un Service como interface — para poder
-            inyectar diferentes implementaciones sin cambiar el código que las usa.
+            Imagina un método <code className="text-primary">alimentar(Animal animal)</code>. Puedes pasarle un Perro,
+            un Gato, un Pájaro — cualquier subtipo de Animal. El método funciona correctamente para todos
+            sin importar el tipo concreto. Ahora agregas <code className="text-primary">Tortuga</code>: el método
+            <code className="text-primary"> alimentar()</code> funciona automáticamente sin ningún cambio.
+            Esto es el principio <strong className="text-text">Open/Closed</strong> del SOLID en acción.
+          </p>
+          <p>
+            <strong className="text-text">Upcasting y downcasting:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Upcasting</strong> (implícito, siempre seguro): <code className="text-primary">Animal a = new Perro()</code> — tratas al Perro como Animal. Pierdes acceso a los métodos específicos de Perro.</li>
+            <li><strong className="text-text">Downcasting</strong> (explícito, puede fallar): <code className="text-primary">Perro p = (Perro) a</code> — recuperas acceso a los métodos de Perro. Si el objeto real NO es un Perro, lanza <code className="text-primary">ClassCastException</code> en runtime.</li>
+            <li>Usa siempre <code className="text-primary">instanceof</code> antes de hacer downcast. En Java 16+, usa pattern matching: <code className="text-primary">if (a instanceof Perro p) {'{'} p.ladrar(); {'}'}</code></li>
+          </ul>
+          <p>
+            En Spring Boot: Spring inyecta una implementación concreta
+            (<code className="text-primary">ProductoServiceImpl</code>) en una variable del tipo interfaz
+            (<code className="text-primary">ProductoService</code>). Esto es upcasting en acción.
+            El controller no sabe ni le importa qué implementación concreta recibe.
           </p>
         </ThinkSection>
 

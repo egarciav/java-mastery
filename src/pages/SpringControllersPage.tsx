@@ -22,17 +22,39 @@ export default function SpringControllersPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Qué es un @RestController?</h2>
 
-        <ThinkSection title="Controller = la fachada HTTP de tu aplicación">
+        <ThinkSection title="Controller = la única capa que toca HTTP en tu aplicación">
           <p>
-            En Angular, un Component recibe input del usuario (clicks, forms) y delega al Service.
-            En Spring, un <code className="text-primary">@RestController</code> recibe peticiones HTTP (GET, POST, PUT, DELETE)
-            y delega al Service. <strong className="text-text">Nunca</strong> pongas lógica de negocio, validaciones complejas,
-            ni acceso a BD en el Controller. Su única responsabilidad es traducir HTTP ↔ Java.
+            En Angular, un Component maneja la UI y delega al Service para lógica. En Spring, un
+            <code className="text-primary"> @RestController</code> maneja HTTP y delega al Service para lógica.
+            La responsabilidad única del Controller es: <strong className="text-text">traducir entre el mundo HTTP
+            y el mundo Java</strong>. Nada más.
+          </p>
+          <p>
+            <strong className="text-text">Lo que SÍ hace un Controller:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>Extraer datos del request (path params, query params, request body, headers)</li>
+            <li>Validar el formato básico (<code className="text-primary">@Valid</code> en el body)</li>
+            <li>Llamar al Service y pasar los datos</li>
+            <li>Envolver el resultado en un <code className="text-primary">ResponseEntity</code> con el status HTTP correcto</li>
+          </ul>
+          <p>
+            <strong className="text-text">Lo que NUNCA debe hacer un Controller:</strong> lógica de negocio,
+            consultas a base de datos, cálculos, validaciones de reglas de negocio. Todo eso va en el Service.
           </p>
           <p>
             <code className="text-primary">@RestController</code> = <code className="text-primary">@Controller</code> +
-            <code className="text-primary"> @ResponseBody</code>. Significa que cada método retorna datos (JSON) directamente,
-            no una vista HTML. Spring usa Jackson para convertir automáticamente tus objetos Java a JSON.
+            <code className="text-primary"> @ResponseBody</code>. El <code className="text-primary">@ResponseBody</code>
+            le dice a Spring que serialice el objeto Java retornado a JSON usando Jackson.
+            El proceso inverso también es automático: el body JSON del request se deserializa a tu objeto Java
+            cuando usas <code className="text-primary">@RequestBody</code>.
+          </p>
+          <p>
+            <strong className="text-text">ResponseEntity&lt;T&gt;</strong>: te da control total sobre la respuesta HTTP.
+            <code className="text-primary"> ResponseEntity.ok(data)</code> → 200 OK con datos.
+            <code className="text-primary"> ResponseEntity.created(uri).body(data)</code> → 201 Created.
+            <code className="text-primary"> ResponseEntity.noContent().build()</code> → 204 No Content (para DELETE).
+            Siempre retorna el status semánticamente correcto.
           </p>
         </ThinkSection>
 

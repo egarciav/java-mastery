@@ -22,19 +22,37 @@ export default function RecordsPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Qué problema resuelven los Records?</h2>
 
-        <ThinkSection title="Record = interfaz TypeScript + constructor + equals + toString">
+        <ThinkSection title="Records: eliminar el boilerplate de las clases de datos">
           <p>
-            En TypeScript defines <code className="text-primary">{"interface Persona { nombre: string; edad: number; }"}</code>
-            y ya tienes un tipo con forma definida. Pero en Java, antes de los records, crear una clase de datos
-            simple requería escribir: campos privados, constructor, getters, <code className="text-primary">equals()</code>,
-            <code className="text-primary"> hashCode()</code> y <code className="text-primary">toString()</code> — unas 50+ líneas
-            de código repetitivo para 3 campos.
+            El problema histórico de Java era el <strong className="text-text">boilerplate verboso</strong>:
+            para una clase de datos simple con 3 campos necesitabas 50+ líneas: declarar campos privados,
+            escribir un constructor, getters para cada campo, <code className="text-primary">equals()</code>,
+            <code className="text-primary">hashCode()</code> y <code className="text-primary">toString()</code>.
+            Todo esto para almacenar 3 valores. Lombok existía como solución externa, pero Java 16
+            trajo la solución oficial: <strong className="text-text">records</strong>.
           </p>
           <p>
-            Un <code className="text-primary">record</code> genera TODO eso automáticamente en una línea. Los campos son
-            <code className="text-primary"> final</code> (inmutables), los getters no llevan prefijo "get", y la igualdad
-            se compara por contenido (no por referencia). Son ideales para DTOs, respuestas de API,
-            objetos de valor, y cualquier dato que no cambia después de crearse.
+            <code className="text-primary">record Persona(String nombre, int edad) {'{}'}</code> genera automáticamente:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>Campos <code className="text-primary">private final</code> para cada componente</li>
+            <li>Constructor canónico que acepta todos los componentes</li>
+            <li>Getters con el mismo nombre del campo (no <code className="text-primary">getNombre()</code>, sino <code className="text-primary">nombre()</code>)</li>
+            <li><code className="text-primary">equals()</code> que compara por contenido, no por referencia</li>
+            <li><code className="text-primary">hashCode()</code> consistente con equals</li>
+            <li><code className="text-primary">toString()</code> legible: <code className="text-primary">Persona[nombre=Carlos, edad=25]</code></li>
+          </ul>
+          <p>
+            <strong className="text-text">Inmutabilidad total</strong>: los campos son <code className="text-primary">final</code>.
+            No hay setters. Una vez creado, el estado no cambia. Esto los hace thread-safe por diseño
+            y perfectos para DTOs, clases de valor, respuestas de API, y llaves de mapas.
+          </p>
+          <p>
+            <strong className="text-text">Limitaciones importantes:</strong> los records no pueden extender clases
+            (solo implementar interfaces), no pueden tener campos de instancia adicionales (solo los del header),
+            y <strong className="text-text">no funcionan con JPA/Hibernate</strong> como entidades
+            (JPA requiere clase mutable con constructor sin argumentos). Para entidades JPA, sigue usando
+            clases normales. Para DTOs que viajan entre capas, records son perfectos.
           </p>
         </ThinkSection>
 

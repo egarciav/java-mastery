@@ -43,17 +43,30 @@ export default function SpringIntroPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Los 3 pilares: IoC, DI y Autoconfiguración</h2>
 
-        <ThinkSection title="Spring Boot = Angular para el backend">
+        <ThinkSection title="Spring Boot = Angular para el backend — las analogías exactas">
           <p>
-            Si ya conoces Angular, Spring Boot es su equivalente backend. Angular tiene: DI con constructores,
-            servicios singleton con <code className="text-primary">@Injectable()</code>, módulos de configuración,
-            interceptores HTTP, guards para rutas, y Angular CLI para generar código.
+            Si ya conoces Angular, Spring Boot es conceptualmente muy familiar. Las analogías son directas:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Angular <code className="text-primary">@Injectable()</code></strong> → Spring <code className="text-primary">@Service</code> / <code className="text-primary">@Component</code>: marca una clase para que el framework la gestione como singleton.</li>
+            <li><strong className="text-text">Angular Module providers</strong> → Spring <code className="text-primary">@Configuration</code> + <code className="text-primary">@Bean</code>: configura objetos en el contenedor.</li>
+            <li><strong className="text-text">Angular HTTP Interceptors</strong> → Spring Filters / HandlerInterceptor: intercepta peticiones antes/después del procesamiento.</li>
+            <li><strong className="text-text">Angular CanActivate Guards</strong> → Spring Security <code className="text-primary">SecurityFilterChain</code>: decide si la petición puede continuar.</li>
+            <li><strong className="text-text">Angular CLI (<code className="text-primary">ng new</code>)</strong> → Spring Initializr (start.spring.io): genera el proyecto con la estructura base.</li>
+            <li><strong className="text-text">Angular <code className="text-primary">environment.ts</code></strong> → Spring <code className="text-primary">application.properties</code> / perfiles: configuración por entorno.</li>
+          </ul>
+          <p>
+            <strong className="text-text">La diferencia filosófica clave:</strong> Angular es un framework
+            <em> frontend</em> — gestiona componentes de UI, routing en el browser, y estado visual.
+            Spring Boot es un framework <em>backend</em> — gestiona peticiones HTTP, lógica de negocio,
+            persistencia de datos y seguridad. Son las dos caras del mismo paradigma de desarrollo moderno.
           </p>
           <p>
-            Spring Boot tiene: DI con constructores, servicios singleton con <code className="text-primary">@Service</code>,
-            clases de configuración con <code className="text-primary">@Configuration</code>, filtros para peticiones,
-            Spring Security para proteger endpoints, y Spring Initializr para generar proyectos.
-            La transición mental es casi directa.
+            <strong className="text-text">Los 3 pilares fundamentales de Spring</strong> que todo lo demás construye:
+            <strong className="text-text"> IoC</strong> (el framework crea y gestiona objetos),
+            <strong className="text-text"> DI</strong> (el framework inyecta dependencias automáticamente), y
+            <strong className="text-text"> Autoconfiguración</strong> (detecta qué tienes en classpath y
+            configura lo necesario sin que escribas código de setup).
           </p>
         </ThinkSection>
 

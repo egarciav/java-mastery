@@ -22,25 +22,39 @@ export default function ConcurrenciaPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Qué es un Thread y por qué importa?</h2>
 
-        <ThinkSection title="Java = multi-threaded real (no event loop)">
+        <ThinkSection title="Java = multi-threaded real vs el event loop de JavaScript">
           <p>
-            En JavaScript/TypeScript todo es <strong className="text-text">single-threaded con event loop</strong>: un solo
-            hilo ejecuta tu código y las operaciones async se manejan con callbacks/promises. Nunca hay
-            dos funciones ejecutándose simultáneamente en el mismo proceso.
+            En JavaScript/TypeScript todo es <strong className="text-text">single-threaded con event loop</strong>:
+            un solo hilo ejecuta tu código. Las operaciones "asíncronas" (fetch, setTimeout) son manejadas
+            por APIs del navegador/Node.js fuera del hilo principal. Nunca hay dos funciones de tu código
+            ejecutándose literalmente en paralelo — el async/await es concurrente, no paralelo.
           </p>
           <p>
-            En Java, puedes tener <strong className="text-text">múltiples hilos reales del sistema operativo</strong>
-            ejecutándose en paralelo sobre múltiples cores de CPU. Esto da mucho más rendimiento para
-            operaciones CPU-intensivas, pero introduce problemas de sincronización: ¿qué pasa si dos hilos
-            modifican la misma variable al mismo tiempo? → <strong className="text-text">Race conditions</strong>,
-            datos corruptos, deadlocks.
+            En Java, puedes crear <strong className="text-text">hilos reales del sistema operativo</strong> que
+            el SO asigna a diferentes cores de CPU. Dos threads pueden ejecutar código Java simultáneamente
+            en el mismo proceso. Esto permite:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Paralelismo real</strong>: procesar datos en múltiples cores simultáneamente</li>
+            <li><strong className="text-text">I/O no bloqueante</strong>: mientras un hilo espera una respuesta de BD, otro sigue procesando requests</li>
+            <li><strong className="text-text">Tareas en background</strong>: enviar emails, generar reportes, sin bloquear el response al cliente</li>
+          </ul>
+          <p>
+            <strong className="text-text">El costo: race conditions</strong>. Si dos hilos leen y modifican la
+            misma variable al mismo tiempo, el resultado es impredecible. Esto no ocurre en JavaScript
+            por diseño, pero en Java debes gestionarlo con <code className="text-primary">synchronized</code>,
+            locks, o usando clases thread-safe como <code className="text-primary">AtomicInteger</code>,
+            <code className="text-primary"> ConcurrentHashMap</code>.
           </p>
           <p>
-            <strong className="text-text">Regla moderna:</strong> nunca crees <code className="text-primary">new Thread()</code> directamente.
-            Usa <code className="text-primary">ExecutorService</code> (pool de hilos reutilizables) o
-            <code className="text-primary"> CompletableFuture</code> (programación asíncrona declarativa). Los threads
-            crudos son como hacer HTTP con sockets raw — funciona pero es innecesariamente complejo.
+            <strong className="text-text">Regla de oro moderna:</strong> nunca uses <code className="text-primary">new Thread()</code>
+            directamente en producción. Usa:
           </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">ExecutorService</code>: pool de hilos reutilizables, evita crear/destruir hilos continuamente</li>
+            <li><code className="text-primary">CompletableFuture</code>: programación asíncrona declarativa, similar a Promises de JS</li>
+            <li><strong className="text-text">Virtual Threads</strong> (Java 21+): para el máximo rendimiento en I/O (Día 30)</li>
+          </ul>
         </ThinkSection>
 
         <CodeBlock filename="Threads.java" code={`

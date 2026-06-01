@@ -29,22 +29,32 @@ export default function ClasesAbstractasPage() {
           queda pendiente para que las subclases lo completen (métodos abstractos marcados con <code className="text-primary">abstract</code>).
         </p>
 
-        <ThinkSection title="Abstracta vs Interface — ¿cuál usar?">
+        <ThinkSection title="Abstracta vs Interface — la guía definitiva para elegir">
           <p>
-            <strong className="text-text">Clase abstracta</strong>: úsala cuando las subclases comparten
-            <em> estado</em> (campos) y <em>código común</em>. Ejemplo: todas las figuras geométricas
-            tienen un color y un método <code className="text-primary">mostrarInfo()</code> que funciona igual para todas.
-            Solo cambia cómo se calcula el área — eso lo defines como abstracto.
+            Esta es una de las decisiones de diseño más comunes en Java. La regla mental:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Clase abstracta</strong>: cuando las subclases comparten <em>estado</em> (campos) y <em>código concreto</em> además del comportamiento abstracto. Ejemplo: todas las figuras tienen un color y un método <code className="text-primary">mostrarInfo()</code> idéntico. Solo cambia cómo se calcula el área.</li>
+            <li><strong className="text-text">Interface</strong>: cuando defines una <em>capacidad</em> que clases no relacionadas pueden tener. <code className="text-primary">Serializable</code> lo puede implementar un Pato, un Documento, y un Número — sin relación entre sí.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Diferencias técnicas clave:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>Una clase solo puede extender <strong className="text-text">una</strong> clase abstracta, pero implementar <strong className="text-text">múltiples</strong> interfaces.</li>
+            <li>Las clases abstractas pueden tener campos de instancia, constructores, y métodos concretos. Las interfaces (hasta Java 7) solo podían tener constantes y métodos abstractos.</li>
+            <li>Desde Java 8, las interfaces tienen <code className="text-primary">default</code> methods con implementación. Esto acerca las interfaces a las clases abstractas, pero la diferencia principal persiste: las interfaces no tienen estado (no pueden tener campos de instancia).</li>
+            <li>Las interfaces son ideales para el <strong className="text-text">Patrón Estrategia</strong> y la inyección de dependencias en Spring Boot.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Cuándo es difícil elegir:</strong> si tu "clase abstracta" no tiene
+            ningún campo ni código concreto, probablemente debería ser una interface. Si tu interface
+            necesita guardar estado entre llamadas, probablemente debería ser una clase abstracta.
           </p>
           <p>
-            <strong className="text-text">Interface</strong>: úsala cuando defines una <em>capacidad</em> que
-            clases no relacionadas pueden tener. Ejemplo: <code className="text-primary">Serializable</code>
-            lo puede implementar un Pato, un Documento, y un Número. No comparten estado ni código.
-          </p>
-          <p>
-            <strong className="text-text">Regla práctica:</strong> ¿Las subclases son "un tipo de" la clase padre
-            (Circulo ES una Figura)? → Clase abstracta. ¿Las clases "pueden hacer" algo (un Pato PUEDE volar)?
-            → Interface. En Java solo puedes heredar de UNA clase abstracta, pero implementar MUCHAS interfaces.
+            <strong className="text-text">Patrón Template Method</strong> (el patrón natural de las clases abstractas):
+            define el <em>esqueleto</em> de un algoritmo en la clase padre con pasos abstractos que cada hijo completa.
+            El padre controla el flujo, los hijos aportan los detalles. Muy común en frameworks.
           </p>
         </ThinkSection>
 

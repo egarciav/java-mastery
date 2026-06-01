@@ -22,26 +22,37 @@ export default function LambdasPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Qué es una Lambda?</h2>
 
-        <ThinkSection title="Lambda = arrow function que implementa una interfaz">
+        <ThinkSection title="Lambda = arrow function, pero construida sobre interfaces funcionales">
           <p>
-            En TypeScript: <code className="text-primary">{"const f = (a, b) => a + b"}</code> — puedes asignar
-            una función a cualquier variable. Las funciones son ciudadanos de primera clase.
+            En TypeScript: <code className="text-primary">{"const suma = (a: number, b: number) => a + b"}</code> —
+            puedes asignar funciones a variables directamente. Las funciones son ciudadanos de primera clase.
           </p>
           <p>
-            En Java, las funciones NO son ciudadanos de primera clase — todo vive dentro de una clase.
-            Una lambda es azúcar sintáctico para una <strong className="text-text">clase anónima</strong> que implementa
-            una interfaz con un solo método abstracto (llamada <strong className="text-text">interfaz funcional</strong>).
-            Es decir, cuando escribes <code className="text-primary">(a, b) -&gt; a + b</code>, Java lo traduce
-            internamente a: "crea un objeto que implementa esta interfaz y su único método hace a + b".
+            En Java, las funciones NO son ciudadanos de primera clase — todo necesita vivir en una clase.
+            Las lambdas son <strong className="text-text">azúcar sintáctico</strong> para una clase anónima que
+            implementa una interfaz con un solo método abstracto (interfaz funcional). El compilador sabe
+            qué interfaz implementar por el contexto donde usas la lambda.
           </p>
           <p>
-            <strong className="text-text">Interfaces funcionales estándar (java.util.function):</strong>{' '}
-            <code className="text-primary">Predicate&lt;T&gt;</code> (T→boolean),{' '}
-            <code className="text-primary">Function&lt;T,R&gt;</code> (T→R),{' '}
-            <code className="text-primary">Consumer&lt;T&gt;</code> (T→void),{' '}
-            <code className="text-primary">Supplier&lt;T&gt;</code> (→T),{' '}
-            <code className="text-primary">Comparator&lt;T&gt;</code> (T,T→int).
-            Estas cubren el 95% de los casos de uso.
+            Cuando escribes <code className="text-primary">{"Comparator<String> c = (a, b) -> a.compareTo(b)"}</code>,
+            Java crea internamente un objeto que implementa <code className="text-primary">Comparator</code> con ese código.
+            Antes de Java 8 tenías que escribir esto explícitamente con clases anónimas — mucho más verboso.
+          </p>
+          <p>
+            <strong className="text-text">Las 5 interfaces funcionales estándar del paquete <code className="text-primary">java.util.function</code>:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">{"Predicate<T>"}</code>: recibe T, retorna boolean. Úsala para filtros. Equivale a <code className="text-primary">{"(item: T) => boolean"}</code> en TS.</li>
+            <li><code className="text-primary">{"Function<T, R>"}</code>: recibe T, retorna R. Para transformaciones. Equivale a <code className="text-primary">{"(item: T) => R"}</code> en TS.</li>
+            <li><code className="text-primary">{"Consumer<T>"}</code>: recibe T, no retorna nada (void). Para efectos secundarios. Equivale a <code className="text-primary">{"(item: T) => void"}</code>.</li>
+            <li><code className="text-primary">{"Supplier<T>"}</code>: no recibe nada, retorna T. Para factories y valores lazy. Equivale a <code className="text-primary">{"() => T"}</code>.</li>
+            <li><code className="text-primary">{"BiFunction<T, U, R>"}</code>: recibe dos argumentos, retorna R. Para operaciones binarias.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Method references</strong> (<code className="text-primary">::</code>):
+            si la lambda solo llama un método existente, puedes usar <code className="text-primary">::</code>
+            como atajo. <code className="text-primary">{"str -> str.toUpperCase()"}</code> se puede escribir
+            como <code className="text-primary">String::toUpperCase</code>. Más limpio y legible.
           </p>
         </ThinkSection>
 

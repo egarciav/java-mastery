@@ -22,18 +22,39 @@ export default function TextBlocksPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Text Blocks (Java 13+)</h2>
 
-        <ThinkSection title="Text Blocks = template literals sin interpolación">
+        <ThinkSection title="Text Blocks: strings multilínea legibles sin escapes ni concatenación">
           <p>
-            En TypeScript usas backticks: <code className="text-primary">{"`Hola ${nombre}`"}</code> con
-            interpolación directa de variables. En Java, los Text Blocks usan <code className="text-primary">{"\"\"\"....\"\"\""}</code>
-            para strings multilínea, pero <strong className="text-text">NO tienen interpolación de variables</strong>.
-            Para insertar valores, usas <code className="text-primary">.formatted()</code> (como printf) o
-            concatenación con <code className="text-primary">+</code>.
+            En TypeScript los backticks permiten strings multilínea con interpolación directa de variables.
+            Java añadió Text Blocks en Java 13 (preview) y estables en Java 15. Son similares pero con
+            una diferencia importante: <strong className="text-text">no tienen interpolación de variables</strong>.
+            Para insertar valores usas <code className="text-primary">.formatted()</code> con marcadores
+            <code className="text-primary"> %s</code>, <code className="text-primary">%d</code>, etc.
           </p>
           <p>
-            <strong className="text-text">¿Cuándo usarlos?</strong> Son ideales para JSON, SQL, HTML, XML, o cualquier
-            string multilínea que sería ilegible con <code className="text-primary">\n</code> y concatenación.
-            El indentado se gestiona automáticamente — Java detecta el indentado común y lo elimina.
+            <strong className="text-text">El problema que resuelven:</strong> antes de Text Blocks, un JSON
+            multilínea en Java requería concatenar strings con <code className="text-primary">\n</code> y
+            escapar cada comilla — completamente ilegible. Con Text Blocks escribes el texto tal cual
+            entre triple comillas <code className="text-primary">{"\"\"\"...\"\"\""}</code>.
+          </p>
+          <p>
+            <strong className="text-text">El manejo del indentado es inteligente:</strong> Java detecta
+            el nivel de indentado común en todas las líneas y lo elimina automáticamente. La posición
+            del cierre <code className="text-primary">{"\"\"\""})</code> en la siguiente línea determina
+            cuántos espacios se eliminan. Así el texto queda limpio sin el indentado del código fuente.
+          </p>
+          <p>
+            <strong className="text-text">¿Cuándo usar Text Blocks?</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>JSON para tests o mocks: cuerpo de request/response de API</li>
+            <li>SQL queries largas que necesitan legibilidad</li>
+            <li>Plantillas HTML para emails o notificaciones</li>
+            <li>Scripts en migraciones de BD o configuraciones</li>
+          </ul>
+          <p>
+            <strong className="text-text">No usar</strong> cuando el string es simple de una línea, o cuando
+            necesitas interpolación compleja — ahí <code className="text-primary">String.format()</code> o
+            <code className="text-primary"> StringBuilder</code> son más adecuados.
           </p>
         </ThinkSection>
 

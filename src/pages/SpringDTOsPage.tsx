@@ -22,19 +22,35 @@ export default function SpringDTOsPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Por qué NUNCA exponer entidades JPA directamente?</h2>
 
-        <ThinkSection title="DTOs = interfaces de Angular para tipar la API (pero del lado servidor)">
+        <ThinkSection title="DTOs: separar el contrato HTTP del modelo interno de base de datos">
           <p>
-            En Angular creas interfaces como <code className="text-primary">UserResponse</code> y
-            <code className="text-primary"> CreateUserRequest</code> para tipar exactamente lo que envías/recibes del backend.
-            No usas la misma interfaz para todo — el formulario de registro no tiene los mismos campos que
-            el perfil público del usuario.
+            En Angular tienes interfaces distintas para tipar lo que envías y recibes:
+            <code className="text-primary"> CreateUserRequest</code>, <code className="text-primary">UserResponse</code>,
+            <code className="text-primary"> UpdateUserRequest</code>. No usas la misma interfaz para todo.
+            El patrón en Spring Boot es idéntico, pero en el servidor.
           </p>
           <p>
-            En Spring es lo mismo: creas DTOs (generalmente records) específicos para cada operación.
-            Un <code className="text-primary">CrearUsuarioRequest</code> recibe nombre+email+contraseña.
-            Un <code className="text-primary">UsuarioResponse</code> retorna id+nombre+email (sin contraseña).
-            Tu entidad JPA <code className="text-primary">Usuario</code> tiene todos los campos + relaciones +
-            auditoría — pero nunca sale directamente al JSON de respuesta.
+            <strong className="text-text">¿Por qué NUNCA exponer entidades JPA directamente en la API?</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Seguridad</strong>: tu entidad <code className="text-primary">Usuario</code> tiene el campo <code className="text-primary">password</code>. Sin DTO, se expone en el JSON de respuesta. Un error catastrófico.</li>
+            <li><strong className="text-text">Acoplamiento</strong>: si cambias el modelo de BD (renombras una columna, añades una relación), cambias el contrato de tu API. Los clientes se rompen.</li>
+            <li><strong className="text-text">Ciclos de serialización</strong>: si <code className="text-primary">Usuario</code> tiene <code className="text-primary">List&lt;Pedido&gt;</code> y <code className="text-primary">Pedido</code> tiene <code className="text-primary">Usuario</code>, Jackson entra en un ciclo infinito intentando serializar.</li>
+            <li><strong className="text-text">Lazy loading</strong>: Jackson intenta serializar relaciones lazy fuera de una sesión JPA → <code className="text-primary">LazyInitializationException</code>.</li>
+          </ul>
+          <p>
+            <strong className="text-text">El patrón correcto</strong>: entidades JPA para persistencia,
+            DTOs para la API HTTP. Conviertes entre ellos en el Service:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">XxxRequest</code> (o <code className="text-primary">XxxDto</code>): datos que recibe el endpoint. Tiene anotaciones de validación.</li>
+            <li><code className="text-primary">XxxResponse</code>: datos que retorna el endpoint. Solo los campos públicos necesarios.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Records son ideales para DTOs</strong> (Java 16+): inmutables,
+            generan equals/hashCode/toString, y su sintaxis compacta es perfecta para objetos de datos puros.
+            Para conversiones en escala, usa <strong className="text-text">MapStruct</strong> —
+            genera automáticamente el código de mapeo entre entidades y DTOs en tiempo de compilación.
           </p>
         </ThinkSection>
 

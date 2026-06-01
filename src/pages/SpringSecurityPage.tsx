@@ -29,18 +29,34 @@ export default function SpringSecurityPage() {
           antes de que llegue a tu Controller.
         </p>
 
-        <ThinkSection title="Spring Security = Route Guards + Interceptors del backend">
+        <ThinkSection title="Spring Security: autenticación + autorización en el servidor">
           <p>
             En Angular proteges rutas con <code className="text-primary">CanActivate</code> guards y adjuntas tokens
-            JWT con HTTP interceptors. En Spring Security es el mismo concepto:
-            <code className="text-primary"> SecurityFilterChain</code> define qué rutas requieren autenticación
-            (como los guards) y <code className="text-primary">OncePerRequestFilter</code> intercepta cada petición
-            para validar el token JWT (como el interceptor).
+            JWT con HTTP interceptors. Spring Security hace lo análogo en el servidor:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">SecurityFilterChain</code>: define qué rutas son públicas y cuáles requieren autenticación/roles específicos. Equivalente al array de rutas con <code className="text-primary">CanActivate</code> en Angular.</li>
+            <li><code className="text-primary">OncePerRequestFilter</code>: intercepta cada petición HTTP para validar el token JWT antes de que llegue al Controller. Equivalente al HTTP interceptor de Angular.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Diferencia fundamental:</strong> la seguridad de Angular es
+            <em> cosmética</em> — protege la UI pero un usuario puede saltarse los guards inspeccionando el
+            bundle JS. Spring Security es <strong className="text-text">real</strong>: si el token no es válido,
+            el servidor retorna 401 y el Controller nunca se ejecuta. La seguridad del frontend y backend
+            son complementarias, no sustitutivas.
           </p>
           <p>
-            La diferencia clave: en Angular, la seguridad del frontend es "cosmética" — un usuario puede
-            saltarse los guards modificando el código. En Spring Security, la protección es <strong className="text-text">real</strong>
-            porque corre en el servidor. Si no pasas la validación, nunca llegas al Controller.
+            <strong className="text-text">Autenticación vs Autorización:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Autenticación</strong>: verificar quién eres. Login con usuario/contraseña, validar JWT.</li>
+            <li><strong className="text-text">Autorización</strong>: verificar qué puedes hacer. <code className="text-primary">hasRole('ADMIN')</code>, <code className="text-primary">hasAuthority('WRITE')</code>.</li>
+          </ul>
+          <p>
+            <strong className="text-text">BCryptPasswordEncoder</strong>: nunca guardes contraseñas en texto plano.
+            BCrypt aplica un hash con salt aleatorio. Cada hash de la misma contraseña es diferente,
+            por lo que ni un dump de la BD revela las contraseñas. Spring Security lo incluye y se usa
+            con <code className="text-primary">passwordEncoder.matches(raw, encoded)</code>.
           </p>
         </ThinkSection>
 

@@ -24,24 +24,72 @@ export default function IntroduccionPage() {
         <p className="text-text-muted leading-relaxed mb-4">
           Java es un lenguaje <strong className="text-text">orientado a objetos</strong>,
           <strong className="text-text"> fuertemente tipado</strong> y <strong className="text-text">compilado</strong>.
-          Fue creado en 1995 por James Gosling y hoy lo mantiene Oracle.
+          Fue creado en 1995 por James Gosling en Sun Microsystems y hoy lo mantiene Oracle con versiones LTS cada dos años.
         </p>
         <p className="text-text-muted leading-relaxed mb-4">
           Su filosofía es <strong className="text-text">"Write Once, Run Anywhere" (WORA)</strong>:
-          escribes el código una vez y se ejecuta en cualquier plataforma con una JVM.
+          escribes el código una vez y se ejecuta en cualquier plataforma que tenga una JVM instalada —
+          Windows, Linux, macOS, servidores, dispositivos embebidos.
         </p>
+        <p className="text-text-muted leading-relaxed mb-4">
+          Algunos términos clave que oirás constantemente:
+        </p>
+        <div className="space-y-3 mb-4">
+          <div className="bg-surface-light border border-border rounded-xl p-4">
+            <h3 className="font-semibold text-text mb-1">Fuertemente tipado</h3>
+            <p className="text-text-muted text-sm">Cada variable tiene un tipo fijo declarado en tiempo de compilación. No puedes asignar un
+            <code className="text-primary"> String</code> a una variable <code className="text-primary">int</code>. El compilador detecta ese error
+            <strong className="text-text"> antes de que el programa corra</strong>, no en producción.</p>
+          </div>
+          <div className="bg-surface-light border border-border rounded-xl p-4">
+            <h3 className="font-semibold text-text mb-1">Compilado</h3>
+            <p className="text-text-muted text-sm">Tu código fuente (<code className="text-primary">.java</code>) pasa por el compilador <code className="text-primary">javac</code>
+            y se convierte en <strong className="text-text">bytecode</strong> (<code className="text-primary">.class</code>). Ese bytecode es un lenguaje
+            intermedio — no es código máquina directo ni código fuente. La JVM lo ejecuta.</p>
+          </div>
+          <div className="bg-surface-light border border-border rounded-xl p-4">
+            <h3 className="font-semibold text-text mb-1">Orientado a objetos</h3>
+            <p className="text-text-muted text-sm">El código se organiza en <strong className="text-text">clases y objetos</strong>. Una clase es el molde,
+            un objeto es la instancia concreta. Todo en Java vive dentro de una clase — no existen funciones sueltas
+            como en JavaScript.</p>
+          </div>
+          <div className="bg-surface-light border border-border rounded-xl p-4">
+            <h3 className="font-semibold text-text mb-1">Garbage Collector (GC)</h3>
+            <p className="text-text-muted text-sm">Java gestiona la memoria automáticamente. A diferencia de C/C++, no tienes que liberar
+            memoria manualmente con <code className="text-primary">free()</code>. El GC de la JVM detecta objetos que ya no se
+            usan y los elimina. Esto elimina una clase entera de bugs muy difíciles de depurar.</p>
+          </div>
+        </div>
 
         <ThinkSection title="¿Por qué debería aprender Java si ya sé TypeScript?">
           <p>
             Piénsalo así: TypeScript te da tipado estático <em>opcional</em> sobre JavaScript.
             Java te da tipado estático <em>obligatorio</em> desde el primer día. Eso significa que
-            el compilador atrapa más errores antes de que tu código se ejecute.
+            el compilador atrapa más errores antes de que tu código se ejecute — errores que en
+            TypeScript/JavaScript solo los descubrirías en producción.
           </p>
           <p>
-            El 90% de los sistemas bancarios, aerolíneas y gobiernos corren sobre Java. Si quieres
-            trabajar en backend enterprise, Java es el lenguaje que abre esas puertas. Spring Boot
-            (que aprenderemos en la Fase 7) es el equivalente de NestJS pero con un ecosistema mucho
-            más maduro.
+            <strong className="text-text">Ecosistema y mercado laboral:</strong> El 90% de los sistemas bancarios,
+            aerolíneas, seguros y gobiernos del mundo corren sobre Java. No porque sea el más moderno,
+            sino porque es <strong className="text-text">extremadamente estable, predecible y tiene el ecosistema más
+            maduro del sector enterprise</strong>. Una aplicación Java bien escrita en 2005 probablemente
+            sigue corriendo hoy sin cambios.
+          </p>
+          <p>
+            <strong className="text-text">Spring Boot:</strong> Es el framework dominante para backends enterprise.
+            Es el equivalente de NestJS pero con 20 años más de madurez, una comunidad 10x más grande y
+            soporte oficial en la mayoría de plataformas cloud (AWS, GCP, Azure). Dominar Java + Spring Boot
+            abre las puertas a los proyectos mejor pagados del sector.
+          </p>
+          <p>
+            <strong className="text-text">Android:</strong> Las apps Android se escriben en Java o Kotlin
+            (Kotlin compila a bytecode Java). Si alguna vez quieres desarrollar apps móviles nativas,
+            el conocimiento de Java te lleva directamente ahí.
+          </p>
+          <p>
+            <strong className="text-text">Lo que ya sabes:</strong> Como desarrollador Angular/TypeScript ya dominas
+            OOP, interfaces, clases, tipado estático y arquitectura en capas. Esos conceptos se
+            trasladan directamente. La curva de aprendizaje es la <em>sintaxis</em>, no el paradigma.
           </p>
         </ThinkSection>
 
@@ -75,20 +123,33 @@ export default function IntroduccionPage() {
             <h3 className="font-semibold text-java mb-2">JVM (Java Virtual Machine)</h3>
             <p className="text-text-muted text-sm">
               Ejecuta el bytecode de Java. Cada sistema operativo tiene su propia JVM,
-              pero todos ejecutan el mismo bytecode. Es lo que hace a Java multiplataforma.
+              pero todos ejecutan el mismo bytecode — eso es WORA. La JVM también es responsable del
+              <strong className="text-text"> Garbage Collector</strong> (gestión automática de memoria) y del
+              <strong className="text-text"> JIT compiler</strong> (Just-In-Time): la JVM observa qué partes
+              del código se ejecutan más y las compila a código máquina nativo en tiempo real,
+              haciendo Java sorprendentemente rápido.
             </p>
           </div>
           <div className="bg-surface-light border border-border rounded-xl p-4">
             <h3 className="font-semibold text-java mb-2">JRE (Java Runtime Environment)</h3>
             <p className="text-text-muted text-sm">
-              JVM + bibliotecas estándar. Lo que necesitas para <strong className="text-text">ejecutar</strong> programas Java.
+              JVM + las bibliotecas estándar de Java (<code className="text-primary">java.lang</code>,
+              <code className="text-primary"> java.util</code>, <code className="text-primary">java.io</code>,
+              <code className="text-primary"> java.net</code>, etc.). Lo que necesitas para
+              <strong className="text-text"> ejecutar</strong> programas Java ya compilados.
+              Antes Java separaba JRE del JDK como descargas distintas; desde Java 9 se fusionaron
+              en la práctica.
             </p>
           </div>
           <div className="bg-surface-light border border-border rounded-xl p-4">
             <h3 className="font-semibold text-java mb-2">JDK (Java Development Kit)</h3>
             <p className="text-text-muted text-sm">
-              JRE + compilador (<code className="text-primary">javac</code>) + debugger + herramientas.
-              Lo que necesitas para <strong className="text-text">escribir y compilar</strong> programas.
+              JRE + herramientas de desarrollo: <code className="text-primary">javac</code> (compilador),
+              <code className="text-primary"> javadoc</code> (genera documentación HTML desde tus comentarios),
+              <code className="text-primary"> jdb</code> (debugger de línea de comandos),
+              <code className="text-primary"> jar</code> (empaquetador), y más.
+              <strong className="text-text"> Como desarrollador, siempre instalas el JDK.</strong>
+              Usa JDK 21 — es la versión LTS (Long-Term Support) más reciente, con soporte hasta 2031.
             </p>
           </div>
         </div>
@@ -150,26 +211,39 @@ public class HolaMundo {
         <ThinkSection title="¿Qué significa cada palabra de este código?">
           <p>Vamos parte por parte, porque entender esto es la base de TODO lo que viene después:</p>
           <p>
-            <strong className="text-text">public</strong> — Modificador de acceso. Significa que esta clase es visible para todos.
-            Por ahora, siempre pondrás <code className="text-primary">public</code> en tu clase principal.
+            <strong className="text-text">public</strong> — Es un <em>modificador de acceso</em>. Controla
+            quién puede ver o usar esta clase. <code className="text-primary">public</code> significa accesible
+            desde cualquier parte. Existen cuatro niveles: <code className="text-primary">public</code>,
+            <code className="text-primary"> protected</code>, <code className="text-primary">package-private</code> (sin
+            palabra clave) y <code className="text-primary">private</code>. Los verás en detalle en el Día 12 (Encapsulamiento).
           </p>
           <p>
             <strong className="text-text">class HolaMundo</strong> — Defines una clase llamada HolaMundo.
-            En Java <em>todo</em> el código vive dentro de una clase. El nombre <em>debe</em> coincidir
-            exactamente con el nombre del archivo (HolaMundo.java).
+            En Java <em>todo</em> el código vive dentro de una clase — no existen funciones ni variables
+            sueltas fuera de una clase. El nombre de la clase <em>debe coincidir exactamente</em> con el
+            nombre del archivo (<code className="text-primary">HolaMundo.java</code>) cuando la clase es pública.
+            Java es case-sensitive: <code className="text-primary">HolaMundo</code> y <code className="text-primary">holamundo</code>
+            son dos clases completamente diferentes.
           </p>
           <p>
             <strong className="text-text">public static void main(String[] args)</strong> — Este es el
-            punto de entrada. La JVM busca exactamente este método para arrancar tu programa. No puedes
-            cambiarle el nombre ni la firma. <code className="text-primary">static</code> = no necesita
-            una instancia. <code className="text-primary">void</code> = no retorna nada.
-            <code className="text-primary"> String[] args</code> = argumentos desde la línea de comandos.
+            <em> punto de entrada del programa</em>. La JVM busca exactamente este método con esta firma
+            exacta para arrancar. No puedes cambiarle el nombre ni los parámetros.
           </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">static</code> — El método pertenece a la clase, no a una instancia. La JVM puede llamarlo sin crear un objeto.</li>
+            <li><code className="text-primary">void</code> — Este método no retorna ningún valor al finalizar.</li>
+            <li><code className="text-primary">String[] args</code> — Es un array de Strings con los argumentos que el usuario pasa al ejecutar el programa desde la terminal: <code className="text-primary">java HolaMundo arg1 arg2</code>. Al inicio siempre estará vacío.</li>
+          </ul>
           <p>
             <strong className="text-text">System.out.println()</strong> — Imprime texto en la consola
-            y agrega un salto de línea al final. <code className="text-primary">System</code> es una clase
-            del sistema, <code className="text-primary">out</code> es el flujo de salida estándar.
+            y agrega un salto de línea al final. Desglosándolo:
           </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">System</code> — Clase del paquete <code className="text-primary">java.lang</code> (importado automáticamente). Representa el sistema donde corre tu programa.</li>
+            <li><code className="text-primary">out</code> — Campo estático de tipo <code className="text-primary">PrintStream</code>. Representa la salida estándar (la terminal).</li>
+            <li><code className="text-primary">println()</code> — Método que imprime el texto y agrega <code className="text-primary">\n</code> al final. <code className="text-primary">print()</code> hace lo mismo pero sin el salto de línea.</li>
+          </ul>
         </ThinkSection>
       </section>
 
@@ -195,7 +269,12 @@ java HolaMundo
         <InfoBox type="info">
           IntelliJ hace estos dos pasos automáticamente con un solo click. Pero es fundamental que
           entiendas el proceso: <strong>tu código → compilador → bytecode → JVM → ejecución</strong>.
-          Cuando algo falle, saber en qué paso ocurrió el error te ahorra horas de debugging.
+          Los errores ocurren en dos momentos distintos:
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            <li><strong>Errores de compilación</strong> (en el paso <code className="text-primary">javac</code>): tipo incorrecto, variable no declarada, método inexistente. El programa ni siquiera arranca. Son los errores <em>buenos</em> — se detectan temprano.</li>
+            <li><strong>Errores de ejecución / runtime</strong> (en el paso <code className="text-primary">java</code>): división por cero, NullPointerException, índice fuera de rango. El programa arranca pero explota en algún momento. Son los errores difíciles.</li>
+          </ul>
+          El compilador de Java es tu primer line of defense.
         </InfoBox>
       </section>
 

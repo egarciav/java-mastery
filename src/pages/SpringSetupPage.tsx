@@ -22,20 +22,38 @@ export default function SpringSetupPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Spring Initializr — El generador de proyectos</h2>
 
-        <ThinkSection title="start.spring.io = ng new para Java">
+        <ThinkSection title="start.spring.io y Maven: el punto de partida de todo proyecto Spring">
           <p>
-            Así como <code className="text-primary">ng new mi-app</code> genera un proyecto Angular completo con
-            estructura de carpetas, dependencias y configuración, <strong className="text-text">Spring Initializr</strong>
-            (start.spring.io) genera un proyecto Spring Boot con Maven/Gradle, dependencias configuradas,
-            clase principal y archivos de configuración. Solo eliges qué necesitas y descargas un ZIP.
+            <strong className="text-text">Spring Initializr</strong> (start.spring.io) es tu
+            <code className="text-primary"> ng new</code> para Java: genera un proyecto completo con la estructura
+            de carpetas correcta, el <code className="text-primary">pom.xml</code> configurado, y las dependencias que eliges.
+            Descarga un ZIP, lo importas en IntelliJ, y estás listo para escribir código de negocio.
           </p>
           <p>
-            <strong className="text-text">Maven</strong> es el gestor de dependencias más usado en Java (como npm).
-            El archivo <code className="text-primary">pom.xml</code> es tu <code className="text-primary">package.json</code>:
-            lista las dependencias (starters), versiones, y plugins de build. Los "starters" son paquetes
-            preconfigurados: <code className="text-primary">spring-boot-starter-web</code> incluye Tomcat + Spring MVC + Jackson,
-            <code className="text-primary"> spring-boot-starter-data-jpa</code> incluye Hibernate + DataSource.
+            <strong className="text-text">Maven = npm para Java:</strong>
           </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">pom.xml</code> es tu <code className="text-primary">package.json</code>: declara dependencias, versiones, y cómo construir el proyecto.</li>
+            <li><code className="text-primary">mvn install</code> descarga dependencias y construye el JAR (como <code className="text-primary">npm install &amp;&amp; npm run build</code>).</li>
+            <li>El repositorio central de Maven (Maven Central) es el equivalente del npm registry — millones de librerías disponibles.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Los Starters son la clave de la autoconfiguración:</strong> cuando añades
+            <code className="text-primary"> spring-boot-starter-web</code> a tu <code className="text-primary">pom.xml</code>,
+            Spring Boot detecta que tienes Tomcat en el classpath y <em>automáticamente</em> configura un
+            servidor web embebido, el DispatcherServlet, Jackson para JSON, etc. Sin una línea de configuración tuya.
+            Esto es <strong className="text-text">autoconfiguración</strong> — el corazón de Spring Boot.
+          </p>
+          <p>
+            <strong className="text-text">Starters esenciales que usarás siempre:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">spring-boot-starter-web</code>: REST API (Tomcat + Spring MVC + Jackson)</li>
+            <li><code className="text-primary">spring-boot-starter-data-jpa</code>: base de datos (Hibernate + Spring Data)</li>
+            <li><code className="text-primary">spring-boot-starter-security</code>: autenticación y autorización</li>
+            <li><code className="text-primary">spring-boot-starter-validation</code>: Bean Validation (Jakarta)</li>
+            <li><code className="text-primary">spring-boot-starter-test</code>: JUnit 5 + Mockito + AssertJ</li>
+          </ul>
         </ThinkSection>
 
         <p className="text-text-muted leading-relaxed mb-4">

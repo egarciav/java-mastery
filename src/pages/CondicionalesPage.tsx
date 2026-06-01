@@ -127,14 +127,30 @@ public class SwitchEjemplo {
     }
 }
 `} />
-        <ThinkSection title="¿Cuándo usar switch clásico vs moderno?">
+        <ThinkSection title="Switch clásico vs moderno — por qué el moderno es mejor">
           <p>
-            <strong className="text-text">Switch clásico</strong> (con break): solo si estás en Java 13 o menos,
-            o si necesitas fall-through intencional (raro).
+            El switch clásico tiene un problema histórico famoso: el <strong className="text-text">fall-through</strong>.
+            Si olvidas un <code className="text-primary">break</code>, el programa "cae" al siguiente case y lo ejecuta
+            también, aunque su condición no coincida. Esto ha causado incontables bugs en Java, C, C++ y JavaScript.
           </p>
           <p>
-            <strong className="text-text">Switch moderno</strong> (con arrow →): siempre que puedas (Java 14+).
-            Es más seguro (no hay bugs de break olvidado), más limpio, y puede retornar un valor directamente.
+            <strong className="text-text">Switch clásico</strong>: úsalo solo si mantienes código legado en Java 13
+            o anterior, o si necesitas fall-through <em>intencional</em> (compartir código entre cases).
+            Siempre documenta el fall-through intencional con un comentario <code className="text-primary">// fall-through</code>.
+          </p>
+          <p>
+            <strong className="text-text">Switch moderno con arrow</strong> (Java 14+, estable desde Java 16):
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>No tiene fall-through — cada case es independiente automáticamente.</li>
+            <li>Puede usarse como <em>expresión</em> (retorna un valor directamente: <code className="text-primary">String x = switch(...){'{'}...{'}'}</code>).</li>
+            <li>El compilador verifica exhaustividad cuando se usa con sealed classes o enums.</li>
+            <li>Puede tener bloques con <code className="text-primary">yield</code> para retornar valores desde bloques complejos.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Regla simple:</strong> si estás en Java 14+, siempre usa switch con arrow.
+            Es más seguro, más expresivo, y el código es más limpio. El switch clásico es
+            prácticamente código legado hoy en día.
           </p>
         </ThinkSection>
 

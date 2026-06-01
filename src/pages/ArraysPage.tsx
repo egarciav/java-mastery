@@ -21,15 +21,35 @@ export default function ArraysPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Declarar y crear Arrays</h2>
 
-        <ThinkSection title="Arrays en Java vs TypeScript — diferencia clave">
+        <ThinkSection title="Arrays en Java vs TypeScript — la diferencia fundamental">
           <p>
-            En TypeScript, los arrays son <strong className="text-text">dinámicos</strong>: puedes hacer
-            <code className="text-primary"> arr.push()</code>, <code className="text-primary">.pop()</code>, y el tamaño cambia.
+            En TypeScript, los arrays son <strong className="text-text">dinámicos por defecto</strong>:
+            <code className="text-primary"> push()</code>, <code className="text-primary">pop()</code>,
+            <code className="text-primary"> splice()</code> cambian el tamaño automáticamente. Bajo el capó,
+            JavaScript reasigna memoria cuando el array crece.
           </p>
           <p>
-            En Java, los arrays tienen <strong className="text-text">tamaño fijo</strong>. Una vez creados con
-            <code className="text-primary"> new int[5]</code>, siempre tendrán 5 elementos. Si necesitas algo dinámico,
-            usarás <code className="text-primary">ArrayList</code> (Día 17). Pero primero domina los arrays — son la base.
+            En Java, los arrays primitivos tienen <strong className="text-text">tamaño fijo en tiempo de creación</strong>.
+            <code className="text-primary">new int[5]</code> reserva exactamente 5 espacios contiguos en memoria.
+            No puedes agregar ni quitar elementos. ¿Por qué esta limitación?
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Rendimiento óptimo</strong>: los arrays de tamaño fijo son la estructura de datos más rápida posible. Acceso en O(1) garantizado. Sin overhead de redimensionamiento.</li>
+            <li><strong className="text-text">Memoria predecible</strong>: sabes exactamente cuánta RAM vas a usar. Importante en sistemas embebidos o cuando optimizas rendimiento.</li>
+            <li><strong className="text-text">Base de otras estructuras</strong>: <code className="text-primary">ArrayList</code> internamente usa un array que redimensiona cuando necesita. Entender arrays es entender cómo funciona ArrayList.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Error clásico — ArrayIndexOutOfBoundsException:</strong> intentar acceder a
+            un índice fuera del rango (negativo o mayor que <code className="text-primary">length - 1</code>).
+            Este es un error de runtime, no de compilación — el compilador no lo detecta. Es uno de los
+            errores más comunes en Java. Regla: el último índice válido es siempre
+            <code className="text-primary"> array.length - 1</code>.
+          </p>
+          <p>
+            <strong className="text-text">Cuándo usar qué:</strong> Array si el tamaño es fijo y conocido
+            (buffer de bytes, tabla de multiplicar, días de la semana). <code className="text-primary">ArrayList</code>
+            cuando el número de elementos puede variar. En la práctica enterprise, usarás <code className="text-primary">ArrayList</code>
+            la mayoría del tiempo.
           </p>
         </ThinkSection>
 

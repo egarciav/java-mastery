@@ -23,22 +23,39 @@ export default function ComparadorPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Comparable — El objeto sabe ordenarse</h2>
 
-        <ThinkSection title="¿Comparable o Comparator? Depende del caso">
+        <ThinkSection title="Comparable vs Comparator — cuándo usar cada uno">
           <p>
-            <strong className="text-text">Comparable&lt;T&gt;</strong>: la clase implementa <code className="text-primary">compareTo()</code>
-            internamente. Define UN solo orden "natural" (ej: productos por precio). Las colecciones usan este
-            orden por defecto al llamar <code className="text-primary">Collections.sort()</code> o <code className="text-primary">.sorted()</code>.
+            Java tiene dos mecanismos para ordenar objetos. Elegir el correcto depende de si el orden
+            es intrínseco al objeto o externo a él.
           </p>
           <p>
-            <strong className="text-text">Comparator&lt;T&gt;</strong>: el orden se define FUERA de la clase. Puedes crear
-            múltiples Comparators para la misma clase (por nombre, por precio, por fecha). Es más flexible y
-            se combina con lambdas y method references. <strong className="text-text">Usa Comparator el 90% del tiempo</strong>
-            — Comparable solo para el orden más obvio y natural de tu clase.
+            <strong className="text-text">Comparable&lt;T&gt;</strong>: la clase implementa <code className="text-primary">compareTo(T o)</code>
+            internamente. Define el <em>orden natural</em> del objeto — la forma "obvia" de ordenarlo.
+            Por ejemplo, <code className="text-primary">String</code> implementa Comparable para ordenar alfabéticamente.
+            <code className="text-primary"> Integer</code> para ordenar numéricamente. Las colecciones usan este orden
+            automáticamente con <code className="text-primary">Collections.sort()</code> y <code className="text-primary">.sorted()</code>
+            sin necesitar ningún parámetro extra.
           </p>
           <p>
-            <strong className="text-text">Regla del retorno:</strong> <code className="text-primary">compareTo()</code> retorna:
-            negativo (this va antes), cero (iguales), positivo (this va después).
-            Es como <code className="text-primary">(a, b) =&gt; a - b</code> en JavaScript.
+            <strong className="text-text">Comparator&lt;T&gt;</strong>: el orden se define <em>fuera</em> de la clase,
+            como un objeto separado. Puedes tener múltiples Comparators para la misma clase:
+            por nombre, por precio, por fecha, por longitud de nombre, etc. Es más flexible y
+            se combina limpiamente con lambdas. <strong className="text-text">Usa Comparator el 90% del tiempo</strong>
+            — Comparable solo cuando hay UN orden natural indiscutible.
+          </p>
+          <p>
+            <strong className="text-text">El contrato de compareTo:</strong> retorna un entero negativo si
+            <code className="text-primary"> this</code> va antes que el argumento, cero si son iguales, positivo si
+            <code className="text-primary"> this</code> va después. Es el equivalente Java de
+            <code className="text-primary"> (a, b) =&gt; a - b</code> en JavaScript. <strong className="text-text">Nunca</strong>
+            uses la resta directa (<code className="text-primary">a - b</code>) para comparar enteros — puede causar
+            overflow. Usa <code className="text-primary">Integer.compare(a, b)</code>.
+          </p>
+          <p>
+            <strong className="text-text">Encadenamiento de Comparators</strong> (Java 8+): puedes combinar múltiples
+            criterios con <code className="text-primary">.thenComparing()</code>:
+            <code className="text-primary"> Comparator.comparing(Producto::getCategoria).thenComparing(Producto::getPrecio)</code>
+            — ordena por categoría, y si hay empate, por precio. Esto reemplaza el código verboso anterior.
           </p>
         </ThinkSection>
 

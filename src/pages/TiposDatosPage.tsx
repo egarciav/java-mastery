@@ -23,14 +23,22 @@ export default function TiposDatosPage() {
 
         <ThinkSection title="¿Por qué Java tiene tantos tipos de números?">
           <p>
-            En TypeScript solo existe <code className="text-primary">number</code> para todo. En Java
-            debes elegir el tipo exacto. ¿Por qué? <strong className="text-text">Eficiencia y control</strong>.
-            Un <code className="text-primary">byte</code> usa 1 byte de RAM; un <code className="text-primary">long</code> usa 8.
-            Cuando manejas millones de registros, esa diferencia importa.
+            En TypeScript solo existe <code className="text-primary">number</code> para todo: números enteros,
+            decimales, grandes y pequeños, todos usan el mismo tipo (IEEE 754 double de 64 bits bajo el capó).
+            Java te obliga a elegir el tipo exacto. ¿Por qué? <strong className="text-text">Eficiencia y control de memoria</strong>.
           </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>Un <code className="text-primary">byte</code> ocupa <strong className="text-text">1 byte</strong> de RAM. Si tienes un array de 10 millones de valores entre 0 y 100, usar <code className="text-primary">byte[]</code> ocupa 10MB. Usar <code className="text-primary">int[]</code> ocupa 40MB.</li>
+            <li><code className="text-primary">int</code> (32 bits) es el tipo entero óptimo para la mayoría de CPUs modernas. Las operaciones con <code className="text-primary">int</code> son más rápidas que con <code className="text-primary">byte</code> o <code className="text-primary">short</code> porque la CPU trabaja nativamente con 32 bits.</li>
+            <li><code className="text-primary">long</code> (64 bits) es necesario para IDs de base de datos, timestamps en milisegundos, distancias astronómicas — valores que superan los ~2 mil millones de <code className="text-primary">int</code>.</li>
+            <li><code className="text-primary">float</code> (32 bits) fue popular en gráficos donde la velocidad importaba más que la precisión. Hoy en día casi siempre se usa <code className="text-primary">double</code>.</li>
+            <li><code className="text-primary">double</code> (64 bits) es el tipo decimal estándar. Mayor precisión, mayor rango. Para dinero <strong className="text-text">NO uses ni float ni double</strong> — usa <code className="text-primary">BigDecimal</code> para evitar errores de punto flotante.</li>
+          </ul>
           <p>
-            En la práctica, usarás <code className="text-primary">int</code> para enteros y <code className="text-primary">double</code> para
-            decimales el 95% del tiempo. Los demás son para casos especiales (archivos binarios, rendimiento extremo, dinero).
+            <strong className="text-text">En la práctica:</strong> usarás <code className="text-primary">int</code> para enteros y
+            <code className="text-primary"> double</code> para decimales el 95% del tiempo. Cuando veas <code className="text-primary">long</code>
+            será para IDs o timestamps. <code className="text-primary">byte</code>/<code className="text-primary">short</code> casi nunca
+            a menos que optimices memoria explícitamente.
           </p>
         </ThinkSection>
 
@@ -100,15 +108,36 @@ public class TiposPrimitivos {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Tipos de Referencia</h2>
 
-        <ThinkSection title="Primitivo vs Referencia — ¿Cuál es la diferencia real?">
+        <ThinkSection title="Primitivo vs Referencia — La diferencia fundamental de Java">
           <p>
-            Imagina que un <strong className="text-text">primitivo</strong> es un post-it con un número escrito directamente.
-            Si le sacas copia, tienes otro post-it independiente con el mismo número.
+            Esta es la distincion mas importante que debes interiorizar en Java. Todo tipo de dato es
+            o un <strong className="text-text">primitivo</strong> o una <strong className="text-text">referencia</strong>.
+            No existe un tercer tipo.
           </p>
           <p>
-            Una <strong className="text-text">referencia</strong> es un post-it con una <em>dirección</em> que apunta a
-            una caja en un almacén. Si copias el post-it, ahora tienes dos post-its que apuntan a la <em>misma</em> caja.
-            Si alguien modifica el contenido de la caja desde un post-it, el otro también lo ve.
+            Imagina que un <strong className="text-text">primitivo</strong> es un post-it con el valor escrito directamente.
+            <code className="text-primary"> int a = 10</code> — el post-it dice "10". Si haces <code className="text-primary">int b = a</code>,
+            obtienes un nuevo post-it independiente que también dice "10". Cambiar <code className="text-primary">b</code> no afecta a
+            <code className="text-primary"> a</code>. Son completamente independientes.
+          </p>
+          <p>
+            Una <strong className="text-text">referencia</strong> es un post-it con una <em>dirección de memoria</em> que
+            apunta a un objeto en el <em>heap</em> (zona de memoria dinámica). Si haces
+            <code className="text-primary"> int[] b = a</code>, obtienes otro post-it con la <em>misma</em> dirección.
+            Ambos post-its apuntan al mismo objeto. Modificar el objeto desde cualquiera de los dos afecta a los demás.
+          </p>
+          <p>
+            <strong className="text-text">¿Dónde vive cada uno?</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Stack</strong>: variables locales y primitivos. Rápido, automático, tamaño fijo.</li>
+            <li><strong className="text-text">Heap</strong>: objetos creados con <code className="text-primary">new</code>. Gestionado por el Garbage Collector.</li>
+            <li>Cuando declaras <code className="text-primary">String nombre = "Carlos"</code>, la variable <code className="text-primary">nombre</code> está en el stack, pero el objeto String <code className="text-primary">"Carlos"</code> está en el heap.</li>
+          </ul>
+          <p>
+            <strong className="text-text">null</strong> es el valor por defecto de toda referencia: significa
+            "este post-it no apunta a ningún objeto". Intentar usar un objeto null causa el infame
+            <code className="text-primary"> NullPointerException</code> — el error #1 más común en Java.
           </p>
         </ThinkSection>
 
@@ -169,8 +198,17 @@ public class PrimitivoVsReferencia {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Wrapper Classes (Clases Envolventes)</h2>
         <p className="text-text-muted leading-relaxed mb-4">
-          Cada tipo primitivo tiene una <strong className="text-text">clase envolvente</strong> (wrapper) que lo convierte en objeto.
-          Son necesarios cuando necesitas usar primitivos con colecciones (List, Map, etc.).
+          Cada tipo primitivo tiene una <strong className="text-text">clase envolvente</strong> (wrapper) que lo
+          "empaqueta" en un objeto. Son necesarios porque las colecciones de Java
+          (<code className="text-primary">List</code>, <code className="text-primary">Map</code>, <code className="text-primary">Set</code>)
+          solo trabajan con objetos, no con primitivos. Por eso no puedes escribir
+          <code className="text-primary"> List&lt;int&gt;</code> — debes escribir <code className="text-primary">List&lt;Integer&gt;</code>.
+        </p>
+        <p className="text-text-muted leading-relaxed mb-4">
+          <strong className="text-text">Autoboxing y Unboxing</strong>: desde Java 5, la conversión entre primitivo y wrapper
+          es automática. El compilador inserta la conversión por ti. Pero esto tiene un costo oculto:
+          cada autoboxing crea un nuevo objeto en el heap. En bucles de millones de iteraciones,
+          eso puede generar presión en el Garbage Collector.
         </p>
 
         <CodeBlock filename="WrapperClasses.java" code={`
@@ -288,9 +326,13 @@ public class InferenciaTipos {
 `} />
 
         <InfoBox type="angular">
-          <code className="text-primary">var</code> en Java es similar a <code className="text-primary">let</code> en 
-          TypeScript cuando no especificas el tipo. TypeScript también infiere tipos automáticamente.
-          La diferencia es que Java solo permite <code className="text-primary">var</code> en variables locales.
+          <code className="text-primary">var</code> en Java es similar a la inferencia de tipo en TypeScript
+          cuando escribes <code className="text-primary">const nombre = "Carlos"</code> sin anotar el tipo.
+          Diferencias clave: Java solo permite <code className="text-primary">var</code> en variables locales (dentro
+          de métodos), no en campos de clase ni parámetros. Además, <code className="text-primary">var</code> en Java
+          sigue siendo <strong>estáticamente tipado</strong> — el tipo se fija en compilación y no puede cambiar.
+          Es solo azúcar sintáctica para evitar repetir tipos largos como
+          <code className="text-primary"> HashMap&lt;String, List&lt;Integer&gt;&gt;</code>.
         </InfoBox>
       </section>
 

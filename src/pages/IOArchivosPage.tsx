@@ -22,23 +22,37 @@ export default function IOArchivosPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">java.nio.file — La API moderna</h2>
 
-        <ThinkSection title="java.nio vs java.io — siempre usa nio">
+        <ThinkSection title="java.nio.file vs java.io — por qué la API moderna importa">
           <p>
-            Java tiene dos APIs de archivos: la vieja <code className="text-primary">java.io.File</code> (Java 1.0, de 1996)
-            y la moderna <code className="text-primary">java.nio.file</code> (NIO.2, Java 7+). <strong className="text-text">Siempre usa NIO.2</strong>.
-            La API vieja tiene problemas: no lanza excepciones informativas cuando falla, no soporta links simbólicos
-            bien, y su diseño es confuso.
+            Java tiene dos APIs para archivos. La vieja <code className="text-primary">java.io.File</code>
+            (Java 1.0, 1996) tiene problemas históricos: el método <code className="text-primary">delete()</code>
+            retorna <code className="text-primary">false</code> silenciosamente en vez de lanzar excepción,
+            no soporta links simbólicos bien, y su API es inconsistente.
+            La moderna <code className="text-primary">java.nio.file</code> (NIO.2, Java 7+) lanza excepciones
+            descriptivas, soporta todas las operaciones del sistema de archivos, y tiene una API fluida.
+            <strong className="text-text"> Siempre usa NIO.2</strong>.
           </p>
           <p>
-            Con NIO.2, <code className="text-primary">Path</code> representa la ruta del archivo (como una dirección) y
-            <code className="text-primary"> Files</code> es la clase utilitaria con métodos estáticos para leer, escribir,
-            copiar, mover y eliminar archivos. Es como <code className="text-primary">fs</code> en Node.js pero tipado y más robusto.
+            <strong className="text-text">Los dos actores principales:</strong>
           </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">Path</code>: representa una ruta (puede no existir). Es inmutable. Úsalo como el equivalente Java de una cadena de ruta. <code className="text-primary">Path.of("/home/user/file.txt")</code> o <code className="text-primary">Paths.get("config.json")</code>.</li>
+            <li><code className="text-primary">Files</code>: clase utilitaria con todos los métodos estáticos. Leer, escribir, copiar, mover, eliminar, verificar existencia, crear directorios.</li>
+          </ul>
           <p>
-            <strong className="text-text">Regla del tamaño:</strong> Para archivos pequeños (&lt;10MB), usa
-            <code className="text-primary"> Files.readString()</code> o <code className="text-primary">Files.readAllLines()</code>.
-            Para archivos grandes, usa <code className="text-primary">Files.lines()</code> (Stream lazy) o
-            <code className="text-primary"> BufferedReader</code> para no cargar todo en RAM.
+            <strong className="text-text">Elegir el método según el tamaño del archivo:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Pequeño (&lt;50MB)</strong>: <code className="text-primary">Files.readString(path)</code> carga todo el archivo en un String. Simple y directo.</li>
+            <li><strong className="text-text">Mediano</strong>: <code className="text-primary">Files.readAllLines(path)</code> carga todas las líneas en una <code className="text-primary">List&lt;String&gt;</code>.</li>
+            <li><strong className="text-text">Grande (&gt;100MB)</strong>: <code className="text-primary">Files.lines(path)</code> retorna un Stream lazy — lee línea por línea sin cargar todo en RAM. O usa <code className="text-primary">BufferedReader</code> para control total.</li>
+          </ul>
+          <p>
+            <strong className="text-text">try-with-resources</strong>: cualquier recurso que implemente
+            <code className="text-primary"> Closeable</code> (archivos, conexiones, streams) debe cerrarse
+            después de usarse. <code className="text-primary">try (var reader = new BufferedReader(...)) {'{'} ... {'}'}</code>
+            garantiza el cierre automático incluso si ocurre una excepción. Es el equivalente Java del
+            <code className="text-primary"> using</code> de C# o los context managers de Python.
           </p>
         </ThinkSection>
 

@@ -21,18 +21,38 @@ export default function BuclesPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Bucle for</h2>
 
-        <ThinkSection title="¿Cuándo usar cada tipo de bucle?">
+        <ThinkSection title="¿Cuándo usar cada tipo de bucle? La guía definitiva">
           <p>
-            <strong className="text-text">for clásico</strong> — Cuando sabes cuántas iteraciones necesitas, o cuando necesitas el índice.
+            Elegir el bucle correcto hace que tu código sea más expresivo e intención clara.
+            La regla es: el bucle debe comunicar <em>cuándo</em> y <em>por qué</em> itera.
           </p>
           <p>
-            <strong className="text-text">for-each</strong> — Cuando recorres una colección completa y NO necesitas el índice. Es más limpio.
+            <strong className="text-text">for clásico</strong>: cuando necesitas el índice o cuando el número
+            de iteraciones es conocido de antemano. <code className="text-primary">for (int i = 0; i &lt; n; i++)</code>
+            comunica claramente: "itero exactamente N veces". También cuando necesitas iterar de atras hacia adelante
+            o con incrementos distintos de 1.
           </p>
           <p>
-            <strong className="text-text">while</strong> — Cuando no sabes cuántas iteraciones habrá (ej: leer un archivo hasta el final).
+            <strong className="text-text">for-each (enhanced for)</strong>: cuando iteras <em>todos</em> los
+            elementos de una colección o array y no necesitas el índice ni modificar la estructura.
+            Es la forma preferida en Java moderno. Internamente usa un <code className="text-primary">Iterator</code>,
+            por lo que funciona con cualquier clase que implemente <code className="text-primary">Iterable</code>.
           </p>
           <p>
-            <strong className="text-text">do-while</strong> — Cuando necesitas ejecutar al menos una vez (ej: menú interactivo).
+            <strong className="text-text">while</strong>: cuando el número de iteraciones es <em>desconocido</em>
+            hasta runtime. Ejemplos clásicos: leer líneas de un archivo hasta EOF, esperar una condición
+            externa (conexión de red), procesar elementos de una cola hasta que esté vacía.
+            La condición se evalúa <em>antes</em> de la primera iteración — puede que el cuerpo nunca se ejecute.
+          </p>
+          <p>
+            <strong className="text-text">do-while</strong>: igual que while pero garantiza que el cuerpo se
+            ejecute <em>al menos una vez</em>. El caso de uso más común es menús interactivos y validaciones
+            de entrada donde debes preguntar al usuario al menos una vez. En la práctica profesional es
+            el bucle menos usado — muchos equipos evitan do-while por claridad.
+          </p>
+          <p>
+            <strong className="text-text">Streams (Java 8+)</strong>: para muchos casos donde antes usarías un bucle
+            para filtrar/transformar/reducir, hoy se usa la API de Streams. Lo verás en el Día 23.
           </p>
         </ThinkSection>
 

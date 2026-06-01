@@ -22,23 +22,37 @@ export default function SpringServicesPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Qué es un Service y por qué separarlo?</h2>
 
-        <ThinkSection title="Service = donde vive la lógica de negocio">
+        <ThinkSection title="Service = el núcleo de la lógica de negocio, sin saber nada de HTTP ni BD">
           <p>
-            El patrón de capas en Spring es: <strong className="text-text">Controller → Service → Repository</strong>.
-            El Controller recibe peticiones HTTP y las traduce a llamadas Java. El Repository se comunica
-            con la base de datos. El Service es el <strong className="text-text">intermediario inteligente</strong>:
-            contiene las reglas de negocio (validaciones, cálculos, decisiones), orquesta múltiples
-            repositorios si es necesario, y define los límites transaccionales.
+            El arquitectura en capas de Spring sigue un principio claro de responsabilidades:
+            <strong className="text-text"> Controller → Service → Repository</strong>.
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Controller</strong>: solo sabe de HTTP. Extrae datos, llama al service, retorna ResponseEntity.</li>
+            <li><strong className="text-text">Service</strong>: solo sabe de lógica de negocio. No sabe que existe HTTP, ni JSON, ni SQL. Valida reglas, orquesta operaciones, toma decisiones.</li>
+            <li><strong className="text-text">Repository</strong>: solo sabe de persistencia. Lee y escribe datos en BD.</li>
+          </ul>
+          <p>
+            Esta separación tiene una ventaja enorme: puedes testear el Service de forma aislada sin
+            levantar un servidor HTTP ni conectarte a una BD real. En Angular, el patrón es idéntico:
+            Component → Service → HttpClient. El Service de Angular tampoco sabe nada de la UI.
           </p>
           <p>
-            <code className="text-primary">@Transactional</code> es una anotación que envuelve el método en una transacción
-            de base de datos: si cualquier operación dentro del método falla (excepción), Spring hace
-            <strong className="text-text">rollback automático</strong> de todos los cambios. Sin @Transactional,
-            podrías quedar con datos a medio guardar si algo falla entre dos operaciones de BD.
+            <strong className="text-text">@Transactional — el mecanismo que garantiza atomicidad:</strong>
+            cuando un método tiene <code className="text-primary">@Transactional</code>, Spring crea un proxy
+            que abre una transacción de BD antes de ejecutar el método y la confirma (<em>commit</em>) al
+            terminar exitosamente, o hace <em>rollback</em> si ocurre una excepción no manejada.
           </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Por defecto</strong>: solo hace rollback en excepciones unchecked (<code className="text-primary">RuntimeException</code>). Para checked exceptions necesitas <code className="text-primary">@Transactional(rollbackFor = Exception.class)</code>.</li>
+            <li><strong className="text-text">Propagación</strong>: <code className="text-primary">REQUIRED</code> (default) — usa la transacción existente o crea una nueva. <code className="text-primary">REQUIRES_NEW</code> — siempre crea una nueva.</li>
+            <li><strong className="text-text">Sin @Transactional</strong> en operaciones múltiples: si falla en el paso 3 de 5, los pasos 1 y 2 ya se guardaron. Datos inconsistentes.</li>
+          </ul>
           <p>
-            En Angular, el patrón es idéntico: Component → Service → HttpClient. El Service es donde
-            pones lógica de transformación y orquestación, no en el componente.
+            <strong className="text-text">Buena práctica</strong>: pon <code className="text-primary">@Transactional</code>
+            a nivel de clase en el Service (cubre todos los métodos) y sobrescribe con
+            <code className="text-primary"> @Transactional(readOnly = true)</code> en métodos de solo lectura
+            para optimización.
           </p>
         </ThinkSection>
 

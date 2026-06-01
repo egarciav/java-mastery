@@ -24,16 +24,27 @@ export default function VariablesConstantesPage() {
         <ThinkSection title="¿Cómo pensar en las variables de Java vs TypeScript?">
           <p>
             En TypeScript escribes <code className="text-primary">let nombre: string = "Carlos"</code> — el tipo va
-            <em> después</em> del nombre, separado por dos puntos.
+            <em> después</em> del nombre, separado por dos puntos. El tipo es opcional (TypeScript lo infiere).
           </p>
           <p>
             En Java escribes <code className="text-primary">String nombre = "Carlos"</code> — el tipo va
-            <em> antes</em> del nombre, sin dos puntos. Y no existe <code className="text-primary">let</code>
-            ni <code className="text-primary">const</code>. Java usa <code className="text-primary">final</code> para constantes.
+            <em> antes</em> del nombre, sin dos puntos. El tipo es <strong className="text-text">obligatorio</strong>
+            (excepto cuando usas <code className="text-primary">var</code>, que se infiere automáticamente).
+            No existen <code className="text-primary">let</code> ni <code className="text-primary">const</code> en Java.
           </p>
           <p>
             La regla mental: <strong className="text-text">tipo nombre = valor;</strong> — siempre en ese orden.
+            Cada sentencia termina con <code className="text-primary">;</code> obligatorio.
           </p>
+          <p>
+            <strong className="text-text">Equivalencias directas:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>TypeScript <code className="text-primary">let x: number = 5</code> → Java <code className="text-primary">int x = 5;</code></li>
+            <li>TypeScript <code className="text-primary">const x = 5</code> → Java <code className="text-primary">final int x = 5;</code></li>
+            <li>TypeScript <code className="text-primary">let x = "hola"</code> (inferido) → Java <code className="text-primary">var x = "hola";</code> (Java 10+)</li>
+            <li>TypeScript <code className="text-primary">let x: string</code> (sin valor) → Java <code className="text-primary">String x;</code> (pero NO puedes usarla hasta asignarle un valor)</li>
+          </ul>
         </ThinkSection>
 
         <CodeBlock filename="Variables.java" code={`
@@ -76,15 +87,30 @@ public class Variables {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Constantes con final</h2>
 
-        <ThinkSection title="final = const de TypeScript... ¿pero con una trampa?">
+        <ThinkSection title="final = const de TypeScript... pero hay una trampa importante">
           <p>
-            <code className="text-primary">final</code> previene la <strong className="text-text">reasignación</strong>,
-            no la <strong className="text-text">mutación</strong>. Es exactamente igual que <code className="text-primary">const</code>
-            en JavaScript: puedes hacer <code className="text-primary">const arr = [1,2,3]; arr[0] = 99;</code> sin error.
+            <code className="text-primary">final</code> previene la <strong className="text-text">reasignación</strong>
+            de la variable, pero <strong className="text-text">NO impide mutar el objeto al que apunta</strong>.
+            Es exactamente igual que <code className="text-primary">const</code> en JavaScript:
           </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">{"const arr = [1,2,3]; arr[0] = 99;"}</code> — funciona en JS</li>
+            <li><code className="text-primary">final int[] arr = {'{'}1,2,3{'}'}; arr[0] = 99;</code> — también funciona en Java</li>
+            <li><code className="text-primary">arr = new int[]{'{'}4,5,6{'}'};</code> — esto SÍ da error (reasignación)</li>
+          </ul>
           <p>
-            Para constantes de clase, la convención es <code className="text-primary">static final</code> +
-            <strong className="text-text"> MAYÚSCULAS_CON_GUIONES</strong>.
+            <strong className="text-text">¿Cuándo usar final?</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Constantes de clase</strong>: <code className="text-primary">static final</code> + nombre en <code className="text-primary">MAYUSCULAS_GUION</code>. Son los equivalentes a las constantes globales de TypeScript.</li>
+            <li><strong className="text-text">Parámetros inmutables</strong>: marcar parámetros de método como <code className="text-primary">final</code> deja claro que no se modificarán dentro del método.</li>
+            <li><strong className="text-text">Variables en lambdas</strong>: una variable usada dentro de una lambda debe ser efectivamente final (no reasignada después de su declaración). Java lo exige por diseño.</li>
+            <li><strong className="text-text">Buena práctica moderna</strong>: muchos equipos Java marcan todas las variables locales como <code className="text-primary">final</code> por defecto para reforzar inmutabilidad y hacer el código más predecible.</li>
+          </ul>
+          <p>
+            Para inmutabilidad <em>real</em> de colecciones, usa <code className="text-primary">List.of()</code> o
+            <code className="text-primary"> Collections.unmodifiableList()</code>. <code className="text-primary">final</code>
+            solo protege la referencia, no el contenido.
           </p>
         </ThinkSection>
 
@@ -132,16 +158,32 @@ public class Constantes {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Scope — ¿Dónde vive cada variable?</h2>
 
-        <ThinkSection title="Las 3 zonas de vida de una variable">
+        <ThinkSection title="Las 3 zonas de vida de una variable en Java">
           <p>
-            <strong className="text-text">Variable de clase (static)</strong> — Vive mientras la clase exista. Compartida por todas las instancias.
+            Entender el scope (alcance) es fundamental para evitar errores. Una variable solo existe
+            dentro del bloque de llaves <code className="text-primary">{'{}'}</code> donde fue declarada.
           </p>
           <p>
-            <strong className="text-text">Variable de instancia</strong> — Vive mientras el objeto exista. Cada objeto tiene su propia copia.
+            <strong className="text-text">1. Variable de clase (static)</strong> — Declarada con <code className="text-primary">static</code>
+            fuera de métodos. Vive durante toda la ejecución del programa (mientras la clase esté cargada).
+            Es compartida por <em>todas</em> las instancias de la clase. Cambiarla desde una instancia
+            la cambia para todas. Útil para contadores, constantes, registros únicos.
           </p>
           <p>
-            <strong className="text-text">Variable local</strong> — Vive solo dentro del método o bloque donde fue declarada.
-            Es la que más usarás al principio.
+            <strong className="text-text">2. Variable de instancia</strong> — Declarada sin <code className="text-primary">static</code>
+            dentro de la clase pero fuera de métodos. Cada objeto creado con <code className="text-primary">new</code>
+            tiene su propia copia. Cuando el Garbage Collector elimina el objeto, la variable desaparece.
+          </p>
+          <p>
+            <strong className="text-text">3. Variable local</strong> — Declarada dentro de un método, bloque
+            <code className="text-primary"> if</code>, bucle <code className="text-primary">for</code>, etc. Existe
+            <em>solo mientras ese bloque se ejecuta</em>. No tiene valor por defecto — debes
+            inicializarla antes de usarla o el compilador dá error.
+          </p>
+          <p>
+            <strong className="text-text">Regla importante:</strong> no puedes acceder a una variable fuera de
+            su scope. Esto es una <em>garantía del compilador</em> — es imposible usar accidentalmente
+            una variable de otro contexto.
           </p>
         </ThinkSection>
 

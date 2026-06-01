@@ -22,24 +22,37 @@ export default function VirtualThreadsPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Por qué son revolucionarios?</h2>
 
-        <ThinkSection title="Virtual Threads = async/await sin cambiar tu código">
+        <ThinkSection title="Virtual Threads: concurrencia masiva sin async/await">
           <p>
-            En Node.js usas <code className="text-primary">async/await</code> para no bloquear el event loop.
-            Si haces una query a BD o una llamada HTTP, usas await para que el hilo no se quede esperando.
-            En Java clásico, cada thread bloqueante consume ~1MB de RAM del sistema operativo. Si tienes
-            10,000 conexiones simultáneas, necesitas 10,000 threads = ~10GB de RAM solo en stacks.
+            En Node.js, <code className="text-primary">async/await</code> es <em>obligatorio</em> para no bloquear
+            el event loop. Cada vez que haces I/O, debes marcar la función como async. Esto "contamina"
+            toda la jerarquía de llamadas hacia arriba (el problema del "async all the way down").
           </p>
           <p>
-            Con <strong className="text-text">Virtual Threads</strong>, puedes crear MILLONES de hilos porque son
-            gestionados por la JVM (no por el SO). Cada uno ocupa solo unos pocos KB. Cuando un virtual thread
-            se bloquea esperando I/O (BD, HTTP, archivo), la JVM lo "desmonta" del thread real y monta otro.
-            Es como async/await pero <strong className="text-text">transparente</strong> — tu código sigue siendo
-            secuencial y simple.
+            En Java clásico, el problema era diferente: cada plataforma thread del SO consume ~1-2MB de
+            RAM. Con 10,000 conexiones HTTP simultáneas → 10,000 threads → ~10-20GB de RAM solo en stacks.
+            Por eso existió WebFlux/Reactor — programación reactiva que permite manejar muchas conexiones
+            con pocos threads, pero a costa de una complejidad enorme.
           </p>
           <p>
-            <strong className="text-text">Impacto práctico:</strong> Spring Boot 3.2+ puede usar virtual threads
-            para manejar peticiones HTTP. Activando una sola propiedad, cada petición corre en un virtual thread,
-            permitiendo miles de conexiones concurrentes sin reactive programming (WebFlux/Reactor).
+            <strong className="text-text">Java 21 Virtual Threads (Project Loom)</strong> resuelve esto de raz:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>Son hilos gestionados por la <strong className="text-text">JVM</strong>, no por el SO. Cuestan ~1-2KB de RAM cada uno.</li>
+            <li>Cuando un virtual thread se bloquea en I/O, la JVM lo <em>desmonta</em> del carrier thread (thread de plataforma) y lo pone en espera. El carrier thread queda libre para ejecutar otro virtual thread.</li>
+            <li>Tu código sigue siendo <strong className="text-text">secuencial y síncrono</strong>. Sin async/await, sin callbacks. Escribes <code className="text-primary">result = db.query(sql)</code> y la JVM gestiona el bloqueo internamente.</li>
+            <li>Puedes crear <strong className="text-text">millones</strong> de virtual threads sin agotar la RAM.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Cuándo NO usar Virtual Threads:</strong> si tu código es CPU-intensivo
+            (algoritmos, cálculos), los virtual threads no ayudan — para eso usa paralelismo con
+            <code className="text-primary"> ForkJoinPool</code> o <code className="text-primary">parallelStream()</code>.
+            Los virtual threads brillan únicamente en cargas <em>I/O-bound</em> (BD, HTTP, archivos).
+          </p>
+          <p>
+            <strong className="text-text">En Spring Boot 3.2+</strong>: una sola propiedad activa virtual threads
+            para todos los requests HTTP, sin cambiar nada más. Es la forma moderna de escalar
+            sin reactive programming.
           </p>
         </ThinkSection>
 

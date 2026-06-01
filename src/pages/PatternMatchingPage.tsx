@@ -28,18 +28,34 @@ export default function PatternMatchingPage() {
           lo haces en una sola expresión segura y legible.
         </p>
 
-        <ThinkSection title="Pattern Matching = smart cast de Kotlin / narrowing de TypeScript">
+        <ThinkSection title="Pattern Matching: type narrowing de Java con garantías del compilador">
           <p>
-            En TypeScript, cuando haces <code className="text-primary">if (typeof x === "string")</code> dentro del
-            bloque if, TypeScript sabe que x es string (type narrowing). En Java 16+, pattern matching
-            hace lo mismo: <code className="text-primary">if (obj instanceof String s)</code> verifica el tipo Y
-            crea la variable <code className="text-primary">s</code> ya tipada como String en el mismo paso.
+            En TypeScript el type narrowing elimina casts manuales: dentro de
+            <code className="text-primary"> if (typeof x === "string")</code>, TypeScript ya sabe que
+            <code className="text-primary"> x</code> es <code className="text-primary">string</code>. Java 16+ hace lo mismo
+            con pattern matching para <code className="text-primary">instanceof</code>:
+            <code className="text-primary"> if (obj instanceof String s)</code> hace el check Y el cast en una
+            sola expresión, eliminando el cast manual <code className="text-primary">(String) obj</code>.
           </p>
           <p>
-            Con el switch mejorado de Java 21, puedes hacer pattern matching sobre sealed classes
-            y records, descomponiendo sus campos directamente. El compilador verifica que tu switch
-            sea <strong className="text-text">exhaustivo</strong> — que cubra todos los subtipos posibles.
-            Si agregas un nuevo subtipo, te obliga a manejar ese caso.
+            <strong className="text-text">El problema que resuelve:</strong> antes de Java 16, el patrón
+            claro era verbose: <code className="text-primary">if (obj instanceof String) {'{'} String s = (String) obj; ... {'}'}</code>.
+            El cast era redundante — ya acabas de verificar el tipo. Pattern matching lo colapsa en una
+            línea y elimina la posibilidad de bug donde el cast y el check no coinciden.
+          </p>
+          <p>
+            <strong className="text-text">Switch con pattern matching (Java 21):</strong> combina verificación
+            de tipo, casting, y desestructuración en un switch exhaustivo:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>Funciona especialmente bien con <strong className="text-text">sealed classes</strong>: el compilador verifica que cubres todos los subtipos permitidos.</li>
+            <li>Con <strong className="text-text">records</strong>, puedes usar deconstruction patterns: <code className="text-primary">case Point(int x, int y) -&gt;</code> extrae directamente los campos del record.</li>
+            <li>Si añades un nuevo subtipo a una sealed class y no lo manejas en el switch, el compilador da error. <em>Exhaustividad garantizada en tiempo de compilación.</em></li>
+          </ul>
+          <p>
+            <strong className="text-text">Guarded patterns:</strong> puedes agregar condiciones adicionales:
+            <code className="text-primary"> case Integer i when i &gt; 0 -&gt;</code> solo hace match si el Integer
+            es positivo. Equivalente al tipo narrowing con condición adicional de TypeScript.
           </p>
         </ThinkSection>
 

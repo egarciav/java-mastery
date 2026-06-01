@@ -29,17 +29,42 @@ export default function SpringTestingPage() {
           su comportamiento sin conectarse a ninguna BD.
         </p>
 
-        <ThinkSection title="Arrange → Act → Assert (AAA pattern)">
+        <ThinkSection title="Tests profesionales: unit tests rápidos + integration tests de confianza">
           <p>
-            Cada test sigue el patrón AAA: <strong className="text-text">Arrange</strong> (preparar datos y configurar
-            qué van a retornar los mocks), <strong className="text-text">Act</strong> (ejecutar el método que estás
-            probando), <strong className="text-text">Assert</strong> (verificar que el resultado es lo que esperabas).
+            El objetivo de los tests no es solo verificar que el código funciona hoy — es garantizar que
+            sigue funcionando cuando alguien lo modifique mañana. Un buen suite de tests es la red de
+            seguridad que te permite refactorizar con confianza.
           </p>
           <p>
-            <code className="text-primary">@Mock</code> crea un mock del Repository (un objeto falso que puedes programar).
-            <code className="text-primary"> @InjectMocks</code> crea el Service real pero le inyecta los mocks como dependencias.
-            <code className="text-primary"> when(...).thenReturn(...)</code> programa lo que el mock va a retornar cuando se llame.
-            <code className="text-primary"> verify(...)</code> confirma que el mock fue llamado como esperabas.
+            <strong className="text-text">Unit tests</strong> (JUnit 5 + Mockito): prueban una clase en aislamiento.
+            Todas las dependencias son mocks. Son rápidos (milisegundos), no necesitan base de datos,
+            y deben ser la mayoría de tus tests. Prueban la lógica de negocio del Service.
+          </p>
+          <p>
+            <strong className="text-text">Integration tests</strong> (@SpringBootTest + MockMvc): levantan el contexto
+            completo de Spring y permiten hacer peticiones HTTP reales a tus endpoints. Más lentos pero
+            verifican que todas las capas funcionan juntas correctamente.
+          </p>
+          <p>
+            <strong className="text-text">El patrón AAA (Arrange-Act-Assert)</strong>: estructura universal de tests:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Arrange</strong>: prepara los datos de entrada y configura los mocks (<code className="text-primary">when(repo.findById(1L)).thenReturn(Optional.of(usuario))</code>)</li>
+            <li><strong className="text-text">Act</strong>: ejecuta el método que estás probando (<code className="text-primary">var result = service.findById(1L)</code>)</li>
+            <li><strong className="text-text">Assert</strong>: verifica el resultado (<code className="text-primary">assertThat(result.nombre()).isEqualTo("Carlos")</code>)</li>
+          </ul>
+          <p>
+            <strong className="text-text">Mockito — las 3 operaciones clave:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">when(mock.metodo()).thenReturn(valor)</code>: programa qué retorna el mock cuando se llama</li>
+            <li><code className="text-primary">when(mock.metodo()).thenThrow(new Exception())</code>: programa que el mock lance una excepción</li>
+            <li><code className="text-primary">verify(mock).metodo(args)</code>: verifica que el mock fue llamado con esos argumentos</li>
+          </ul>
+          <p>
+            <strong className="text-text">Regla práctica</strong>: si tu Service tiene lógica de negocio compleja
+            (validaciones, cálculos, decisiones), es lo más importante de testear con unit tests.
+            Los Controllers y Repositories se testean mejor con integration tests.
           </p>
         </ThinkSection>
 

@@ -22,19 +22,37 @@ export default function SpringExceptionHandlerPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Por qué necesitas manejo global de errores?</h2>
 
-        <ThinkSection title="@ControllerAdvice = ErrorHandler global de Angular">
+        <ThinkSection title="@ControllerAdvice: manejo global de errores para una API profesional">
           <p>
-            En Angular usas un <code className="text-primary">ErrorHandler</code> global o HTTP interceptors para
-            capturar errores de forma centralizada y mostrar mensajes al usuario. En Spring,
-            <code className="text-primary"> @ControllerAdvice</code> hace exactamente lo mismo: intercepta excepciones
-            que ocurren en cualquier Controller y las transforma en respuestas HTTP con formato consistente.
+            En Angular capturas errores HTTP en interceptors y los presentas al usuario de forma coherente.
+            En Spring, <code className="text-primary">@ControllerAdvice</code> hace lo análogo en el servidor:
+            un componente central que captura excepciones de <em>todos</em> los Controllers y las transforma
+            en respuestas JSON estructuradas con el código HTTP correcto.
           </p>
           <p>
-            Sin esto, cuando tu código lanza una excepción, Spring retorna un stacktrace completo en el JSON
-            de respuesta (exponiendo detalles internos de tu código) o una página HTML blanca de error.
-            Ambas opciones son inaceptables en una API profesional — necesitas respuestas JSON estructuradas
-            con códigos HTTP correctos (400, 404, 500) y mensajes claros para el frontend.
+            <strong className="text-text">Sin @ControllerAdvice</strong>, Spring Boot retorna por defecto
+            su "Whitelabel Error Page" en HTML o un JSON de Spring con campos como <code className="text-primary">timestamp</code>,
+            <code className="text-primary"> status</code>, <code className="text-primary">error</code>, <code className="text-primary">path</code>
+            — útil para desarrollo pero inaceptable en producción porque expone detalles internos.
           </p>
+          <p>
+            <strong className="text-text">El flujo correcto en una API profesional:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>Service lanza <code className="text-primary">ResourceNotFoundException("Producto con id 5 no encontrado")</code></li>
+            <li><code className="text-primary">@ControllerAdvice</code> la captura con <code className="text-primary">@ExceptionHandler(ResourceNotFoundException.class)</code></li>
+            <li>Retorna <code className="text-primary">ResponseEntity</code> con status 404 y un JSON consistente: <code className="text-primary">{"{'{'} \"error\": \"NOT_FOUND\", \"mensaje\": \"...\", \"timestamp\": \"...\" {'}'}"}</code></li>
+            <li>El Service nunca sabe nada de HTTP. El Controller nunca maneja errores. Todo centralizado.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Mapeo de excepciones a códigos HTTP:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">ResourceNotFoundException</code> → 404 Not Found</li>
+            <li><code className="text-primary">ValidationException</code> / <code className="text-primary">MethodArgumentNotValidException</code> → 400 Bad Request</li>
+            <li><code className="text-primary">AccessDeniedException</code> → 403 Forbidden</li>
+            <li><code className="text-primary">Exception</code> (genérica) → 500 Internal Server Error</li>
+          </ul>
         </ThinkSection>
 
         <p className="text-text-muted leading-relaxed mb-4">

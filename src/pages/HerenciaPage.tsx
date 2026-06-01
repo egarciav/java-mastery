@@ -29,19 +29,34 @@ export default function HerenciaPage() {
           y <code className="text-primary">@Override</code> para reemplazar el comportamiento de un método heredado.
         </p>
 
-        <ThinkSection title="Herencia = 'es un'. ¿Cuándo usarla?">
+        <ThinkSection title="Herencia = 'es un'. Cuándo usarla y cuándo no">
           <p>
-            La prueba para saber si herencia es correcta: ¿tiene sentido decir que la clase hija "es un" tipo
-            del padre? Un <code className="text-primary">Perro</code> <strong className="text-text">es un</strong>
-            <code className="text-primary"> Animal</code> → ✅ correcto. Un <code className="text-primary">Motor</code>
-            <strong className="text-text"> es un</strong> <code className="text-primary">Auto</code> → ❌ incorrecto
-            (un Motor es PARTE de un Auto — eso es composición, no herencia).
+            La prueba para saber si herencia es correcta se llama <strong className="text-text">prueba "es un"</strong>:
+            ¿tiene sentido decir que la clase hija ES UN tipo del padre en toda circunstancia?
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">Perro</code> es un <code className="text-primary">Animal</code> → ✅ siempre es verdad</li>
+            <li><code className="text-primary">Empleado</code> es una <code className="text-primary">Persona</code> → ✅ correcto</li>
+            <li><code className="text-primary">Motor</code> es un <code className="text-primary">Auto</code> → ❌ un Motor es PARTE de un Auto (composición)</li>
+            <li><code className="text-primary">Pila</code> extiende <code className="text-primary">Vector</code> → ❌ (error histórico en Java estándar)</li>
+          </ul>
+          <p>
+            <strong className="text-text">Java solo permite herencia simple</strong>: una clase puede extender exactamente
+            una clase padre. Esto evita el "diamond problem" de C++ donde una clase hereda de dos padres que comparten
+            un abuelo común y hay ambigüedad sobre qué método usar. Para múltiples capacidades, Java usa interfaces.
           </p>
           <p>
-            Java solo permite <strong className="text-text">herencia simple</strong>: una clase puede extender UNA sola
-            clase padre. Esto evita el "diamond problem" de C++. Para agregar múltiples capacidades a una clase,
-            usarás interfaces (Día 15). En la práctica profesional moderna, se prefiere <strong className="text-text">composición
-            sobre herencia</strong> — pero herencia sigue siendo fundamental para entender frameworks como Spring.
+            <strong className="text-text">Composición sobre herencia</strong> (principio moderno): en lugar de extender
+            una clase para reusar funcionalidad, incluye un objeto de esa clase como campo. Por ejemplo, en vez de
+            <code className="text-primary"> Empleado extends Persona</code>, puedes tener
+            <code className="text-primary"> class Empleado {'{'} private Persona persona; {'}'}</code>.
+            La ventaja: puedes cambiar la implementación interna sin afectar la jerarquía, y no estás atado
+            a la API del padre. En Spring Boot, la composición es mucho más común que la herencia.
+          </p>
+          <p>
+            <strong className="text-text">Cuándo SÍ usar herencia:</strong> cuando hay una jerarquía natural y estable
+            (formas geométricas, tipos de cuenta bancaria, animales), cuando quieres compartir comportamiento
+            concreto entre subclases, o cuando usas el patrón Template Method.
           </p>
         </ThinkSection>
 

@@ -22,22 +22,40 @@ export default function EnumsPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Qué es un Enum y cuándo usarlo?</h2>
 
-        <ThinkSection title="Enums Java vs TypeScript — la diferencia es abismal">
+        <ThinkSection title="Enums Java: clases completas con objetos singleton predefinidos">
           <p>
-            En TypeScript, un enum es azúcar sintáctica para constantes numéricas o strings:
-            <code className="text-primary"> enum Color {'{'}Red, Green, Blue{'}'}</code> se compila a números 0, 1, 2.
-            No puedes agregar métodos, campos ni lógica a un enum de TypeScript.
+            En TypeScript, <code className="text-primary">enum Color {'{'} Red, Green, Blue {'}'}</code> es solo
+            azúcar para constantes numéricas (0, 1, 2) o strings. No puedes agregar métodos ni lógica.
           </p>
           <p>
-            En Java, un enum es una <strong className="text-text">clase especial</strong> donde cada valor es un
-            <strong className="text-text"> objeto singleton</strong>. Puede tener constructores privados, campos con datos,
-            métodos con lógica, e incluso implementar interfaces. Es como tener una clase con un número fijo
-            de instancias predefinidas.
+            En Java, <strong className="text-text">un enum es una clase real</strong> donde cada constante es
+            un <em>objeto singleton</em> creado al cargar la clase. Esto significa que puedes:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>Tener <strong className="text-text">campos</strong> en cada constante: <code className="text-primary">EURO("€", 1.0)</code></li>
+            <li>Agregar <strong className="text-text">métodos</strong> con lógica de negocio</li>
+            <li>Implementar <strong className="text-text">interfaces</strong> para comportamiento polimórfico</li>
+            <li>Sobrescribir métodos por constante individual (abstract methods en el enum)</li>
+          </ul>
+          <p>
+            <strong className="text-text">Ventaja crítica con switch:</strong> el compilador Java puede verificar
+            que tu switch cubre todos los valores del enum. Si añades un nuevo estado pero olvidas el case,
+            el compilador te avisa. Con el switch moderno (Java 14+), esta verificación es obligatoria.
           </p>
           <p>
-            <strong className="text-text">¿Cuándo usar enum?</strong> Siempre que tengas un conjunto FIJO y CONOCIDO de
-            valores: estados de un pedido (PENDIENTE, ENVIADO, ENTREGADO), roles (ADMIN, USER),
-            direcciones (NORTE, SUR, ESTE, OESTE), monedas (USD, EUR), etc.
+            <strong className="text-text">Métodos útiles heredados por todos los enums:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">name()</code>: retorna el nombre como String (<code className="text-primary">"PENDIENTE"</code>)</li>
+            <li><code className="text-primary">ordinal()</code>: retorna la posición (0, 1, 2...) — evita depender de esto</li>
+            <li><code className="text-primary">valueOf(String)</code>: convierte un String al enum correspondiente</li>
+            <li><code className="text-primary">values()</code>: retorna un array con todos los valores</li>
+          </ul>
+          <p>
+            <strong className="text-text">En Spring Boot</strong>: los enums se usan en entidades JPA para
+            estados y tipos. Con <code className="text-primary">@Enumerated(EnumType.STRING)</code>, JPA guarda el
+            nombre del enum como texto en la BD (más seguro que <code className="text-primary">ORDINAL</code>,
+            que usa números y se rompe si reordenas las constantes).
           </p>
         </ThinkSection>
 

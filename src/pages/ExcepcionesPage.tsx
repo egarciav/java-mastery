@@ -28,24 +28,41 @@ export default function ExcepcionesPage() {
           que pueda manejar ese tipo de error. Si no lo encuentra, el programa se detiene con un stack trace.
         </p>
 
-        <ThinkSection title="Checked vs Unchecked — la diferencia fundamental con TypeScript">
+        <ThinkSection title="Checked vs Unchecked — la diferencia que nadie explica bien">
           <p>
-            En TypeScript/JavaScript, todos los errores son opcionales de manejar. Puedes ignorarlos y tu código
-            compila igual (aunque crashee en runtime). Java tiene una filosofía diferente con dos categorías:
+            En TypeScript/JavaScript, todos los errores son <em>opcionales</em> de manejar. El compilador
+            no te dice nada si ignoras un posible fallo. Java tiene una filosofía diferente con
+            dos categorías de excepciones con comportamientos muy distintos:
           </p>
           <p>
-            <strong className="text-text">Checked exceptions</strong> (heredan de <code className="text-primary">Exception</code>):
-            el compilador te <em>obliga</em> a manejarlas con try-catch o declararlas con throws.
-            Representan errores recuperables que tu programa debería anticipar: archivos que no existen
-            (<code className="text-primary">IOException</code>), conexiones a BD fallidas (<code className="text-primary">SQLException</code>).
-            Si no las manejas, <strong className="text-text">tu código no compila</strong>.
+            <strong className="text-text">Checked exceptions</strong> (heredan de <code className="text-primary">Exception</code>
+            pero NO de <code className="text-primary">RuntimeException</code>): el compilador te <em>obliga</em>
+            a manejarlas. O las capturas con <code className="text-primary">try-catch</code>, o declaras que tu
+            método las propaga con <code className="text-primary">throws</code>. Si no haces ninguna, el código
+            no compila. Representan condiciones externas imprevisibles pero recuperables:
           </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">IOException</code> — archivo no encontrado, disco lleno, permisos</li>
+            <li><code className="text-primary">SQLException</code> — error de base de datos</li>
+            <li><code className="text-primary">ParseException</code> — formato de fecha inválido</li>
+          </ul>
           <p>
             <strong className="text-text">Unchecked exceptions</strong> (heredan de <code className="text-primary">RuntimeException</code>):
-            son opcionales de capturar. Representan errores de programación que NO deberían ocurrir si el código
-            es correcto: <code className="text-primary">NullPointerException</code> (usaste null sin verificar),
-            <code className="text-primary"> ArrayIndexOutOfBoundsException</code> (accediste fuera del rango).
-            La solución es arreglar el código, no ponerle try-catch.
+            opcionales de capturar. Representan <em>bugs de programación</em> que no deberían existir
+            si el código está bien escrito. Capturarlas con try-catch generalmente oculta el problema real:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">NullPointerException</code> — usaste un objeto sin verificar que no es null</li>
+            <li><code className="text-primary">ArrayIndexOutOfBoundsException</code> — accediste fuera del rango</li>
+            <li><code className="text-primary">ClassCastException</code> — cast inválido</li>
+            <li><code className="text-primary">IllegalArgumentException</code> — argumento inválido pasado a un método</li>
+          </ul>
+          <p>
+            <strong className="text-text">Debate moderno:</strong> muchos desarrolladores Java (incluyendo la
+            comunidad Spring Boot) prefieren usar solo excepciones unchecked en sus propias APIs.
+            Checked exceptions tienen una desventaja: al propagarse fuerzan a todos los intermediarios
+            a declararlas en su firma, contaminando las interfaces. Spring Boot siempre usa unchecked
+            (como <code className="text-primary">DataAccessException</code> que envuelve SQLException).
           </p>
         </ThinkSection>
 

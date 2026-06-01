@@ -21,15 +21,34 @@ export default function StringsPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Crear Strings</h2>
 
-        <ThinkSection title="¿Por qué los Strings son inmutables?">
+        <ThinkSection title="¿Por qué los Strings son inmutables en Java?">
           <p>
-            En TypeScript/JavaScript, los strings también son inmutables, pero casi nadie lo piensa.
-            En Java es <strong className="text-text">crucial</strong> porque afecta rendimiento: cada vez que
-            "modificas" un String con <code className="text-primary">+</code>, se crea un objeto nuevo en memoria.
+            En TypeScript/JavaScript, los strings también son inmutables, pero casi nadie lo piensa
+            porque JavaScript oculta ese detalle. En Java es <strong className="text-text">algo que hay que tener
+            presente activamente</strong>, porque afecta directamente al rendimiento y al diseño.
           </p>
           <p>
-            Si concatenas en un bucle de 10,000 iteraciones, creas 10,000 objetos String. Por eso existe
-            <code className="text-primary"> StringBuilder</code>: modifica el mismo objeto internamente.
+            <strong className="text-text">¿Qué significa inmutable?</strong> Que una vez creado un objeto String,
+            su contenido nunca cambia. Cuando escribes <code className="text-primary">texto = texto + " mundo"</code>,
+            Java NO modifica el objeto original. Crea un <em>nuevo</em> objeto String que contiene
+            la concatenación, y tu variable ahora apunta a ese nuevo objeto. El objeto anterior
+            queda huerfano esperando al Garbage Collector.
+          </p>
+          <p>
+            <strong className="text-text">¿Por qué se diseñó así?</strong> La inmutabilidad da varias ventajas:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Thread safety</strong>: múltiples hilos pueden leer el mismo String sin sincronización.</li>
+            <li><strong className="text-text">String Pool</strong>: Java puede reutilizar objetos String idénticos en memoria. Si dos variables tienen el valor <code className="text-primary">"hola"</code>, apuntan al mismo objeto en el pool. Esto ahorra memoria.</li>
+            <li><strong className="text-text">Seguridad</strong>: los Strings se usan para rutas de archivos, credenciales, URLs. Si fueran mutables, podría modificarse su contenido después de una validación de seguridad.</li>
+            <li><strong className="text-text">Hashcodes estables</strong>: los Strings se usan como claves en HashMaps. Su hash debe ser constante.</li>
+          </ul>
+          <p>
+            <strong className="text-text">La consecuencia práctica del rendimiento:</strong> Si concatenas en un bucle
+            de 10,000 iteraciones con <code className="text-primary">+</code>, creas 10,000 objetos String
+            temporales en el heap. Por eso existe <code className="text-primary">StringBuilder</code>:
+            modifica un buffer interno sin crear objetos nuevos. La diferencia de rendimiento puede
+            ser de 10x a 100x en bucles grandes.
           </p>
         </ThinkSection>
 
@@ -192,9 +211,15 @@ public class StringBuilderEjemplo {
 }
 `} />
         <InfoBox type="angular">
-          En TypeScript/JavaScript, los template literals (<code className="text-primary">{"`${variable}`"}</code>) son 
-          la forma estándar de formatear strings. En Java usas <code className="text-primary">String.format()</code>,
-          el operador <code className="text-primary">+</code>, o <code className="text-primary">StringBuilder</code> para casos de rendimiento.
+          En TypeScript/JavaScript, los template literals con backticks son la forma estándar de
+          formatear strings con interpolación de variables. En Java tienes tres opciones:
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            <li><code className="text-primary">String.format("Hola %s", nombre)</code> — retorna un String formateado (similar a template literals)</li>
+            <li><code className="text-primary">"Hola %s".formatted(nombre)</code> — Java 15+, mismo resultado, más fluido</li>
+            <li>Text Blocks con <code className="text-primary">"""..."""</code> (Java 15+) — para Strings multilínea como JSON, HTML, SQL</li>
+          </ul>
+          Java <strong>NO tiene interpolación directa</strong> de variables en Strings como los backticks.
+          Siempre necesitas <code className="text-primary">format()</code>, concatenación con <code className="text-primary">+</code>, o <code className="text-primary">StringBuilder</code>.
         </InfoBox>
       </section>
 

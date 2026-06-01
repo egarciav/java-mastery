@@ -23,24 +23,25 @@ export default function ColeccionesPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">ArrayList — Lista dinámica ordenada</h2>
 
-        <ThinkSection title="El framework de colecciones: List vs Set vs Map">
+        <ThinkSection title="El framework de colecciones: elegir la estructura correcta importa">
           <p>
-            Java tiene un framework de colecciones organizado en interfaces:
-            <strong className="text-text"> List</strong> (ordenada, permite duplicados — como array de TS),
-            <strong className="text-text"> Set</strong> (sin duplicados, sin orden garantizado — como Set de JS),
-            <strong className="text-text"> Map</strong> (clave→valor — como Map/objeto de JS).
+            Java organiza sus colecciones en <strong className="text-text">interfaces y sus implementaciones</strong>.
+            La regla de oro: <em>declara el tipo como interfaz, crea con la implementación</em>:
+            <code className="text-primary"> List&lt;String&gt; lista = new ArrayList&lt;&gt;()</code>.
+            Así puedes cambiar la implementación sin tocar el código que la usa.
           </p>
+          <p><strong className="text-text">¿Cuál estructura usar?</strong></p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">ArrayList</strong>: acceso por índice O(1), inserción al final O(1) amortizado. Internamente es un array que se duplica cuando se llena. Úsalo cuando necesites orden y acceso rápido por posición.</li>
+            <li><strong className="text-text">LinkedList</strong>: inserción/eliminación al inicio/final O(1), pero acceso por índice O(n). Úsalo cuando insertes/elimines frecuentemente en los extremos.</li>
+            <li><strong className="text-text">HashSet</strong>: contiene/agrega/elimina en O(1) promedio. Sin orden. Internamente usa un HashMap. Úsalo para verificar existencia y eliminar duplicados.</li>
+            <li><strong className="text-text">HashMap</strong>: búsqueda por clave O(1) promedio. Calcula el hash de la clave para encontrar el bucket. Requiere que las claves implementen correctamente <code className="text-primary">equals()</code> y <code className="text-primary">hashCode()</code>.</li>
+            <li><strong className="text-text">TreeMap / TreeSet</strong>: ordenados por clave natural o Comparator. O(log n) para todas las operaciones. Úsalos cuando necesites el orden de las claves.</li>
+          </ul>
           <p>
-            <strong className="text-text">Regla fundamental:</strong> declara con la INTERFACE como tipo
-            (<code className="text-primary">List&lt;String&gt;</code>) y usa la IMPLEMENTACIÓN al crear
-            (<code className="text-primary">new ArrayList&lt;&gt;()</code>). Así puedes cambiar de ArrayList a LinkedList
-            sin modificar el código que la usa. Esto se llama "programar contra interfaces" y es un
-            pilar de la buena arquitectura en Java y Spring.
-          </p>
-          <p>
-            <strong className="text-text">¿Cuál usar?</strong> ¿Necesitas acceso por índice y orden? → <code className="text-primary">List</code>.
-            ¿Necesitas unicidad sin duplicados? → <code className="text-primary">Set</code>.
-            ¿Necesitas buscar por clave? → <code className="text-primary">Map</code>.
+            <strong className="text-text">En Spring Boot</strong> usarás <code className="text-primary">List</code> para
+            retornar listas de entidades, <code className="text-primary">Map</code> para respuestas dinámicas,
+            y <code className="text-primary">Set</code> para relaciones ManyToMany en JPA.
           </p>
         </ThinkSection>
 

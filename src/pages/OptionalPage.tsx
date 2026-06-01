@@ -22,22 +22,35 @@ export default function OptionalPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Por qué existe Optional?</h2>
 
-        <ThinkSection title="Optional = un contenedor que puede estar vacío">
+        <ThinkSection title="Optional: eliminar NullPointerException del vocabulario de tu API">
           <p>
-            En TypeScript puedes usar <code className="text-primary">?.</code> (optional chaining) y <code className="text-primary">??</code>
-            (nullish coalescing) para manejar nulls de forma segura. Pero en Java no existían estos operadores
-            hasta que se creó <code className="text-primary">Optional</code> en Java 8.
+            Tony Hoare, quien inventó el concepto de null en 1965, lo llamó su <em>"billion dollar mistake"</em> —
+            estimó que los errores de null han costado miles de millones en bugs y downtime. Java vivió con
+            este problema durante décadas hasta Java 8, cuando llegó <code className="text-primary">Optional</code>.
           </p>
           <p>
-            <strong className="text-text">NullPointerException (NPE)</strong> es el error #1 en Java. Ocurre cuando llamas un
-            método sobre una variable que es <code className="text-primary">null</code>. Optional te obliga a pensar
-            explícitamente: "¿qué hago si no hay valor?" — en vez de confiar en que "seguro no es null".
+            En TypeScript tienes <code className="text-primary">?.</code> (optional chaining) y <code className="text-primary">??</code>
+            (nullish coalescing) a nivel de lenguaje. En Java, <code className="text-primary">Optional</code> es una solución
+            de biblioteca: una clase genérica que actúa como contenedor. Puede contener un valor,
+            o estar vacío. El punto es que la <em>posibilidad de ausencia está expresada en el tipo</em>:
+            <code className="text-primary"> Optional&lt;Usuario&gt;</code> le dice al que llama tu método
+            "este valor puede no existir — trátalo como tal".
           </p>
           <p>
-            <strong className="text-text">Reglas de oro:</strong> (1) Nunca retornes null — retorna <code className="text-primary">Optional.empty()</code>.
-            (2) Nunca uses Optional como parámetro de método. (3) Nunca uses Optional como campo de clase.
-            Su único propósito legítimo es como <strong className="text-text">tipo de retorno</strong> para comunicar
-            que un resultado puede estar ausente.
+            <strong className="text-text">Reglas de uso correcto (las más ignoradas en Java):</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">SÍ</strong>: como tipo de retorno de métodos que pueden no encontrar un resultado (<code className="text-primary">Optional&lt;Usuario&gt; findByEmail(String email)</code>).</li>
+            <li><strong className="text-text">NO</strong>: como parámetro de método. Usa sobrecarga o valores por defecto en su lugar.</li>
+            <li><strong className="text-text">NO</strong>: como campo de clase. Los fields deben ser el tipo directo. Optional no es <code className="text-primary">Serializable</code>.</li>
+            <li><strong className="text-text">NO</strong>: hagas <code className="text-primary">optional.get()</code> sin verificar primero con <code className="text-primary">isPresent()</code> — lanza <code className="text-primary">NoSuchElementException</code>. Usa <code className="text-primary">orElse()</code>, <code className="text-primary">orElseThrow()</code>, o <code className="text-primary">ifPresent()</code>.</li>
+          </ul>
+          <p>
+            <strong className="text-text">En Spring Data</strong>, los repositorios retornan
+            <code className="text-primary"> Optional&lt;T&gt;</code> por defecto: <code className="text-primary">findById()</code>
+            retorna <code className="text-primary">Optional&lt;Producto&gt;</code>. Si el ID no existe, en vez de null,
+            recibes <code className="text-primary">Optional.empty()</code>. Esto fuerza al servicio a manejar
+            explícitamente el caso "no encontrado" antes de responder al cliente.
           </p>
         </ThinkSection>
 

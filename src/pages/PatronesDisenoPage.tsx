@@ -22,18 +22,30 @@ export default function PatronesDisenoPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Singleton — Una sola instancia global</h2>
 
-        <ThinkSection title="Spring Boot YA usa todos estos patrones por ti">
+        <ThinkSection title="Patrones de diseño: el vocabulario común del desarrollo profesional">
           <p>
-            No necesitas implementar Singleton manualmente — Spring lo hace con <code className="text-primary">@Service</code> (scope singleton por defecto).
-            No necesitas implementar Strategy manualmente — Spring lo hace con múltiples <code className="text-primary">@Service</code> que implementan
-            la misma interfaz + <code className="text-primary">@Qualifier</code>. No necesitas Observer — Spring tiene
-            <code className="text-primary"> ApplicationEventPublisher</code>.
+            Los patrones de diseño son <strong className="text-text">soluciones probadas a problemas recurrentes</strong>
+            en el diseño de software orientado a objetos. No son librerías ni código — son conceptos y estructuras
+            que se repiten en todo el ecosistema Java. El libro original de los "Gang of Four" (1994)
+            definió 23 patrones que siguen siendo relevantes hoy.
           </p>
           <p>
-            Entonces, ¿por qué aprenderlos? Porque <strong className="text-text">entender los patrones te permite entender cómo
-            funciona Spring internamente</strong>. Cuando ves <code className="text-primary">@Bean</code> sabes que es una Factory.
-            Cuando ves filtros de seguridad encadenados, sabes que es Chain of Responsibility.
-            Cuando ves <code className="text-primary">ResponseEntity.ok().body()</code>, sabes que es un Builder.
+            <strong className="text-text">¿Por qué aprenderlos si Spring ya los implementa?</strong>
+            Porque sin entender los patrones, Spring parece magia. Con ellos, todo tiene sentido:
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><strong className="text-text">Singleton</strong>: <code className="text-primary">@Service</code>, <code className="text-primary">@Component</code>, <code className="text-primary">@Repository</code> — todos son singletons por defecto. Una instancia para toda la aplicación.</li>
+            <li><strong className="text-text">Factory / Factory Method</strong>: <code className="text-primary">@Bean</code> en <code className="text-primary">@Configuration</code> — un método que crea y configura objetos.</li>
+            <li><strong className="text-text">Builder</strong>: <code className="text-primary">ResponseEntity.ok().headers(...).body(data)</code>, <code className="text-primary">MockMvc.perform(get("/api"))</code> — construcción fluida paso a paso.</li>
+            <li><strong className="text-text">Strategy</strong>: múltiples implementaciones de un <code className="text-primary">@Service</code> seleccionadas con <code className="text-primary">@Qualifier</code>.</li>
+            <li><strong className="text-text">Chain of Responsibility</strong>: los filtros de Spring Security se encadenan — cada filtro decide si procesa o pasa al siguiente.</li>
+            <li><strong className="text-text">Observer/Event</strong>: <code className="text-primary">@EventListener</code> y <code className="text-primary">ApplicationEventPublisher</code>.</li>
+            <li><strong className="text-text">Proxy</strong>: <code className="text-primary">@Transactional</code> y <code className="text-primary">@Cacheable</code> — Spring envuelve tu bean con un proxy que añade comportamiento antes/después.</li>
+          </ul>
+          <p>
+            <strong className="text-text">El lenguaje común</strong>: cuando en una code review alguien dice
+            "esto debería ser un Strategy" o "usa un Builder aquí", entienden exactamente qué proponer.
+            Los patrones son vocabulario compartido que hace la comunicación técnica más precisa.
           </p>
         </ThinkSection>
 

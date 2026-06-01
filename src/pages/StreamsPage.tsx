@@ -22,17 +22,36 @@ export default function StreamsPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Qué es un Stream?</h2>
 
-        <ThinkSection title="Stream = pipeline de datos (como RxJS pipe)">
+        <ThinkSection title="Stream = pipeline de transformación declarativa sobre colecciones">
           <p>
-            En Angular usas <code className="text-primary">pipe(filter(), map(), tap())</code> con observables para
-            transformar flujos de datos. En Java, <code className="text-primary">.stream().filter().map().collect()</code>
-            es el mismo concepto aplicado a colecciones en memoria.
+            En Angular usas <code className="text-primary">pipe(filter(), map(), tap())</code> con Observables.
+            En Java, <code className="text-primary">.stream().filter().map().collect()</code> hace lo mismo
+            pero sobre colecciones en memoria, no sobre flujos de eventos asíncronos.
           </p>
           <p>
-            <strong className="text-text">Diferencias clave con RxJS:</strong> (1) Los Streams se consumen <strong className="text-text">una sola vez</strong>
-            — no puedes reusar un Stream como un Observable. (2) Son <strong className="text-text">lazy</strong> — no procesan
-            nada hasta que llamas una operación terminal (collect, forEach, count). (3) Son <strong className="text-text">síncronos</strong>
-            — no manejan eventos asíncronos ni tiempo.
+            <strong className="text-text">La clave conceptual — lazy evaluation:</strong> las operaciones
+            intermedias de un Stream (<code className="text-primary">filter</code>, <code className="text-primary">map</code>,
+            <code className="text-primary">sorted</code>) son <em>perezosas</em>. No ejecutan nada cuando las encadenas.
+            Solo cuando llamas una operación terminal (<code className="text-primary">collect</code>,
+            <code className="text-primary">forEach</code>, <code className="text-primary">count</code>,
+            <code className="text-primary">findFirst</code>) el pipeline se activa y procesa los elementos.
+            Esto permite optimizaciones: si usas <code className="text-primary">findFirst()</code>, Java puede
+            detener el procesamiento en el primer elemento que cumple la condición sin procesar el resto.
+          </p>
+          <p>
+            <strong className="text-text">Diferencias clave con RxJS:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li>Los Streams se consumen <strong className="text-text">una sola vez</strong> — no puedes reusar un Stream (si lo intentas: <code className="text-primary">IllegalStateException</code>).</li>
+            <li>Son <strong className="text-text">síncronos</strong> por defecto — no manejan tiempo ni eventos asíncronos.</li>
+            <li>Pueden ser <strong className="text-text">paralelos</strong> con <code className="text-primary">.parallelStream()</code> — divide el trabajo entre múltiples threads automáticamente. Útil para procesamiento de grandes datasets, pero no siempre más rápido (overhead de coordinación).</li>
+            <li>No mutan la colección original — siempre producen un nuevo resultado.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Cuándo usar Streams vs bucles tradicionales:</strong> Streams son
+            más expresivos para transformaciones funcionales (filter + map + collect). Los bucles clásicos
+            son más claros cuando el cuerpo es complejo, tiene múltiples efectos secundarios, o necesitas
+            control fino sobre excepciones. No todo necesita ser un Stream.
           </p>
         </ThinkSection>
 

@@ -21,15 +21,29 @@ export default function MetodosPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">Definir y llamar métodos</h2>
 
-        <ThinkSection title="Métodos en Java vs funciones en TypeScript">
+        <ThinkSection title="Métodos en Java vs funciones en TypeScript — todo vive en una clase">
           <p>
-            En TypeScript puedes tener funciones sueltas: <code className="text-primary">function sumar(a: number, b: number) {'{}'}</code>.
-            En Java, <strong className="text-text">todo método debe vivir dentro de una clase</strong>.
+            En TypeScript puedes declarar funciones independientes en un archivo:
+            <code className="text-primary"> export function sumar(a: number, b: number): number {'{...}'}</code>.
+            En Java, <strong className="text-text">todo método debe declararse dentro de una clase</strong>.
+            No existe el concepto de función suelta.
           </p>
           <p>
-            <code className="text-primary">static</code> permite llamar al método sin crear un objeto.
-            Sin <code className="text-primary">static</code>, necesitas hacer <code className="text-primary">new MiClase().miMetodo()</code>.
-            Por ahora usarás <code className="text-primary">static</code>; cuando lleguemos a OOP, entenderás cuándo no usarlo.
+            <strong className="text-text">Anatomía de un método en Java:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">modificador</code> — <code className="text-primary">public</code>, <code className="text-primary">private</code>, <code className="text-primary">protected</code>, o package-private (sin keyword). Controla quién puede llamar al método.</li>
+            <li><code className="text-primary">static</code> (opcional) — Si está, el método pertenece a la clase y se llama como <code className="text-primary">Clase.metodo()</code>. Sin él, pertenece a una instancia y requiere <code className="text-primary">new</code>.</li>
+            <li><code className="text-primary">tipo de retorno</code> — qué tipo devuelve: <code className="text-primary">int</code>, <code className="text-primary">String</code>, <code className="text-primary">void</code> (nada), etc. Es obligatorio y el compilador lo verifica.</li>
+            <li><code className="text-primary">nombre</code> — camelCase por convención. Debe ser descriptivo: <code className="text-primary">calcularImpuesto</code>, no <code className="text-primary">calc</code>.</li>
+            <li><code className="text-primary">(parámetros)</code> — cada parámetro tiene tipo y nombre. A diferencia de TypeScript, el tipo es obligatorio.</li>
+          </ul>
+          <p>
+            <strong className="text-text">¿Cuándo es static y cuándo no?</strong> Si el método depende del
+            estado de un objeto específico (sus campos), no es static. Si solo trabaja con sus parámetros
+            o es una utilidad sin estado, sí es static. En la práctica: los métodos de utilidad
+            (<code className="text-primary">Math.sqrt()</code>, <code className="text-primary">Arrays.sort()</code>) son static.
+            Los métodos de negocio de un objeto (<code className="text-primary">cuenta.depositar()</code>) no lo son.
           </p>
         </ThinkSection>
 
@@ -173,8 +187,12 @@ public class PasoPorValor {
 }
 `} />
         <InfoBox type="info">
-          Java es siempre <strong>paso por valor</strong>. Para primitivos copia el valor. Para objetos copia 
-          la referencia — por eso puedes modificar el contenido del objeto pero no reasignar la variable original.
+          Java es siempre <strong>paso por valor</strong>. Este es uno de los conceptos más confusos para principiantes:
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            <li><strong>Primitivos</strong>: se copia el valor. El método trabaja con una copia independiente. Cambiar el parámetro no afecta al original.</li>
+            <li><strong>Objetos/Arrays</strong>: se copia la <em>referencia</em> (dirección de memoria). El método puede modificar el contenido del objeto porque tiene su dirección. Pero NO puede reasignar la variable original — si haces <code className="text-primary">arr = new int[]{99}</code> dentro del método, solo cambia la copia local de la referencia.</li>
+            <li>Esto es idéntico al comportamiento de JavaScript/TypeScript. La confusión viene de llamarlo "por referencia" cuando en realidad es "valor de la referencia".</li>
+          </ul>
         </InfoBox>
       </section>
 

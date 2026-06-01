@@ -22,22 +22,38 @@ export default function SealedClassesPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-text mb-4">¿Qué son y por qué existen?</h2>
 
-        <ThinkSection title="Sealed = union types de TypeScript en Java">
+        <ThinkSection title="Sealed Classes: jerarquías cerradas con exhaustividad garantizada">
           <p>
-            En TypeScript puedes definir: <code className="text-primary">{"type Resultado = Exito | Error | Pendiente"}</code>.
-            El compilador sabe que solo existen esos 3 tipos posibles. Si haces un switch/if, TypeScript
-            te avisa si no cubres todos los casos.
+            En TypeScript los union types son fundamentales:
+            <code className="text-primary"> type Forma = Circulo | Rectangulo | Triangulo</code>.
+            El compilador sabe exactamente qué tipos son posibles y puede verificar exhaustividad
+            en un switch. Java no tenía esto hasta Java 17.
           </p>
           <p>
-            En Java 17+, <code className="text-primary">sealed interface Resultado permits Exito, Error, Pendiente</code>
-            logra exactamente lo mismo. El compilador sabe que solo esas 3 clases implementan Resultado,
-            y en un switch con pattern matching te obliga a cubrir TODOS los casos o poner un default.
+            <code className="text-primary">sealed interface Forma permits Circulo, Rectangulo, Triangulo</code>
+            logra el mismo efecto. La clave es la keyword <code className="text-primary">permits</code>: declara
+            explícitamente qué clases pueden implementar o extender esta interfaz/clase. Cualquier otra clase
+            que intente hacerlo dará error de compilación.
           </p>
           <p>
-            <strong className="text-text">¿Cuándo usarlas?</strong> Cuando tienes una jerarquía CERRADA: estados de un
-            proceso (Pendiente/Aprobado/Rechazado), tipos de pago (Tarjeta/Efectivo/Transferencia),
-            nodos de un AST, resultados de operaciones (Ok/Error). Si alguien más pudiera necesitar
-            extender la clase, NO la hagas sealed.
+            <strong className="text-text">El beneficio real es con pattern matching en switch (Java 21):</strong>
+            el compilador puede verificar que el switch es exhaustivo. Si añades un nuevo tipo permitido
+            (<code className="text-primary">Hexagono</code>), todos los switch que usen <code className="text-primary">Forma</code>
+            sin default dejarán de compilar, obligándote a manejar el nuevo caso. Esto elimina la clase
+            entera de bugs de "nuevo tipo no manejado en producción".
+          </p>
+          <p>
+            <strong className="text-text">Los subtipos pueden ser:</strong>
+          </p>
+          <ul className="list-disc list-inside text-text-muted space-y-1 ml-2">
+            <li><code className="text-primary">final</code>: no puede extenderse más. Terminal en la jerarquía.</li>
+            <li><code className="text-primary">sealed</code> + <code className="text-primary">permits</code>: puede extenderse pero solo por los tipos declarados.</li>
+            <li><code className="text-primary">non-sealed</code>: cualquiera puede extenderlo. Abre la jerarquía en ese punto.</li>
+          </ul>
+          <p>
+            <strong className="text-text">Cuándo NO usar sealed:</strong> si la jerarquía puede crecer (nuevos tipos
+            de clientes, nuevos estados añadidos por módulos externos). Sealed es para conjuntos
+            <em> cerrados y estables</em> por diseño.
           </p>
         </ThinkSection>
 
